@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="f00b12b6-83c9-4566-a646-f1138df73fec" name="cluster">
+        <fileTransfer rootFolder="/user/home/gv.martins" accessType="SFTP" host="193.136.122.132" port="12034" sshConfigId="ca18b843-de71-4931-a441-988c97a74da7" sshConfig="gv.martins@193.136.122.132:12034 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

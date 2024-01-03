@@ -22,7 +22,6 @@ def home():
 def video(filename):
     return send_from_directory('videofiles', filename)
 
-
 @app.route('/search_keyword/<keyword>', methods=['POST'])
 def search_keyword(keyword):
     timestamp = int(get_time_slot_of_phrase(keyword))
