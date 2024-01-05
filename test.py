@@ -1,10 +1,23 @@
+import sys
+from subprocess import call
+
 from eaf_parser.eaf_parser import EAFParser
 from embeddings.generate_embeddings import generate_frame_embeddings, generate_annotation_embeddings
 
-parser = EAFParser()
+RESULTS_PATH = "test_embeddings" #sys.argv[1]
+FRAMES_PATH = "frames" #sys.argv[2]
 
-parser.create_data_dict()
+#parser = EAFParser()
 
-parser.save_data_dict_json()
+#parser.create_data_dict()
 
-generate_annotation_embeddings("test.json", "test_embeddings")
+#parser.save_data_dict_json()
+
+#generate_annotation_embeddings("test.json", "test_embeddings")
+
+rc = call(["frame_extraction/parse_video_frames.sh"], cwd=".")
+if rc != 0:
+    print("Error: frame extraction failed")
+    sys.exit(1)
+
+generate_frame_embeddings(FRAMES_PATH, RESULTS_PATH)

@@ -1,5 +1,6 @@
 import pprint as pp
-from opensearchpy import OpenSearch
+from opensearchpy import OpenSearch, OpenSearchException
+
 
 class LGPOpenSearch:
 
@@ -110,3 +111,19 @@ class LGPOpenSearch:
             print('\nCreating index:')
             response = self.create_index()
             print(response)
+
+    def index_if_not_exists(self, doc):
+        try:
+            self.client.create(index=self.index_name, id=doc["frame_id"], body=doc)
+            return True
+        except OpenSearchException as e:
+            if 'version_conflict_engine_exception' in str(e):
+                return False
+            else:
+                raise
+
+    def delete_index(self):
+        self.client.indices.delete(
+            index=self.index_name
+        )
+        return True

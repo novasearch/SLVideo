@@ -13,28 +13,30 @@ st = SentenceEmbedder()
 def generate_annotation_embeddings(frame_annotations, result_dir):
     embeddings = {}
 
-    with open(frame_annotations, 'r') as f:
-        data = json.load(f)
+    data = json.load(frame_annotations)
 
-        for tier in data:
-            print(f"Embedding {tier} annotations")
-            annotation_embeddings = {}
-            if len(data[tier]['annotations']) == 0:
-                continue
+    for tier in data:
+        print(f"Embedding {tier} annotations")
+        annotation_embeddings = {}
+        if len(data[tier]['annotations']) == 0:
+            continue
 
-            # filter out the null values from the data[tier]['annotations'] list
-            data[tier]['annotations'] = list(filter(lambda annotation: annotation['value'] is not None, data[tier]['annotations']))
+        # filter out the null values from the data[tier]['annotations'] list
+        data[tier]['annotations'] = list(
+            filter(lambda annotation: annotation['value'] is not None, data[tier]['annotations']))
 
-            # encode only the values of each annotation
-            embed_buffer = st.text_encode(list(annotation['value'] for annotation in data[tier]['annotations']))
-            for i, annotation_id in enumerate(annotation['annotation_id'] for annotation in data[tier]['annotations']):
-               annotation_embeddings[annotation_id] = embed_buffer[i]
-            embeddings[tier] = annotation_embeddings
+        # encode only the values of each annotation
+        embed_buffer = st.text_encode(list(annotation['value'] for annotation in data[tier]['annotations']))
+        for i, annotation_id in enumerate(annotation['annotation_id'] for annotation in data[tier]['annotations']):
+            annotation_embeddings[annotation_id] = embed_buffer[i]
+        embeddings[tier] = annotation_embeddings
 
     video_name = os.path.splitext(os.path.basename(frame_annotations))[0]
     pickle.dump(embeddings, open(os.path.join(result_dir, video_name + '_annotation_embeddings.json.embeddings'), 'wb'))
 
 
+# Generates frame embeddings for a single video
+# TODO: Change to generating embeddings for a single video
 def generate_frame_embeddings(frame_dir, result_dir):
     embeddings = {}
 
@@ -54,4 +56,5 @@ def generate_frame_embeddings(frame_dir, result_dir):
         # add to dict
         embeddings[video_folder] = frame_embeddings
     # save dict
-    pickle.dump(embeddings, open(os.path.join(result_dir, 'frame_image_embeddings.json.embeddings'), 'wb'))
+    video_name = os.path.splitext(os.path.basename(frame_annotations))[0]
+    pickle.dump(embeddings, open(os.path.join(result_dir, video_name + '_frame_embeddings.json.embeddings'), 'wb'))
