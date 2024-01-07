@@ -36,25 +36,19 @@ def generate_annotation_embeddings(frame_annotations, result_dir):
 
 
 # Generates frame embeddings for a single video
-# TODO: Change to generating embeddings for a single video
 def generate_frame_embeddings(frame_dir, result_dir):
-    embeddings = {}
 
-    # iterate videos
-    for video_folder in os.listdir(frame_dir):
-        print(f"Working on {video_folder}")
-        frame_embeddings = {}
-        # iterate frames
-        for frame in os.listdir(os.path.join(frame_dir, video_folder)):
-            full_path = os.path.abspath(os.path.join(frame_dir, video_folder, frame))
-            print(f"Embedding {full_path}")
-            # get name of file without extension
-            time = os.path.splitext(frame)[0]
-            # generate embedding
-            frame_embeddings[time] = st.image_encode(full_path)
+    print(f"Working on {frame_dir}")
+    frame_embeddings = {}
+    # iterate results
+    for frame in os.listdir(frame_dir):
+        full_path = os.path.abspath(os.path.join(frame_dir, frame))
+        print(f"Embedding {full_path}")
+        # get name of file without extension
+        time = os.path.splitext(frame)[0]
+        # generate embedding
+        frame_embeddings[time] = st.image_encode(full_path)
 
-        # add to dict
-        embeddings[video_folder] = frame_embeddings
     # save dict
-    video_name = os.path.splitext(os.path.basename(frame_annotations))[0]
-    pickle.dump(embeddings, open(os.path.join(result_dir, video_name + '_frame_embeddings.json.embeddings'), 'wb'))
+    video_name = os.path.splitext(os.path.basename(frame_dir))[0]
+    pickle.dump(frame_embeddings, open(os.path.join(result_dir, video_name + '_frame_embeddings.json.embeddings'), 'wb'))

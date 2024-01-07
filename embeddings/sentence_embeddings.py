@@ -17,7 +17,7 @@ class Embedder():
         model_output = self.model.encode(texts, convert_to_tensor=True)
         return model_output
 
-    # Encode image (video frames)
+    # Encode image (video results)
     def image_encode(self, path):
         model_output = self.model.encode(Image.open(path),convert_to_tensor=True)
         return model_output

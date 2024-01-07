@@ -5,7 +5,7 @@ from eaf_parser.eaf_parser import EAFParser
 from embeddings.generate_embeddings import generate_frame_embeddings, generate_annotation_embeddings
 
 RESULTS_PATH = "test_embeddings" #sys.argv[1]
-FRAMES_PATH = "frames" #sys.argv[2]
+FRAMES_PATH = "frame_extraction/results"  #sys.argv[2]
 
 #parser = EAFParser()
 

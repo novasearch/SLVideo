@@ -11,7 +11,7 @@ from eaf_parser.eaf_parser import EAFParser
 from embeddings.generate_embeddings import generate_frame_embeddings, generate_annotation_embeddings
 from opensearch.opensearch import LGPOpenSearch
 
-RESULTS_PATH = "frames"  # sys.argv[1]
+RESULTS_PATH = "frame_extraction/results"  # sys.argv[1]
 VIDEO_PATH = "videofiles"  # sys.argv[2]
 
 opensearch = LGPOpenSearch()
@@ -44,7 +44,7 @@ def gen_doc(frame_id: str, video_id: str, annotation_id: str, path: str, timesta
 for video in os.listdir(VIDEO_PATH):
     frame_path = os.path.join(VIDEO_PATH, video)
 
-    # Extracts frames from video
+    # Extracts results from video
     rc = call(["frame_extraction/parse_video_frames.sh", os.path.join(VIDEO_PATH, video + ".mp4"), RESULTS_PATH],
               cwd=".")
     if rc != 0:
@@ -64,7 +64,7 @@ for video in os.listdir(VIDEO_PATH):
     time.sleep(1)
 
     # Generate frame embeddings
-    generate_frame_embeddings(frame_path, os.path.join(RESULTS_PATH, video + "_embeddings", "frames"))
+    generate_frame_embeddings(frame_path, os.path.join(RESULTS_PATH, video + "_embeddings", "results"))
     print("Frame embeddings generated for video" + video)
     time.sleep(1)
 
@@ -105,8 +105,8 @@ for video in os.listdir(VIDEO_PATH):
             timestamp=timestamps[frame_id],
             linguistic_type_ref=linguistic_type_ref,
             annotation=annotation,
-            frame_embedding=frame_embeddings[frame_id],
-            annotation_embedding=annotation_embeddings["LP_P1 transcrição livre"][annotation_id]  # TODO
+            frame_embedding=frame_embeddings[frame_id].tolist(),
+            annotation_embedding=annotation_embeddings["LP_P1 transcrição livre"][annotation_id].tolist()  # TODO
         )
 
         opensearch.index_if_not_exists(doc)

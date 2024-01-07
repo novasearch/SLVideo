@@ -9,7 +9,7 @@ class LGPOpenSearch:
         port = 8200
         user = 'pt.sign.language'
         password = '_2@Vu6Z%a#jPv#6'
-        
+
         self.index_name = 'pt.sign.language'
 
         self.client = OpenSearch(
@@ -63,16 +63,16 @@ class LGPOpenSearch:
                         'dimension': 512,
                         'type': 'knn_vector'
                     }
-                    #"start_time": {
+                    # "start_time": {
                     #    "type": "double"
-                    #},
-                    #"end_time": {
+                    # },
+                    # "end_time": {
                     #    "type": "double"
-                    #},
+                    # },
                 }
             }
         }
-        
+
         if not self.index_exists():
             response = self.client.indices.create(self.index_name, body=index_body)
             index_settings = {
@@ -97,11 +97,13 @@ class LGPOpenSearch:
             resp = self.client.indices.open(index=self.index_name)
             print(resp)
 
-            print('\n----------------------------------------------------------------------------------- INDEX SETTINGS')
+            print(
+                '\n----------------------------------------------------------------------------------- INDEX SETTINGS')
             settings = self.client.indices.get_settings(index=self.index_name)
             pp.pprint(settings)
 
-            print('\n----------------------------------------------------------------------------------- INDEX MAPPINGS')
+            print(
+                '\n----------------------------------------------------------------------------------- INDEX MAPPINGS')
             mappings = self.client.indices.get_mapping(index=self.index_name)
             pp.pprint(mappings)
 
