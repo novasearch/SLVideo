@@ -129,3 +129,50 @@ class LGPOpenSearch:
             index=self.index_name
         )
         return True
+
+    def annotation_query(self, video_id, query):
+        query_obj = {
+            "query": {
+                "bool": {
+                    "must": {
+                        "term": {
+                            "video_id": video_id
+                        }
+                    },
+                    "should": {
+                        "match": {
+                            "annotation": query
+                        }
+                    }
+                }
+            }
+        }
+        return self.client.search(
+            body=query_obj,
+            index=self.index_name
+        )
+
+    def annotation_embeddings_query(self, video_id, query):
+
+        query_embedding = self.st.text_encode(query).cpu()
+
+        query_obj = {
+            'size': 5,
+            '_source': ['frame_id', "video_id", "annotation", "timestamp", "path", "annotation_embedding"],
+            "query": {
+                "bool": {
+                    "should": {
+                        "knn": {
+                            "annotation_embedding": {
+                                "vector": query_embedding.numpy(),
+                                "k": 10
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return self.client.search(
+            body=query_obj,
+            index=self.index_name
+        )

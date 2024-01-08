@@ -9,8 +9,5 @@ RESULT_PATH=$3
 
 # Extract frames from video
 mkdir -p "$RESULT_PATH"/../frames
-OUTPUT_FILE=$RESULT_PATH/../frames/$VIDEO_ID"_frames".json
-echo "{ " > "$OUTPUT_FILE"
-# TODO: Mudar para apenas sacar as key frames
-ffmpeg -i "$VIDEO_PATH" -r 1 frame%d.png # Extract frames every second
-echo "}" >> "$OUTPUT_FILE"
+#ffmpeg -i "$VIDEO_PATH" -r 1 frame%d.png # Extract frames every second
+ffmpeg -i "$VIDEO_PATH" -vf "select=eq(pict_type\,PICT_TYPE_I)" -vsync vfr "$RESULT_PATH"/../frames/$VIDEO_ID/"keyframe"%04d.png

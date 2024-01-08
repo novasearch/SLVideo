@@ -18,13 +18,12 @@ echo "Processing video $VIDEO_ID"
 VIDEO_PATH=$VIDEO_DIR"/"$VIDEO_ID
 ./extract_i_frames.sh $VIDEO_PATH $VIDEO_ID $RESULT_PATH
 
-FRAMES_PATH=$RESULT_PATH/../frames/$VIDEO_ID"_frames".json
+FRAMES_PATH="$RESULT_PATH"/../frames/$VIDEO_ID/
 
 # Get timestamps
 mkdir -p "$RESULT_PATH"/../timestamps
 OUTPUT_FILE=$RESULT_PATH/../timestamps/$VIDEO_ID"_timestamps".json
 echo "{ " > "$OUTPUT_FILE"
-ffprobe -skip_frame nokey -select_streams v:0 -show_entries packet=pts_time,flags -of csv=print_section=0 "$FRAMES_PATH" | awk -v count=1 -F',' '/K/ {printf("\"%s-f%03d\": %s,\n", video_id, count, $1) ; count++}' video_id=$VIDEO_ID  >> $OUTPUT_FILE
-sed -i '$ s/.$//' "$OUTPUT_FILE" # remove last ,
+ffprobe -select_streams v:0 -show_entries packet=pts_time,flags -of csv=print_section=0 "$FRAMES_PATH" | awk -v count=1 -F',' '/K/ {printf("\"%s-f%03d\": %s,\n", video_id, count, $1) ; count++}' video_id=$VIDEO_ID  >> $OUTPUT_FILEsed -i '$ s/.$//' "$OUTPUT_FILE" # remove last ,
 echo "}" >> "$OUTPUT_FILE"
 
