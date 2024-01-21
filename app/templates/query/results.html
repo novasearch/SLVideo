@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Search Results{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% for expression in expressions %}
+        <div id="expression_block">
+            <form action="{{ url_for('query.results') }}" method="post">
+                <button type="submit" id="expression_block_1" class="expression">{{ expression }}</button>
+                <input type="hidden" name="expression" value="{{ expression }}">
+            </form>
+            <div id="expression_block_2">
+                {% for frame in frames[expression] %}
+                    <img class="frame" src="{{ url_for('static', filename='videofiles/frames/' + expression +'/' + frame) }}" alt="Not Found">
+                {% endfor %}
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+{% endblock %}

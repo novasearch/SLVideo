@@ -1,0 +1,10 @@
+from opensearchpy import OpenSearch
+
+# Create an OpenSearch client
+client = OpenSearch(hosts=['localhost:9200'])
+
+# Index the data into OpenSearch
+for tier in tiers_dict:
+    for annotation in tiers_dict[tier]['annotations']:
+        response = client.index(index='your_index', body=annotation)
+        print(response)

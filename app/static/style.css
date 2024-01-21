@@ -1,0 +1,27 @@
+.expression {
+    font-size: 20px;
+    color: #000000;
+    margin: 0px;
+    padding: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    outline: none;
+}
+
+.frame {
+    width: 10%;
+    height: 10%;
+    margin: 0px;
+    padding: 5px;
+}
+
+#expression_block {
+    display: flex;
+    align-items: center;
+}
+
+#expression_block_1, #expression_block_2 {
+    display:inline;
+}

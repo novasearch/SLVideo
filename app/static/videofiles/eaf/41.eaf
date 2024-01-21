@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ANNOTATION_DOCUMENT AUTHOR="" DATE="2021-05-13T12:10:24+00:00"
+    FORMAT="3.0" VERSION="3.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.mpi.nl/tools/elan/EAFv3.0.xsd">
+    <HEADER MEDIA_FILE="" TIME_UNITS="milliseconds">
+        <MEDIA_DESCRIPTOR
+            MEDIA_URL="file:///Users/helenacarmo/Desktop/Transcrições_2005/41/41.mp4"
+            MIME_TYPE="video/mp4" RELATIVE_MEDIA_URL="./41.mp4"/>
+        <PROPERTY NAME="URN">urn:nl-mpi-tools-elan-eaf:e9e2ddf1-ee4e-499b-9f86-fb707320cb85</PROPERTY>
+        <PROPERTY NAME="lastUsedAnnotationId">84</PROPERTY>
+    </HEADER>
+    <TIME_ORDER>
+        <TIME_SLOT TIME_SLOT_ID="ts1" TIME_VALUE="1180"/>
+        <TIME_SLOT TIME_SLOT_ID="ts2" TIME_VALUE="1180"/>
+        <TIME_SLOT TIME_SLOT_ID="ts3" TIME_VALUE="1190"/>
+        <TIME_SLOT TIME_SLOT_ID="ts4" TIME_VALUE="1190"/>
+        <TIME_SLOT TIME_SLOT_ID="ts5" TIME_VALUE="1880"/>
+        <TIME_SLOT TIME_SLOT_ID="ts6" TIME_VALUE="2150"/>
+        <TIME_SLOT TIME_SLOT_ID="ts7" TIME_VALUE="2850"/>
+        <TIME_SLOT TIME_SLOT_ID="ts8" TIME_VALUE="2850"/>
+        <TIME_SLOT TIME_SLOT_ID="ts9" TIME_VALUE="2850"/>
+        <TIME_SLOT TIME_SLOT_ID="ts10" TIME_VALUE="2860"/>
+        <TIME_SLOT TIME_SLOT_ID="ts11" TIME_VALUE="3274"/>
+        <TIME_SLOT TIME_SLOT_ID="ts12" TIME_VALUE="3280"/>
+        <TIME_SLOT TIME_SLOT_ID="ts13" TIME_VALUE="3290"/>
+        <TIME_SLOT TIME_SLOT_ID="ts14" TIME_VALUE="3290"/>
+        <TIME_SLOT TIME_SLOT_ID="ts15" TIME_VALUE="3970"/>
+        <TIME_SLOT TIME_SLOT_ID="ts16" TIME_VALUE="4134"/>
+        <TIME_SLOT TIME_SLOT_ID="ts17" TIME_VALUE="4820"/>
+        <TIME_SLOT TIME_SLOT_ID="ts18" TIME_VALUE="4883"/>
+        <TIME_SLOT TIME_SLOT_ID="ts19" TIME_VALUE="5828"/>
+        <TIME_SLOT TIME_SLOT_ID="ts20" TIME_VALUE="5830"/>
+        <TIME_SLOT TIME_SLOT_ID="ts21" TIME_VALUE="5832"/>
+        <TIME_SLOT TIME_SLOT_ID="ts22" TIME_VALUE="5848"/>
+        <TIME_SLOT TIME_SLOT_ID="ts23" TIME_VALUE="6128"/>
+        <TIME_SLOT TIME_SLOT_ID="ts24" TIME_VALUE="6128"/>
+        <TIME_SLOT TIME_SLOT_ID="ts25" TIME_VALUE="6128"/>
+        <TIME_SLOT TIME_SLOT_ID="ts26" TIME_VALUE="6797"/>
+        <TIME_SLOT TIME_SLOT_ID="ts27" TIME_VALUE="6797"/>
+        <TIME_SLOT TIME_SLOT_ID="ts28" TIME_VALUE="6797"/>
+        <TIME_SLOT TIME_SLOT_ID="ts29" TIME_VALUE="7079"/>
+        <TIME_SLOT TIME_SLOT_ID="ts30" TIME_VALUE="7094"/>
+        <TIME_SLOT TIME_SLOT_ID="ts31" TIME_VALUE="7094"/>
+        <TIME_SLOT TIME_SLOT_ID="ts32" TIME_VALUE="7950"/>
+        <TIME_SLOT TIME_SLOT_ID="ts33" TIME_VALUE="8018"/>
+        <TIME_SLOT TIME_SLOT_ID="ts34" TIME_VALUE="8504"/>
+        <TIME_SLOT TIME_SLOT_ID="ts35" TIME_VALUE="8504"/>
+        <TIME_SLOT TIME_SLOT_ID="ts36" TIME_VALUE="8509"/>
+        <TIME_SLOT TIME_SLOT_ID="ts37" TIME_VALUE="8630"/>
+        <TIME_SLOT TIME_SLOT_ID="ts38" TIME_VALUE="8640"/>
+        <TIME_SLOT TIME_SLOT_ID="ts39" TIME_VALUE="8660"/>
+        <TIME_SLOT TIME_SLOT_ID="ts40" TIME_VALUE="8660"/>
+        <TIME_SLOT TIME_SLOT_ID="ts41" TIME_VALUE="9280"/>
+        <TIME_SLOT TIME_SLOT_ID="ts42" TIME_VALUE="9330"/>
+        <TIME_SLOT TIME_SLOT_ID="ts43" TIME_VALUE="10310"/>
+        <TIME_SLOT TIME_SLOT_ID="ts44" TIME_VALUE="10430"/>
+        <TIME_SLOT TIME_SLOT_ID="ts45" TIME_VALUE="11067"/>
+        <TIME_SLOT TIME_SLOT_ID="ts46" TIME_VALUE="11312"/>
+        <TIME_SLOT TIME_SLOT_ID="ts47" TIME_VALUE="11949"/>
+        <TIME_SLOT TIME_SLOT_ID="ts48" TIME_VALUE="11950"/>
+        <TIME_SLOT TIME_SLOT_ID="ts49" TIME_VALUE="11950"/>
+        <TIME_SLOT TIME_SLOT_ID="ts50" TIME_VALUE="11969"/>
+    </TIME_ORDER>
+    <TIER DEFAULT_LOCALE="en" LINGUISTIC_TYPE_REF="default-lt" TIER_ID="LP_P1 transcrição livre">
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a67"
+                TIME_SLOT_REF1="ts3" TIME_SLOT_REF2="ts9">
+                <ANNOTATION_VALUE>O tema é Egipto</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a68"
+                TIME_SLOT_REF1="ts13" TIME_SLOT_REF2="ts20">
+                <ANNOTATION_VALUE>Veneravam e acreditavam dos surdos</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a77"
+                TIME_SLOT_REF1="ts25" TIME_SLOT_REF2="ts28">
+                <ANNOTATION_VALUE>Porquê</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a79"
+                TIME_SLOT_REF1="ts30" TIME_SLOT_REF2="ts34">
+                <ANNOTATION_VALUE>havia ligação entre o faraó</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a69"
+                TIME_SLOT_REF1="ts39" TIME_SLOT_REF2="ts49">
+                <ANNOTATION_VALUE>E com deus dentro na sociedade deles.</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+    </TIER>
+    <TIER DEFAULT_LOCALE="en" LINGUISTIC_TYPE_REF="default-lt" TIER_ID="LGP_P1 Trans_Literal">
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a1"
+                TIME_SLOT_REF1="ts1" TIME_SLOT_REF2="ts7">
+                <ANNOTATION_VALUE>TEMA EGITO</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a2"
+                TIME_SLOT_REF1="ts11" TIME_SLOT_REF2="ts21">
+                <ANNOTATION_VALUE>VENERAR ACREDITAR SURDO</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a78"
+                TIME_SLOT_REF1="ts24" TIME_SLOT_REF2="ts27">
+                <ANNOTATION_VALUE>PORQUÊ</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a80"
+                TIME_SLOT_REF1="ts31" TIME_SLOT_REF2="ts35">
+                <ANNOTATION_VALUE>LIGAR FARAÓ </ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a3"
+                TIME_SLOT_REF1="ts38" TIME_SLOT_REF2="ts47">
+                <ANNOTATION_VALUE>LIGAR DEUS DENTRO SOCIEDADE</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+    </TIER>
+    <TIER DEFAULT_LOCALE="en" LINGUISTIC_TYPE_REF="default-lt" TIER_ID="GLOSAS_P1">
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a4"
+                TIME_SLOT_REF1="ts2" TIME_SLOT_REF2="ts5">
+                <ANNOTATION_VALUE>TEMA</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a5"
+                TIME_SLOT_REF1="ts6" TIME_SLOT_REF2="ts8">
+                <ANNOTATION_VALUE>EGITO</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a6"
+                TIME_SLOT_REF1="ts12" TIME_SLOT_REF2="ts15">
+                <ANNOTATION_VALUE>VENERAR</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a7"
+                TIME_SLOT_REF1="ts16" TIME_SLOT_REF2="ts17">
+                <ANNOTATION_VALUE>ACREDITAR</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a8"
+                TIME_SLOT_REF1="ts18" TIME_SLOT_REF2="ts19">
+                <ANNOTATION_VALUE>SURDO</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a9"
+                TIME_SLOT_REF1="ts23" TIME_SLOT_REF2="ts26">
+                <ANNOTATION_VALUE>PORQUÊ</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a10"
+                TIME_SLOT_REF1="ts29" TIME_SLOT_REF2="ts32">
+                <ANNOTATION_VALUE>LIGAR</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a11"
+                TIME_SLOT_REF1="ts33" TIME_SLOT_REF2="ts36">
+                <ANNOTATION_VALUE>FARAÓ</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a12"
+                TIME_SLOT_REF1="ts37" TIME_SLOT_REF2="ts41">
+                <ANNOTATION_VALUE>LIGAR</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a13"
+                TIME_SLOT_REF1="ts42" TIME_SLOT_REF2="ts43">
+                <ANNOTATION_VALUE>DEUS</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a14"
+                TIME_SLOT_REF1="ts44" TIME_SLOT_REF2="ts45">
+                <ANNOTATION_VALUE>DENTRO</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a15"
+                TIME_SLOT_REF1="ts46" TIME_SLOT_REF2="ts48">
+                <ANNOTATION_VALUE>SOCIEDADE</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+    </TIER>
+    <TIER LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="LGP_P1 Trans_Literal" TIER_ID="Come_P1Literal">
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a81" ANNOTATION_REF="a78">
+                <ANNOTATION_VALUE>INT</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+    </TIER>
+    <TIER DEFAULT_LOCALE="en" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="GLOSAS_P1" TIER_ID="GLOSA_P1-M1">
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a22" ANNOTATION_REF="a4">
+                <ANNOTATION_VALUE>TEMA</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a23" ANNOTATION_REF="a5">
+                <ANNOTATION_VALUE>EGITO</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a24" ANNOTATION_REF="a6">
+                <ANNOTATION_VALUE>VENERAR (3PL)</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a25" ANNOTATION_REF="a7">
+                <ANNOTATION_VALUE>ACREDITAR (3PL)</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a26" ANNOTATION_REF="a8">
+                <ANNOTATION_VALUE>SURDO (PL)</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a27" ANNOTATION_REF="a9">
+                <ANNOTATION_VALUE>PORQUÊ</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a70" ANNOTATION_REF="a10">
+                <ANNOTATION_VALUE>LIGAR</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a29" ANNOTATION_REF="a11">
+                <ANNOTATION_VALUE>FARAÓ</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a71" ANNOTATION_REF="a12">
+                <ANNOTATION_VALUE>LIGAR</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a31" ANNOTATION_REF="a13">
+                <ANNOTATION_VALUE>DEUS</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a32" ANNOTATION_REF="a14">
+                <ANNOTATION_VALUE>DENTRO</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a33" ANNOTATION_REF="a15">
+                <ANNOTATION_VALUE>SOCIEDADE</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+    </TIER>
+    <TIER DEFAULT_LOCALE="en" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="GLOSAS_P1" TIER_ID="GLOSA_P1-M2"/>
+    <TIER DEFAULT_LOCALE="en" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="GLOSAS_P1" TIER_ID="Comen_GlosaP1"/>
+    <TIER DEFAULT_LOCALE="pt" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="GLOSAS_P1" TIER_ID="M2_ClassGram"/>
+    <TIER DEFAULT_LOCALE="pt" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="GLOSAS_P1" TIER_ID="M1_ClassGram">
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a55" ANNOTATION_REF="a4">
+                <ANNOTATION_VALUE>N</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a56" ANNOTATION_REF="a5">
+                <ANNOTATION_VALUE>N</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a57" ANNOTATION_REF="a6">
+                <ANNOTATION_VALUE>V_TRA</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a58" ANNOTATION_REF="a7">
+                <ANNOTATION_VALUE>V_TRA</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a59" ANNOTATION_REF="a8">
+                <ANNOTATION_VALUE>N</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a60" ANNOTATION_REF="a9">
+                <ANNOTATION_VALUE>CONJ</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a75" ANNOTATION_REF="a10">
+                <ANNOTATION_VALUE>V_TRA</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a62" ANNOTATION_REF="a11">
+                <ANNOTATION_VALUE>N</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a76" ANNOTATION_REF="a12">
+                <ANNOTATION_VALUE>V_COP_N</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a64" ANNOTATION_REF="a13">
+                <ANNOTATION_VALUE>N</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a65" ANNOTATION_REF="a14">
+                <ANNOTATION_VALUE>ADV</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <REF_ANNOTATION ANNOTATION_ID="a66" ANNOTATION_REF="a15">
+                <ANNOTATION_VALUE>N</ANNOTATION_VALUE>
+            </REF_ANNOTATION>
+        </ANNOTATION>
+    </TIER>
+    <TIER DEFAULT_LOCALE="pt" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="GLOSAS_P1" TIER_ID="GLOSA_P1_EXPRESSAO"/>
+    <TIER DEFAULT_LOCALE="pt" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="GLOSAS_P1" TIER_ID="Exp_ClassGram"/>
+    <TIER DEFAULT_LOCALE="en" LINGUISTIC_TYPE_REF="default-lt" TIER_ID="Fono_Hamnosys"/>
+    <TIER DEFAULT_LOCALE="pt" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="Fono_Hamnosys" TIER_ID="Config"/>
+    <TIER DEFAULT_LOCALE="pt" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="Fono_Hamnosys" TIER_ID="Orient"/>
+    <TIER DEFAULT_LOCALE="pt" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="Fono_Hamnosys" TIER_ID="Local"/>
+    <TIER DEFAULT_LOCALE="pt" LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="Fono_Hamnosys" TIER_ID="Movim"/>
+    <TIER LINGUISTIC_TYPE_REF="default-lt" TIER_ID="Sint_Constituinte">
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a82"
+                TIME_SLOT_REF1="ts4" TIME_SLOT_REF2="ts10">
+                <ANNOTATION_VALUE>?????</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a83"
+                TIME_SLOT_REF1="ts14" TIME_SLOT_REF2="ts22">
+                <ANNOTATION_VALUE>VERBO ARG_INT????</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+        <ANNOTATION>
+            <ALIGNABLE_ANNOTATION ANNOTATION_ID="a84"
+                TIME_SLOT_REF1="ts40" TIME_SLOT_REF2="ts50">
+                <ANNOTATION_VALUE>ARG_EXT VERBO ARG_INT VERBO ARG_3 ADJ????</ANNOTATION_VALUE>
+            </ALIGNABLE_ANNOTATION>
+        </ANNOTATION>
+    </TIER>
+    <TIER LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="Sint_Constituinte" TIER_ID="M1_Constituinte"/>
+    <TIER LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="Sint_Constituinte" TIER_ID="M2_Constituinte"/>
+    <TIER LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="Sint_Constituinte" TIER_ID="Exp_Constituinte"/>
+    <TIER LINGUISTIC_TYPE_REF="Symbolic Association"
+        PARENT_REF="Sint_Constituinte" TIER_ID="Seman_Estr"/>
+    <LINGUISTIC_TYPE GRAPHIC_REFERENCES="false"
+        LINGUISTIC_TYPE_ID="default-lt" TIME_ALIGNABLE="true"/>
+    <LINGUISTIC_TYPE CONSTRAINTS="Symbolic_Association"
+        GRAPHIC_REFERENCES="false"
+        LINGUISTIC_TYPE_ID="Symbolic Association" TIME_ALIGNABLE="false"/>
+    <LINGUISTIC_TYPE CONSTRAINTS="Time_Subdivision"
+        GRAPHIC_REFERENCES="false" LINGUISTIC_TYPE_ID="Time Subdivision" TIME_ALIGNABLE="true"/>
+    <LOCALE COUNTRY_CODE="GB" LANGUAGE_CODE="en"/>
+    <LOCALE COUNTRY_CODE="PT" LANGUAGE_CODE="pt"/>
+    <CONSTRAINT
+        DESCRIPTION="Time subdivision of parent annotation's time interval, no time gaps allowed within this interval" STEREOTYPE="Time_Subdivision"/>
+    <CONSTRAINT
+        DESCRIPTION="Symbolic subdivision of a parent annotation. Annotations refering to the same parent are ordered" STEREOTYPE="Symbolic_Subdivision"/>
+    <CONSTRAINT DESCRIPTION="1-1 association with a parent annotation" STEREOTYPE="Symbolic_Association"/>
+    <CONSTRAINT
+        DESCRIPTION="Time alignable annotations within the parent annotation's time interval, gaps are allowed" STEREOTYPE="Included_In"/>
+</ANNOTATION_DOCUMENT>
