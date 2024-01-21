@@ -1,24 +1,19 @@
-import json
-import os
 import pickle
 import torch
 import io
-import sys
 import time
-from subprocess import call
 
-from eaf_parser.eaf_parser import EAFParser
-from embeddings.generate_embeddings import generate_frame_embeddings, generate_annotation_embeddings
-from opensearch.opensearch import LGPOpenSearch
+from .eaf_parser import eaf_parser
+from .opensearch.opensearch import LGPOpenSearch
+from .frame_extraction import frame_extraction
 
-RESULTS_PATH = "results"  # sys.argv[exp9]
-VIDEO_PATH = "static/videofiles/mp4"  # sys.argv[exp10]
-EAF_PATH = "vidofiles/eaf"  # sys.argv[exp11]
-ANNOTATIONS_PATH = "static/videofiles/annotations"  # sys.argv[4]
-FRAMES_PATH = "static/videofiles/frames"  # sys.argv[5]
+RESULTS_PATH = "app/static/videofiles"  # sys.argv[exp9]
+VIDEO_PATH = "app/static/videofiles/mp4"  # sys.argv[exp10]
+EAF_PATH = "app/static/videofiles/eaf"  # sys.argv[exp11]
+ANNOTATIONS_PATH = "app/static/videofiles/annotations"  # sys.argv[4]
+FRAMES_PATH = "app/static/videofiles/frames"  # sys.argv[5]
 
 opensearch = LGPOpenSearch()
-parser = EAFParser()
 
 
 class CPU_Unpickler(pickle.Unpickler):
@@ -44,22 +39,25 @@ def gen_doc(frame_id: str, video_id: str, annotation_id: str, path: str, timesta
     }
 
 
+def preprocess_videos():
+    """ Preprocess videos (extract the facial expressions frames)
+    and generate embeddings. All the results are saved in the static/videofiles folder. """
+
+    # Generate json file for videos with annotations and timestamps
+    eaf_parser.parse_eaf_files(EAF_PATH)
+    print("Annotations generated")
+    time.sleep(1)
+
+    # Extract facial expressions frames
+    frame_extraction.extract_facial_expressions_frames()
+
+    print("Extracted facial expressions frames")
+    time.sleep(1)
+
+
+"""
 # If index doesn't exist, create it
 opensearch.create_index()
-
-# Extract the videos keyframes and respective timestamps
-rc = call(["frame_extraction/parse_video_frames.sh", VIDEO_PATH, RESULTS_PATH], cwd=".")
-if rc != 0:
-    print("Error: frame extraction failed")
-    sys.exit(1)
-
-print("Extracted key frames")
-time.sleep(1)
-
-# Generate json file for videos with annotations and timestamps
-parser.parse_eaf_files(EAF_PATH)
-print("Annotations generated")
-time.sleep(1)
 
 # Generate annotation embeddings
 generate_annotation_embeddings(ANNOTATIONS_PATH, RESULTS_PATH)
@@ -97,13 +95,13 @@ for video_id in os.listdir(FRAMES_PATH):
 
                 # Find the annotation corresponding to this frame
                 # TODO: Check if it is needed to iterate over all annotations tiers
-                annotations = video_annotations["LP_P1 transcrição livre"]["annotations"]
+                annotations = video_annotations["GLOSA_P1_EXPRESSAO"]["annotations"]
 
                 # TODO: Check how are the timestamps created
                 for annotation in annotations:
                     if annotation["start_time"] <= timestamps[frame_id] <= annotation["end_time"]:
                         annotation_id = annotation["annotation_id"]
-                        linguistic_type_ref = video_annotations["LP_P1 transcrição livre"]["tier_id"]
+                        linguistic_type_ref = video_annotations["GLOSA_P1_EXPRESSAO"]["tier_id"]
                         annotation = annotation["value"]
 
                         doc = gen_doc(
@@ -115,7 +113,7 @@ for video_id in os.listdir(FRAMES_PATH):
                             linguistic_type_ref=linguistic_type_ref,
                             annotation=annotation,
                             frame_embedding=frame_embeddings[video_id][frame_id].tolist(),
-                            annotation_embedding=annotation_embeddings[video_id]["LP_P1 transcrição livre"][annotation_id].tolist()
+                            annotation_embedding=annotation_embeddings[video_id]["GLOSA_P1_EXPRESSAO"][annotation_id].tolist()
                             # TODO
                         )
 
@@ -127,5 +125,4 @@ for video_id in os.listdir(FRAMES_PATH):
                         print("\n\n")
 
                         break
-
-print("Pipeline done.")
+"""

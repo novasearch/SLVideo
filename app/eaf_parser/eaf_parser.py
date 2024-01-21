@@ -4,68 +4,79 @@ import xml.etree.ElementTree as ET
 import json
 import os
 
+ANNOTATIONS_PATH = "app/static/videofiles/annotations"
 
-class EAFParser:
 
-    def parse_eaf_files(self, eaf_dir):
+def parse_eaf_files(eaf_dir):
+    for eaf in os.listdir(eaf_dir):
+        data_dict = {}
 
-        for eaf in os.listdir(eaf_dir):
-            data_dict = {}
+        with open(os.path.join(eaf_dir, eaf), "r", encoding='utf-8') as file:
+            file_content = file.read()
 
-            with open(os.path.join(eaf_dir, eaf), "r", encoding='utf-8') as file:
-                file_content = file.read()
+            # Get the root element
+            root = ET.fromstring(file_content)
 
-                # Get the root element
-                root = ET.fromstring(file_content)
+            # Get the time slots info, cycle through them and save each time slot
+            time_slots = root.findall('TIME_ORDER/TIME_SLOT')
+            time_slots_dict = {}
+            for time_slot in time_slots:
+                time_slots_dict[time_slot.attrib['TIME_SLOT_ID']] = {
+                    'time_slot_id': time_slot.attrib['TIME_SLOT_ID'],
+                    'time_value': time_slot.attrib['TIME_VALUE']
+                }
 
-                # Get the time slots info, cycle through them and save each time slot
-                time_slots = root.findall('TIME_ORDER/TIME_SLOT')
-                time_slots_dict = {}
-                for time_slot in time_slots:
-                    time_slots_dict[time_slot.attrib['TIME_SLOT_ID']] = {
-                        'time_slot_id': time_slot.attrib['TIME_SLOT_ID'],
-                        'time_value': time_slot.attrib['TIME_VALUE']
+            # Get the tiers info, cycle through them and save each tier
+            tiers = root.findall('TIER')
+            for tier in tiers:
+                data_dict[tier.attrib['TIER_ID']] = {
+                    'linguistic_type_ref': tier.attrib['LINGUISTIC_TYPE_REF'],
+                    'tier_id': tier.attrib['TIER_ID'],
+                    'annotations': [],
+                    'parent_ref': tier.attrib.get('PARENT_REF')  # Optional
+                }
+
+            first_time_slot = int(time_slots_dict['ts1']['time_value'])
+
+            # Get the alignable annotations info
+            annotation_timestamps = {}
+            for tier in data_dict:
+                annotations = root.findall('TIER[@TIER_ID="' + tier + '"]/ANNOTATION/ALIGNABLE_ANNOTATION')
+                for annotation in annotations:
+                    data_dict[tier]['annotations'].append({
+                        'annotation_id': annotation.attrib['ANNOTATION_ID'],
+                        'start_time': str(int(
+                            time_slots_dict[annotation.attrib['TIME_SLOT_REF1']]['time_value']) - first_time_slot),
+                        'end_time': str(int(
+                            time_slots_dict[annotation.attrib['TIME_SLOT_REF2']]['time_value']) - first_time_slot),
+                        'value': annotation.find('ANNOTATION_VALUE').text
+                    })
+                    annotation_timestamps[annotation.attrib['ANNOTATION_ID']] = {
+                        'start_time': str(int(
+                            time_slots_dict[annotation.attrib['TIME_SLOT_REF1']]['time_value']) - first_time_slot),
+                        'end_time': str(int(
+                            time_slots_dict[annotation.attrib['TIME_SLOT_REF2']]['time_value']) - first_time_slot)
                     }
 
-                # Get the tiers info, cycle through them and save each tier
-                tiers = root.findall('TIER')
-                for tier in tiers:
-                    data_dict[tier.attrib['TIER_ID']] = {
-                        'linguistic_type_ref': tier.attrib['LINGUISTIC_TYPE_REF'],
-                        'tier_id': tier.attrib['TIER_ID'],
-                        'annotations': [],
-                        'parent_ref': tier.attrib.get('PARENT_REF')  # Optional
-                    }
-
-                first_time_slot = int(time_slots_dict['ts1']['time_value'])
-
-                # Get the alignable annotations info
-                for tier in data_dict:
-                    annotations = root.findall('TIER[@TIER_ID="' + tier + '"]/ANNOTATION/ALIGNABLE_ANNOTATION')
-                    for annotation in annotations:
+            # Get the ref annotations info
+            for tier in data_dict:
+                annotations = root.findall('TIER[@TIER_ID="' + tier + '"]/ANNOTATION/REF_ANNOTATION')
+                for annotation in annotations:
+                    annotation_ref = annotation.attrib['ANNOTATION_REF']
+                    if annotation_ref in annotation_timestamps:
                         data_dict[tier]['annotations'].append({
                             'annotation_id': annotation.attrib['ANNOTATION_ID'],
-                            'start_time': str(int(
-                                time_slots_dict[annotation.attrib['TIME_SLOT_REF1']]['time_value']) - first_time_slot),
-                            'end_time': str(int(
-                                time_slots_dict[annotation.attrib['TIME_SLOT_REF2']]['time_value']) - first_time_slot),
-                            'value': annotation.find('ANNOTATION_VALUE').text
+                            'annotation_ref': annotation_ref,
+                            'value': annotation.find('ANNOTATION_VALUE').text,
+                            'start_time': annotation_timestamps[annotation_ref]['start_time'],
+                            'end_time': annotation_timestamps[annotation_ref]['end_time']
                         })
 
-                # Get the ref annotations info
-                for tier in data_dict:
-                    annotations = root.findall('TIER[@TIER_ID="' + tier + '"]/ANNOTATION/REF_ANNOTATION')
-                    for annotation in annotations:
-                        data_dict[tier]['annotations'].append({
-                            'annotation_id': annotation.attrib['ANNOTATION_ID'],
-                            'annotation_ref': annotation.attrib['ANNOTATION_REF'],
-                            'value': annotation.find('ANNOTATION_VALUE').text
-                        })
-
-                # Save the data dict as a json file
-                videoname, extension = os.path.splitext(eaf_dir)
-                with open(videoname + '.json', 'w') as f:
-                    json.dump(data_dict, f)
+            # Save the data dict as a json file
+            videoname, extension = os.path.splitext(eaf)
+            print(file.name)
+            with open(os.path.join(ANNOTATIONS_PATH, videoname + '.json'), 'w') as f:
+                json.dump(data_dict, f)
 
     # Get the data dict as json
     # def get_data_dict_json(self):
