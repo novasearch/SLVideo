@@ -50,7 +50,6 @@ def preprocess_videos():
 
     # Extract facial expressions frames
     frame_extraction.extract_facial_expressions_frames()
-
     print("Extracted facial expressions frames")
     time.sleep(1)
 

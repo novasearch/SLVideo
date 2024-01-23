@@ -2,6 +2,7 @@ import datetime
 import os
 import json
 import subprocess
+import re
 
 VIDEOS_DIR = "app/static/videofiles/mp4"
 FRAMES_DIR = "app/static/videofiles/frames"
@@ -10,52 +11,59 @@ ANNOTATIONS_DIR = "app/static/videofiles/annotations"
 
 def extract_facial_expressions_frames():
     """ Extract the facial expressions frames from the videos
-    and save them in the static/videofiles folder. """
+    and save them in the static/videofiles/frames folder. """
 
-    for video in os.listdir(VIDEOS_DIR):
+    for i, video in enumerate(os.listdir(VIDEOS_DIR)):
+        if i >= 3:  # Stop the loop after processing 3 videos
+            break
+
         video_path = os.path.join(VIDEOS_DIR, video)
-        annotation_path = os.path.join(ANNOTATIONS_DIR, f"{video}.json")
+        videoname, extension = os.path.splitext(video)
+        annotation_path = os.path.join(ANNOTATIONS_DIR, f"{videoname}.json")
+        video_dir = os.path.join(FRAMES_DIR, videoname)
 
-        # Initialize a counter for each facial expression
-        expression_counters = {}
+        if os.path.isdir(video_dir):
+            continue
 
         # Cycle through the annotations referring facial expressions
         with open(annotation_path, "r") as f:
             annotations = json.load(f)
+            print(annotation_path)
+            annotations_keys = ["GLOSA_P1_EXPRESSÃO", "GLOSA_P1_EXPRESSAO"]
 
-            for facial_expression in annotations["GLOSA_P1_EXPRESSAO"]["annotations"]:
-                # Convert start and end time from milliseconds to hh:mm:ss format
-                start_time_milliseconds = facial_expression["start_time"]
-                start_time_seconds = start_time_milliseconds / 1000  # convert milliseconds to seconds
-                start_time_str = str(datetime.timedelta(seconds=start_time_seconds))
+            for key in annotations_keys:
+                if key in annotations:
+                    for facial_expression in annotations[key]["annotations"]:
+                        # Convert start and end time from milliseconds to hh:mm:ss format
+                        start_time_milliseconds = facial_expression["start_time"]
+                        start_time_seconds = int(start_time_milliseconds) / 1000  # convert milliseconds to seconds
+                        start_time_str = str(datetime.timedelta(seconds=start_time_seconds))
 
-                end_time_milliseconds = facial_expression["end_time"]
-                end_time_seconds = end_time_milliseconds / 1000
-                end_time_str = str(datetime.timedelta(seconds=end_time_seconds))
+                        end_time_milliseconds = facial_expression["end_time"]
+                        end_time_seconds = int(end_time_milliseconds) / 1000
+                        end_time_str = str(datetime.timedelta(seconds=end_time_seconds))
 
-                value = facial_expression["value"]
+                        value = facial_expression["value"]
 
-                # Increment the counter for this facial expression
-                if value not in expression_counters:
-                    expression_counters[value] = 1
-                else:
-                    expression_counters[value] += 1
+                        # Create a directory for the video if it doesn't exist
+                        os.makedirs(video_dir, exist_ok=True)
 
-                # Create a directory for the facial expression if it doesn't exist
-                expression_dir = os.path.join(FRAMES_DIR, value)
-                os.makedirs(expression_dir, exist_ok=True)
+                        # Create a directory for the facial expression inside the video directory
+                        expression_dir = os.path.join(video_dir, f"{value}_{start_time_milliseconds}")
 
-                # Create a directory for the video inside the facial expression directory
-                video_dir = os.path.join(expression_dir, f"{video}_{expression_counters[value]}")
-                os.makedirs(video_dir, exist_ok=True)
+                        # Erase invalid characters
+                        safe_expression_dir = re.sub(r'[*?:"<>|]', '', expression_dir)
+                        safe_expression_value = re.sub(r'[*?:"<>|]', '', value)
 
-                # Extract the facial expressions frames from the video
-                command = ["ffmpeg",
-                           "-i", video_path,  # input file
-                           "-ss", start_time_str,  # start time
-                           "-to", end_time_str,  # end time
-                           "-vf", "fps=1",  # extract 1 frame per second
-                           os.path.join(FRAMES_DIR, f"{video}_{value}_%d.png")  # output file
-                           ]
+                        os.makedirs(safe_expression_dir, exist_ok=True)
 
-                subprocess.call(command)
+                        # Extract the facial expressions frames from the video
+                        command = ["ffmpeg",
+                                   "-i", video_path,  # input file
+                                   "-ss", start_time_str,  # start time
+                                   "-to", end_time_str,  # end time
+                                   # "-vf", "fps=1",  # extract 1 frame per second
+                                   os.path.join(safe_expression_dir, f"{safe_expression_value}_%02d.png")  # output file
+                                   ]
+
+                        subprocess.call(command)

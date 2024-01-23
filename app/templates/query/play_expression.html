@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Play {{exp_id}}{% endblock %}</h1>
+    <h1>{% block title %}Play {{expression}}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-    <video width="320" height="240" controls>
-        <source src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}" type="video/mp4">
+    <video width="640" height="320" controls>
+        <source src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t={{ timestamp }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 {% endblock %}

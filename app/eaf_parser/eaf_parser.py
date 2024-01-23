@@ -9,6 +9,12 @@ ANNOTATIONS_PATH = "app/static/videofiles/annotations"
 
 def parse_eaf_files(eaf_dir):
     for eaf in os.listdir(eaf_dir):
+        videoname, extension = os.path.splitext(eaf)
+        video_annotations_path = os.path.join(ANNOTATIONS_PATH, videoname + '.json')
+
+        if os.path.isfile(video_annotations_path) or extension != '.eaf':
+            continue
+
         data_dict = {}
 
         with open(os.path.join(eaf_dir, eaf), "r", encoding='utf-8') as file:
@@ -36,8 +42,6 @@ def parse_eaf_files(eaf_dir):
                     'parent_ref': tier.attrib.get('PARENT_REF')  # Optional
                 }
 
-            first_time_slot = int(time_slots_dict['ts1']['time_value'])
-
             # Get the alignable annotations info
             annotation_timestamps = {}
             for tier in data_dict:
@@ -46,16 +50,16 @@ def parse_eaf_files(eaf_dir):
                     data_dict[tier]['annotations'].append({
                         'annotation_id': annotation.attrib['ANNOTATION_ID'],
                         'start_time': str(int(
-                            time_slots_dict[annotation.attrib['TIME_SLOT_REF1']]['time_value']) - first_time_slot),
+                            time_slots_dict[annotation.attrib['TIME_SLOT_REF1']]['time_value'])),
                         'end_time': str(int(
-                            time_slots_dict[annotation.attrib['TIME_SLOT_REF2']]['time_value']) - first_time_slot),
+                            time_slots_dict[annotation.attrib['TIME_SLOT_REF2']]['time_value'])),
                         'value': annotation.find('ANNOTATION_VALUE').text
                     })
                     annotation_timestamps[annotation.attrib['ANNOTATION_ID']] = {
                         'start_time': str(int(
-                            time_slots_dict[annotation.attrib['TIME_SLOT_REF1']]['time_value']) - first_time_slot),
+                            time_slots_dict[annotation.attrib['TIME_SLOT_REF1']]['time_value'])),
                         'end_time': str(int(
-                            time_slots_dict[annotation.attrib['TIME_SLOT_REF2']]['time_value']) - first_time_slot)
+                            time_slots_dict[annotation.attrib['TIME_SLOT_REF2']]['time_value']))
                     }
 
             # Get the ref annotations info
@@ -73,9 +77,8 @@ def parse_eaf_files(eaf_dir):
                         })
 
             # Save the data dict as a json file
-            videoname, extension = os.path.splitext(eaf)
-            print(file.name)
-            with open(os.path.join(ANNOTATIONS_PATH, videoname + '.json'), 'w') as f:
+            with open(video_annotations_path, 'w') as f:
+            #with open(os.path.join("../static/videofiles/annotations", videoname + '.json'), 'w', encoding='utf-8') as f:
                 json.dump(data_dict, f)
 
     # Get the data dict as json
@@ -86,3 +89,7 @@ def parse_eaf_files(eaf_dir):
     # def save_data_dict_json(self):
     #    with open('test.json', 'w') as f:
     #        json.dump(self.data_dict, f)
+
+
+# Execute this script to parse a specific eaf file
+#parse_eaf_files("../static/videofiles/eaf")
