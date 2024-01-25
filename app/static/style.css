@@ -1,5 +1,5 @@
 .expression {
-    font-size: 20px;
+    font-size: 18px;
     color: #000000;
     margin: 0px;
     padding: 20px;
@@ -10,9 +10,21 @@
     outline: none;
 }
 
+.expression_description {
+    font-size: 15px;
+    color: #646464;
+    margin: 0px;
+    padding: 5px;
+    background: none;
+    border: none;
+    text-decoration: none;
+    outline: none;
+    text-align: center;
+}
+
 .frame {
-    width: 10%;
-    height: 10%;
+    width: 11%;
+    height: 11%;
     margin: 0px;
     padding: 5px;
 }

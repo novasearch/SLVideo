@@ -1,1 +1,3709 @@
-{"LP_P1 transcri\u00e7\u00e3o livre": {"linguistic_type_ref": "default-lt", "tier_id": "LP_P1 transcri\u00e7\u00e3o livre", "annotations": [{"annotation_id": "a1", "start_time": "11370", "end_time": "18356", "value": " a m\u00e3e deu \u00e0 menina um cesto com fruta e p\u00e3o"}, {"annotation_id": "a2", "start_time": "18396", "end_time": "20120", "value": "estava a ANDAR_"}, {"annotation_id": "a445", "start_time": "20210", "end_time": "22019", "value": " mas parou para ir buscar umas flores"}, {"annotation_id": "a3", "start_time": "22090", "end_time": "24370", "value": "Um lobo viu"}, {"annotation_id": "a446", "start_time": "24455", "end_time": "26210", "value": "escondeu-se atr\u00e1s da \u00e1rvore"}, {"annotation_id": "a4", "start_time": "26895", "end_time": "29250", "value": "a menina estava a ANDAR_ "}, {"annotation_id": "a454", "start_time": "29260", "end_time": "30940", "value": "o lobo aproveitou"}, {"annotation_id": "a5", "start_time": "31005", "end_time": "31804", "value": "onde vais?"}, {"annotation_id": "a6", "start_time": "31862", "end_time": "34206", "value": "casa da av\u00f3"}, {"annotation_id": "a7", "start_time": "35220", "end_time": "38350", "value": "lobo continuou o seu caminho"}, {"annotation_id": "a8", "start_time": "38610", "end_time": "40460", "value": "viu a porta da casa da av\u00f3"}, {"annotation_id": "a9", "start_time": "40536", "end_time": "41520", "value": "bateu \u00e0 porta"}, {"annotation_id": "a465", "start_time": "41578", "end_time": "43060", "value": "a av\u00f3 surpresa abriu a porta e gritou"}, {"annotation_id": "a474", "start_time": "43067", "end_time": "43397", "value": "ol\u00e1"}, {"annotation_id": "a10", "start_time": "43486", "end_time": "44460", "value": "o lobo agarrou-a"}, {"annotation_id": "a475", "start_time": "44523", "end_time": "45613", "value": "comeu-a"}, {"annotation_id": "a11", "start_time": "45752", "end_time": "46844", "value": "deitou-se na cama e tapou-se"}, {"annotation_id": "a12", "start_time": "46898", "end_time": "49370", "value": "colocou os \u00f3culos, a touca"}, {"annotation_id": "a487", "start_time": "49392", "end_time": "50532", "value": "mudou-se para a cama"}, {"annotation_id": "a563", "start_time": "50593", "end_time": "51543", "value": "tapou-se"}, {"annotation_id": "a13", "start_time": "51701", "end_time": "52730", "value": "a menina chegou"}, {"annotation_id": "a553", "start_time": "52775", "end_time": "54315", "value": "bateu \u00e0 porta da av\u00f3"}, {"annotation_id": "a14", "start_time": "55116", "end_time": "55532", "value": "ok"}, {"annotation_id": "a15", "start_time": "56071", "end_time": "56512", "value": "av\u00f3"}, {"annotation_id": "a16", "start_time": "57009", "end_time": "58405", "value": "o lobo estava deitado"}, {"annotation_id": "a17", "start_time": "58431", "end_time": "59080", "value": "quem \u00e9s tu?"}, {"annotation_id": "a535", "start_time": "59130", "end_time": "64730", "value": " Tens os olhos grandes, o rariz comprido e grande, as orelhas grandes"}, {"annotation_id": "a18", "start_time": "65142", "end_time": "66616", "value": "o lobo comeu-a"}, {"annotation_id": "a19", "start_time": "67324", "end_time": "68603", "value": "a menina fugiu com medo"}, {"annotation_id": "a20", "start_time": "68641", "end_time": "69220", "value": "fugiu"}, {"annotation_id": "a524", "start_time": "69340", "end_time": "69980", "value": " a correr"}, {"annotation_id": "a21", "start_time": "70426", "end_time": "72147", "value": "dois homens ouviram"}, {"annotation_id": "a22", "start_time": "72627", "end_time": "73710", "value": "correram"}, {"annotation_id": "a516", "start_time": "73795", "end_time": "76095", "value": "bateram \u00e0 porta"}, {"annotation_id": "a23", "start_time": "77343", "end_time": "78382", "value": "A menina a correr"}, {"annotation_id": "a24", "start_time": "78417", "end_time": "79580", "value": "deram um tiro ao lobo"}, {"annotation_id": "a488", "start_time": "79625", "end_time": "80165", "value": "ele morreu"}, {"annotation_id": "a378", "start_time": "80216", "end_time": "80688", "value": "acabar"}, {"annotation_id": "a25", "start_time": "80716", "end_time": "81755", "value": "a av\u00f3 sobreviveu"}], "parent_ref": null}, "LGP_P1 Trans_Literal": {"linguistic_type_ref": "default-lt", "tier_id": "LGP_P1 Trans_Literal", "annotations": [{"annotation_id": "a26", "start_time": "11370", "end_time": "18356", "value": "[MULHER] PEQUENA M\u00c3E DAR CESTO FRUTA P\u00c3O CHOURI\u00c7O"}, {"annotation_id": "a392", "start_time": "18394", "end_time": "20114", "value": "ANDAR_"}, {"annotation_id": "a27", "start_time": "20210", "end_time": "22019", "value": "MAS APANHAR FLORES"}, {"annotation_id": "a28", "start_time": "22090", "end_time": "24370", "value": "[1] LOBO VER "}, {"annotation_id": "a432", "start_time": "24455", "end_time": "26210", "value": "[ESCONDER-SE-ATR\u00c1S] ATR\u00c1S"}, {"annotation_id": "a29", "start_time": "26895", "end_time": "29240", "value": "DEPOIS MENINA ANDAR_ "}, {"annotation_id": "a440", "start_time": "29260", "end_time": "30940", "value": "LOBO APROVEITAR"}, {"annotation_id": "a30", "start_time": "31005", "end_time": "31804", "value": "ONDE IR"}, {"annotation_id": "a31", "start_time": "31862", "end_time": "34206", "value": "AV\u00d3 CASA"}, {"annotation_id": "a32", "start_time": "35220", "end_time": "38350", "value": "[MULHER] HOMEM LOBO ANDAR_"}, {"annotation_id": "a33", "start_time": "38610", "end_time": "40460", "value": "VER PORTA CASA AV\u00d3"}, {"annotation_id": "a34", "start_time": "40536", "end_time": "41520", "value": "BATER-PORTA"}, {"annotation_id": "a466", "start_time": "41578", "end_time": "43050", "value": " AV\u00d3 [ABRIR-A-PORTA]"}, {"annotation_id": "a476", "start_time": "43067", "end_time": "43397", "value": "SURPRESA"}, {"annotation_id": "a35", "start_time": "43486", "end_time": "44450", "value": "LOBO AGARRAR"}, {"annotation_id": "a477", "start_time": "44523", "end_time": "45613", "value": "COMER"}, {"annotation_id": "a36", "start_time": "45752", "end_time": "46844", "value": "CAMA [TAPAR-SE] "}, {"annotation_id": "a37", "start_time": "46898", "end_time": "49360", "value": "\u00d3CULOS [COLOCAR-TOUCA] VESTIDO"}, {"annotation_id": "a489", "start_time": "49392", "end_time": "50532", "value": "MUDAR CAMA"}, {"annotation_id": "a564", "start_time": "50593", "end_time": "51543", "value": "TAPAR-SE"}, {"annotation_id": "a38", "start_time": "51701", "end_time": "52730", "value": "MENINA ANDAR_"}, {"annotation_id": "a554", "start_time": "52780", "end_time": "54310", "value": " [BATER-\u00c0-PORTA] NETO"}, {"annotation_id": "a39", "start_time": "55116", "end_time": "55532", "value": "OK"}, {"annotation_id": "a40", "start_time": "56077", "end_time": "56519", "value": "NETO"}, {"annotation_id": "a41", "start_time": "57009", "end_time": "58405", "value": "LOBO deitado"}, {"annotation_id": "a42", "start_time": "58431", "end_time": "59090", "value": "QUEM TU?"}, {"annotation_id": "a536", "start_time": "59130", "end_time": "64730", "value": " OLHOS GRANDE NARIZ GRANDE ORELHAS GRANDE"}, {"annotation_id": "a43", "start_time": "65142", "end_time": "66616", "value": "LOBO COMER"}, {"annotation_id": "a44", "start_time": "67324", "end_time": "68603", "value": "MENINA FUGIR MEDO"}, {"annotation_id": "a45", "start_time": "68641", "end_time": "69230", "value": "CORRER [IR-A-CORRER]"}, {"annotation_id": "a46", "start_time": "70426", "end_time": "72147", "value": "HOMEM DOIS OUVIR"}, {"annotation_id": "a47", "start_time": "72627", "end_time": "73720", "value": "CORRER"}, {"annotation_id": "a517", "start_time": "73795", "end_time": "76095", "value": "[BATAR_PORTA] CASA"}, {"annotation_id": "a48", "start_time": "77343", "end_time": "78382", "value": "MENINA CORRER"}, {"annotation_id": "a49", "start_time": "78417", "end_time": "79590", "value": "[DISPARAR-ARMA] LOBO"}, {"annotation_id": "a490", "start_time": "79625", "end_time": "80165", "value": "MORRER"}, {"annotation_id": "a379", "start_time": "80216", "end_time": "80688", "value": "ACABAR"}, {"annotation_id": "a50", "start_time": "80716", "end_time": "81755", "value": "VIVER NETO"}], "parent_ref": null}, "GLOSAS_P1": {"linguistic_type_ref": "default-lt", "tier_id": "GLOSAS_P1", "annotations": [{"annotation_id": "a393", "start_time": "11370", "end_time": "12590", "value": "FG(mulher)"}, {"annotation_id": "a394", "start_time": "12665", "end_time": "13385", "value": "PEQUENA"}, {"annotation_id": "a395", "start_time": "13410", "end_time": "13780", "value": "M\u00c3E"}, {"annotation_id": "a396", "start_time": "13820", "end_time": "14960", "value": "DAR"}, {"annotation_id": "a397", "start_time": "15045", "end_time": "16095", "value": "CESTO"}, {"annotation_id": "a398", "start_time": "16215", "end_time": "16725", "value": "FRUTA"}, {"annotation_id": "a399", "start_time": "16815", "end_time": "17675", "value": "P\u00c3O"}, {"annotation_id": "a400", "start_time": "17755", "end_time": "18345", "value": "CHOURI\u00c7O"}, {"annotation_id": "a59", "start_time": "18396", "end_time": "20115", "value": "ANDAR_"}, {"annotation_id": "a60", "start_time": "20210", "end_time": "20670", "value": "MAS"}, {"annotation_id": "a61", "start_time": "20725", "end_time": "21035", "value": "APANHAR"}, {"annotation_id": "a62", "start_time": "21075", "end_time": "22015", "value": "FLORES"}, {"annotation_id": "a63", "start_time": "22080", "end_time": "22460", "value": "N(1)"}, {"annotation_id": "a64", "start_time": "22515", "end_time": "23095", "value": "LOBO"}, {"annotation_id": "a65", "start_time": "23150", "end_time": "24370", "value": "VER"}, {"annotation_id": "a66", "start_time": "24465", "end_time": "25310", "value": "CL(esconder-se-atr\u00e1s)"}, {"annotation_id": "a437", "start_time": "25317", "end_time": "26207", "value": "\u00c1RVORE"}, {"annotation_id": "a68", "start_time": "26895", "end_time": "27495", "value": "DEPOIS"}, {"annotation_id": "a69", "start_time": "27530", "end_time": "27950", "value": " (MULHER=?)"}, {"annotation_id": "a70", "start_time": "28005", "end_time": "29235", "value": "ANDAR_"}, {"annotation_id": "a71", "start_time": "29265", "end_time": "29575", "value": "LOBO"}, {"annotation_id": "a72", "start_time": "29625", "end_time": "30955", "value": "APROVEITAR"}, {"annotation_id": "a73", "start_time": "30995", "end_time": "31465", "value": "ONDE"}, {"annotation_id": "a74", "start_time": "31505", "end_time": "31795", "value": "IR"}, {"annotation_id": "a75", "start_time": "31855", "end_time": "32805", "value": "(AV\u00d3=?)"}, {"annotation_id": "a76", "start_time": "33065", "end_time": "34190", "value": "CASA"}, {"annotation_id": "a77", "start_time": "35212", "end_time": "35722", "value": "FG(mulher)"}, {"annotation_id": "a78", "start_time": "35760", "end_time": "36170", "value": "HOMEM"}, {"annotation_id": "a79", "start_time": "36232", "end_time": "36862", "value": "LOBO"}, {"annotation_id": "a80", "start_time": "36942", "end_time": "38342", "value": "ANDAR_"}, {"annotation_id": "a81", "start_time": "38607", "end_time": "39147", "value": "VER"}, {"annotation_id": "a82", "start_time": "39182", "end_time": "39752", "value": "PORTA"}, {"annotation_id": "a83", "start_time": "39782", "end_time": "40012", "value": "CASA"}, {"annotation_id": "a84", "start_time": "40042", "end_time": "40452", "value": "(AV\u00d3=?)"}, {"annotation_id": "a85", "start_time": "40522", "end_time": "41512", "value": "BATER-PORTA"}, {"annotation_id": "a86", "start_time": "41572", "end_time": "42132", "value": "(AV\u00d3=?)"}, {"annotation_id": "a87", "start_time": "42192", "end_time": "43032", "value": "CL(abrir-porta)"}, {"annotation_id": "a88", "start_time": "43067", "end_time": "43397", "value": "SURPRESA"}, {"annotation_id": "a89", "start_time": "43477", "end_time": "44060", "value": "LOBO"}, {"annotation_id": "a90", "start_time": "44163", "end_time": "44453", "value": "AGARRAR"}, {"annotation_id": "a91", "start_time": "44523", "end_time": "45613", "value": "COMER"}, {"annotation_id": "a92", "start_time": "45753", "end_time": "46163", "value": "CAMA"}, {"annotation_id": "a93", "start_time": "46253", "end_time": "46843", "value": "CL(tapar-se)"}, {"annotation_id": "a94", "start_time": "46900", "end_time": "47410", "value": "\u00d3CULOS"}, {"annotation_id": "a95", "start_time": "47463", "end_time": "48523", "value": "CL(colocar-touca)"}, {"annotation_id": "a96", "start_time": "48578", "end_time": "49348", "value": "VESTIDO"}, {"annotation_id": "a97", "start_time": "49398", "end_time": "50108", "value": "MUDAR"}, {"annotation_id": "a98", "start_time": "50158", "end_time": "50538", "value": "CAMA"}, {"annotation_id": "a99", "start_time": "50593", "end_time": "51543", "value": "CL(tapar-se)"}, {"annotation_id": "a100", "start_time": "51700", "end_time": "52450", "value": "FG(mulher)"}, {"annotation_id": "a101", "start_time": "52510", "end_time": "52710", "value": "ANDAR_"}, {"annotation_id": "a102", "start_time": "52795", "end_time": "53805", "value": "CL(bater-\u00e0-porta)"}, {"annotation_id": "a103", "start_time": "53865", "end_time": "54315", "value": "NETO"}, {"annotation_id": "a104", "start_time": "55110", "end_time": "55520", "value": "OK"}, {"annotation_id": "a105", "start_time": "56075", "end_time": "56515", "value": "NETO"}, {"annotation_id": "a106", "start_time": "57010", "end_time": "57900", "value": "LOBO"}, {"annotation_id": "a107", "start_time": "57980", "end_time": "58390", "value": "CL(estar-deitado))"}, {"annotation_id": "a108", "start_time": "58420", "end_time": "59070", "value": "[QUEM-TU]"}, {"annotation_id": "a109", "start_time": "59130", "end_time": "59670", "value": "OLHOS"}, {"annotation_id": "a110", "start_time": "59715", "end_time": "60795", "value": "GRANDE"}, {"annotation_id": "a111", "start_time": "60850", "end_time": "61370", "value": "NARIZ"}, {"annotation_id": "a112", "start_time": "61405", "end_time": "62005", "value": "CL(nariz-comprido)"}, {"annotation_id": "a113", "start_time": "62030", "end_time": "62770", "value": "GRANDE"}, {"annotation_id": "a114", "start_time": "63035", "end_time": "63765", "value": "ORELHAS"}, {"annotation_id": "a115", "start_time": "63825", "end_time": "64735", "value": "GRANDES"}, {"annotation_id": "a116", "start_time": "65135", "end_time": "65765", "value": "LOBO"}, {"annotation_id": "a117", "start_time": "65845", "end_time": "66615", "value": "COMER"}, {"annotation_id": "a118", "start_time": "67320", "end_time": "67640", "value": "FG(mulher)"}, {"annotation_id": "a119", "start_time": "67700", "end_time": "68170", "value": "FUGIR"}, {"annotation_id": "a120", "start_time": "68200", "end_time": "68595", "value": "MEDO"}, {"annotation_id": "a121", "start_time": "68640", "end_time": "69210", "value": "CORRER"}, {"annotation_id": "a122", "start_time": "69340", "end_time": "69980", "value": "CL(ir-a-correr)"}, {"annotation_id": "a123", "start_time": "70415", "end_time": "70775", "value": "HOMEM"}, {"annotation_id": "a124", "start_time": "70820", "end_time": "71000", "value": "N(2)"}, {"annotation_id": "a125", "start_time": "71045", "end_time": "72145", "value": "OUVIR"}, {"annotation_id": "a126", "start_time": "72620", "end_time": "73700", "value": "CORRER"}, {"annotation_id": "a127", "start_time": "73795", "end_time": "74515", "value": "CL(bater-\u00e0-porta)"}, {"annotation_id": "a128", "start_time": "74560", "end_time": "76080", "value": "CASA"}, {"annotation_id": "a129", "start_time": "77350", "end_time": "77930", "value": "(MENINAFG(mulher)=?)"}, {"annotation_id": "a130", "start_time": "77995", "end_time": "78365", "value": "CORRER"}, {"annotation_id": "a131", "start_time": "78415", "end_time": "79175", "value": "[DISPARAR-ARMA]"}, {"annotation_id": "a132", "start_time": "79230", "end_time": "79570", "value": "LOBO"}, {"annotation_id": "a133", "start_time": "79625", "end_time": "80165", "value": "MORRER"}, {"annotation_id": "a380", "start_time": "80216", "end_time": "80688", "value": "ACABAR"}, {"annotation_id": "a134", "start_time": "80720", "end_time": "81300", "value": "(VIVER=?)"}, {"annotation_id": "a135", "start_time": "81365", "end_time": "81755", "value": "(AV\u00d3=?)"}], "parent_ref": null}, "Come_P1Literal": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Come_P1Literal", "annotations": [{"annotation_id": "a431", "annotation_ref": "a26", "value": "ROLE - verbo", "start_time": "11370", "end_time": "18356"}, {"annotation_id": "a433", "annotation_ref": "a28", "value": "ROLE", "start_time": "22090", "end_time": "24370"}, {"annotation_id": "a447", "annotation_ref": "a432", "value": "ROLE", "start_time": "24455", "end_time": "26210"}, {"annotation_id": "a455", "annotation_ref": "a30", "value": "INT", "start_time": "31005", "end_time": "31804"}, {"annotation_id": "a456", "annotation_ref": "a31", "value": "DP POSSESSIVO", "start_time": "31862", "end_time": "34206"}], "parent_ref": "LGP_P1 Trans_Literal"}, "Sint_Constituinte": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Sint_Constituinte", "annotations": [{"annotation_id": "a401", "annotation_ref": "a26", "value": "ARG_INT ARG_EXT V_DITRA ARG_INT2", "start_time": "11370", "end_time": "18356"}, {"annotation_id": "a402", "annotation_ref": "a392", "value": "V_TRA", "start_time": "18394", "end_time": "20114"}, {"annotation_id": "a137", "annotation_ref": "a27", "value": "V_TRA ARG_INT", "start_time": "20210", "end_time": "22019"}, {"annotation_id": "a138", "annotation_ref": "a28", "value": "ARG_EXT V_TRA ARG_INT[-]", "start_time": "22090", "end_time": "24370"}, {"annotation_id": "a448", "annotation_ref": "a432", "value": "V_INT ADJT", "start_time": "24455", "end_time": "26210"}, {"annotation_id": "a139", "annotation_ref": "a29", "value": "ADJT ARG_EXT V_INT", "start_time": "26895", "end_time": "29240"}, {"annotation_id": "a449", "annotation_ref": "a440", "value": "ARG_EXT V_INT", "start_time": "29260", "end_time": "30940"}, {"annotation_id": "a140", "annotation_ref": "a30", "value": "ADJT V_INT", "start_time": "31005", "end_time": "31804"}, {"annotation_id": "a142", "annotation_ref": "a32", "value": "ARG_EXT V_INT", "start_time": "35220", "end_time": "38350"}, {"annotation_id": "a143", "annotation_ref": "a33", "value": "V_TRA ARG_INT", "start_time": "38610", "end_time": "40460"}, {"annotation_id": "a144", "annotation_ref": "a34", "value": "V_TRA ARG_INT", "start_time": "40536", "end_time": "41520"}, {"annotation_id": "a478", "annotation_ref": "a466", "value": "ARG_EXT V_TRA-ARG_INT", "start_time": "41578", "end_time": "43050"}, {"annotation_id": "a145", "annotation_ref": "a35", "value": "ARG_EXT V_TRA", "start_time": "43486", "end_time": "44450"}, {"annotation_id": "a479", "annotation_ref": "a477", "value": "V_TRA", "start_time": "44523", "end_time": "45613"}, {"annotation_id": "a146", "annotation_ref": "a36", "value": "ADJT V_INT-ARG_EXT", "start_time": "45752", "end_time": "46844"}, {"annotation_id": "a147", "annotation_ref": "a37", "value": "ARG_INT V_TRA-ARG_INT2 ARG_INT3", "start_time": "46898", "end_time": "49360"}, {"annotation_id": "a491", "annotation_ref": "a489", "value": "V_PRON ADJT", "start_time": "49392", "end_time": "50532"}, {"annotation_id": "a565", "annotation_ref": "a564", "value": "V_PRON", "start_time": "50593", "end_time": "51543"}, {"annotation_id": "a148", "annotation_ref": "a38", "value": "ARG_EXT V_INT", "start_time": "51701", "end_time": "52730"}, {"annotation_id": "a555", "annotation_ref": "a554", "value": "V_TRA ARG_INT", "start_time": "52780", "end_time": "54310"}, {"annotation_id": "a556", "annotation_ref": "a39", "value": "INTERJ", "start_time": "55116", "end_time": "55532"}, {"annotation_id": "a151", "annotation_ref": "a41", "value": "ARG_EXT V_INT", "start_time": "57009", "end_time": "58405"}, {"annotation_id": "a537", "annotation_ref": "a42", "value": "E_INT V_COP[-] ARG_INT ", "start_time": "58431", "end_time": "59090"}, {"annotation_id": "a538", "annotation_ref": "a536", "value": "[-]V_COP ARG_INT ARG_INT2 ARG_INT3", "start_time": "59130", "end_time": "64730"}, {"annotation_id": "a153", "annotation_ref": "a43", "value": "ARG_EXT V_TRA ARG_INT[-]", "start_time": "65142", "end_time": "66616"}, {"annotation_id": "a154", "annotation_ref": "a44", "value": "ARG_EXT V_INT ADJT", "start_time": "67324", "end_time": "68603"}, {"annotation_id": "a155", "annotation_ref": "a45", "value": "V_INT", "start_time": "68641", "end_time": "69230"}, {"annotation_id": "a156", "annotation_ref": "a46", "value": "ARG_EXT V_INT", "start_time": "70426", "end_time": "72147"}, {"annotation_id": "a157", "annotation_ref": "a47", "value": "V_INT", "start_time": "72627", "end_time": "73720"}, {"annotation_id": "a518", "annotation_ref": "a517", "value": "V_TRA ARG_INT", "start_time": "73795", "end_time": "76095"}, {"annotation_id": "a158", "annotation_ref": "a48", "value": "ARG_EXT V_INT", "start_time": "77343", "end_time": "78382"}, {"annotation_id": "a159", "annotation_ref": "a49", "value": "V_TRA ARG_INT", "start_time": "78417", "end_time": "79590"}, {"annotation_id": "a492", "annotation_ref": "a490", "value": "V_INT", "start_time": "79625", "end_time": "80165"}, {"annotation_id": "a493", "annotation_ref": "a379", "value": "V_INT", "start_time": "80216", "end_time": "80688"}, {"annotation_id": "a160", "annotation_ref": "a50", "value": "V_INT ARG_EXT", "start_time": "80716", "end_time": "81755"}], "parent_ref": "LGP_P1 Trans_Literal"}, "GLOSA_P1-M1": {"linguistic_type_ref": "Symbolic Association", "tier_id": "GLOSA_P1-M1", "annotations": [{"annotation_id": "a403", "annotation_ref": "a393", "value": "FG(mulher)", "start_time": "11370", "end_time": "12590"}, {"annotation_id": "a404", "annotation_ref": "a394", "value": "PEQUENA", "start_time": "12665", "end_time": "13385"}, {"annotation_id": "a405", "annotation_ref": "a395", "value": "M\u00c3E", "start_time": "13410", "end_time": "13780"}, {"annotation_id": "a406", "annotation_ref": "a396", "value": "(1sg)DAR(3sg)", "start_time": "13820", "end_time": "14960"}, {"annotation_id": "a407", "annotation_ref": "a397", "value": "CESTO", "start_time": "15045", "end_time": "16095"}, {"annotation_id": "a408", "annotation_ref": "a398", "value": "FRUTA", "start_time": "16215", "end_time": "16725"}, {"annotation_id": "a409", "annotation_ref": "a399", "value": "P\u00c3O", "start_time": "16815", "end_time": "17675"}, {"annotation_id": "a410", "annotation_ref": "a400", "value": "CHOURI\u00c7O", "start_time": "17755", "end_time": "18345"}, {"annotation_id": "a169", "annotation_ref": "a59", "value": "(1sg)ANDAR_", "start_time": "18396", "end_time": "20115"}, {"annotation_id": "a170", "annotation_ref": "a60", "value": "MAS", "start_time": "20210", "end_time": "20670"}, {"annotation_id": "a171", "annotation_ref": "a61", "value": "(1sg)APANHAR", "start_time": "20725", "end_time": "21035"}, {"annotation_id": "a172", "annotation_ref": "a62", "value": "FLOR+", "start_time": "21075", "end_time": "22015"}, {"annotation_id": "a173", "annotation_ref": "a63", "value": "N(1)", "start_time": "22080", "end_time": "22460"}, {"annotation_id": "a174", "annotation_ref": "a64", "value": "LOBO", "start_time": "22515", "end_time": "23095"}, {"annotation_id": "a175", "annotation_ref": "a65", "value": "(1sg)VER", "start_time": "23150", "end_time": "24370"}, {"annotation_id": "a176", "annotation_ref": "a66", "value": "CL(esconder-se-atr\u00e1s-da-\u00e1rvore)", "start_time": "24465", "end_time": "25310"}, {"annotation_id": "a438", "annotation_ref": "a437", "value": "\u00c1RVORE", "start_time": "25317", "end_time": "26207"}, {"annotation_id": "a178", "annotation_ref": "a68", "value": "DEPOIS", "start_time": "26895", "end_time": "27495"}, {"annotation_id": "a179", "annotation_ref": "a69", "value": "FG(mulher)", "start_time": "27530", "end_time": "27950"}, {"annotation_id": "a180", "annotation_ref": "a70", "value": "ANDAR_", "start_time": "28005", "end_time": "29235"}, {"annotation_id": "a181", "annotation_ref": "a71", "value": "LOBO", "start_time": "29265", "end_time": "29575"}, {"annotation_id": "a182", "annotation_ref": "a72", "value": "APROVEITAR_", "start_time": "29625", "end_time": "30955"}, {"annotation_id": "a183", "annotation_ref": "a74", "value": "IR", "start_time": "31505", "end_time": "31795"}, {"annotation_id": "a184", "annotation_ref": "a75", "value": "NETO", "start_time": "31855", "end_time": "32805"}, {"annotation_id": "a185", "annotation_ref": "a77", "value": "FG(mulher)", "start_time": "35212", "end_time": "35722"}, {"annotation_id": "a186", "annotation_ref": "a78", "value": "HOMEM", "start_time": "35760", "end_time": "36170"}, {"annotation_id": "a187", "annotation_ref": "a79", "value": "LOBO", "start_time": "36232", "end_time": "36862"}, {"annotation_id": "a188", "annotation_ref": "a80", "value": "ANDAR_", "start_time": "36942", "end_time": "38342"}, {"annotation_id": "a189", "annotation_ref": "a81", "value": "VER", "start_time": "38607", "end_time": "39147"}, {"annotation_id": "a190", "annotation_ref": "a82", "value": "PORTA", "start_time": "39182", "end_time": "39752"}, {"annotation_id": "a191", "annotation_ref": "a83", "value": "CASA", "start_time": "39782", "end_time": "40012"}, {"annotation_id": "a192", "annotation_ref": "a85", "value": "CL(bater-\u00e0-porta)", "start_time": "40522", "end_time": "41512"}, {"annotation_id": "a193", "annotation_ref": "a86", "value": "NETO", "start_time": "41572", "end_time": "42132"}, {"annotation_id": "a194", "annotation_ref": "a87", "value": "CL(abrir-porta)", "start_time": "42192", "end_time": "43032"}, {"annotation_id": "a195", "annotation_ref": "a88", "value": "SURPRESA", "start_time": "43067", "end_time": "43397"}, {"annotation_id": "a196", "annotation_ref": "a89", "value": "LOBO", "start_time": "43477", "end_time": "44060"}, {"annotation_id": "a197", "annotation_ref": "a90", "value": "(1sg)AGARRAR(3sg)", "start_time": "44163", "end_time": "44453"}, {"annotation_id": "a198", "annotation_ref": "a91", "value": "(1sg)COMER(3sg)", "start_time": "44523", "end_time": "45613"}, {"annotation_id": "a199", "annotation_ref": "a92", "value": "CAMA", "start_time": "45753", "end_time": "46163"}, {"annotation_id": "a200", "annotation_ref": "a93", "value": "CL(tapar-se-com-cobertores)", "start_time": "46253", "end_time": "46843"}, {"annotation_id": "a201", "annotation_ref": "a94", "value": "\u00d3CULOS", "start_time": "46900", "end_time": "47410"}, {"annotation_id": "a202", "annotation_ref": "a95", "value": "CL(colocar-a-touca)", "start_time": "47463", "end_time": "48523"}, {"annotation_id": "a203", "annotation_ref": "a96", "value": "VESTIDO", "start_time": "48578", "end_time": "49348"}, {"annotation_id": "a204", "annotation_ref": "a97", "value": "MUDAR", "start_time": "49398", "end_time": "50108"}, {"annotation_id": "a205", "annotation_ref": "a98", "value": "CAMA", "start_time": "50158", "end_time": "50538"}, {"annotation_id": "a206", "annotation_ref": "a99", "value": "CL(tapar-se)", "start_time": "50593", "end_time": "51543"}, {"annotation_id": "a207", "annotation_ref": "a100", "value": "FG(mulher)", "start_time": "51700", "end_time": "52450"}, {"annotation_id": "a208", "annotation_ref": "a101", "value": "ANDAR_", "start_time": "52510", "end_time": "52710"}, {"annotation_id": "a209", "annotation_ref": "a102", "value": "CL(bater-\u00e0-porta)", "start_time": "52795", "end_time": "53805"}, {"annotation_id": "a210", "annotation_ref": "a103", "value": "NETO", "start_time": "53865", "end_time": "54315"}, {"annotation_id": "a211", "annotation_ref": "a106", "value": "LOBO", "start_time": "57010", "end_time": "57900"}, {"annotation_id": "a212", "annotation_ref": "a107", "value": "CL(estar-na-cama)", "start_time": "57980", "end_time": "58390"}, {"annotation_id": "a213", "annotation_ref": "a108", "value": "IX(quem)", "start_time": "58420", "end_time": "59070"}, {"annotation_id": "a214", "annotation_ref": "a109", "value": "OLHOS", "start_time": "59130", "end_time": "59670"}, {"annotation_id": "a215", "annotation_ref": "a110", "value": "GRANDE", "start_time": "59715", "end_time": "60795"}, {"annotation_id": "a216", "annotation_ref": "a111", "value": "NARIZ", "start_time": "60850", "end_time": "61370"}, {"annotation_id": "a217", "annotation_ref": "a112", "value": "CL(nariz-comprido))", "start_time": "61405", "end_time": "62005"}, {"annotation_id": "a218", "annotation_ref": "a113", "value": "GRANDE", "start_time": "62030", "end_time": "62770"}, {"annotation_id": "a219", "annotation_ref": "a114", "value": "ORELHAS", "start_time": "63035", "end_time": "63765"}, {"annotation_id": "a220", "annotation_ref": "a115", "value": "GRANDES", "start_time": "63825", "end_time": "64735"}, {"annotation_id": "a221", "annotation_ref": "a116", "value": "LOBO", "start_time": "65135", "end_time": "65765"}, {"annotation_id": "a222", "annotation_ref": "a117", "value": "COMER", "start_time": "65845", "end_time": "66615"}, {"annotation_id": "a223", "annotation_ref": "a118", "value": "FG(mulher)", "start_time": "67320", "end_time": "67640"}, {"annotation_id": "a224", "annotation_ref": "a119", "value": "FUGIR", "start_time": "67700", "end_time": "68170"}, {"annotation_id": "a225", "annotation_ref": "a120", "value": "MEDO", "start_time": "68200", "end_time": "68595"}, {"annotation_id": "a226", "annotation_ref": "a121", "value": "CORRER", "start_time": "68640", "end_time": "69210"}, {"annotation_id": "a227", "annotation_ref": "a122", "value": "CL(ir-a-correr)", "start_time": "69340", "end_time": "69980"}, {"annotation_id": "a228", "annotation_ref": "a123", "value": "HOMEM", "start_time": "70415", "end_time": "70775"}, {"annotation_id": "a229", "annotation_ref": "a124", "value": "N(2)", "start_time": "70820", "end_time": "71000"}, {"annotation_id": "a230", "annotation_ref": "a125", "value": "OUVIR", "start_time": "71045", "end_time": "72145"}, {"annotation_id": "a231", "annotation_ref": "a126", "value": "CORRER", "start_time": "72620", "end_time": "73700"}, {"annotation_id": "a232", "annotation_ref": "a127", "value": "CL(bater-\u00e0-porta)", "start_time": "73795", "end_time": "74515"}, {"annotation_id": "a382", "annotation_ref": "a128", "value": "CASA", "start_time": "74560", "end_time": "76080"}, {"annotation_id": "a233", "annotation_ref": "a129", "value": "FG(mulher)", "start_time": "77350", "end_time": "77930"}, {"annotation_id": "a234", "annotation_ref": "a130", "value": "CORRER", "start_time": "77995", "end_time": "78365"}, {"annotation_id": "a235", "annotation_ref": "a131", "value": "CL(dar-tiro)", "start_time": "78415", "end_time": "79175"}, {"annotation_id": "a236", "annotation_ref": "a132", "value": "LOBO", "start_time": "79230", "end_time": "79570"}, {"annotation_id": "a237", "annotation_ref": "a133", "value": "MORRER", "start_time": "79625", "end_time": "80165"}, {"annotation_id": "a383", "annotation_ref": "a380", "value": "ACABAR", "start_time": "80216", "end_time": "80688"}, {"annotation_id": "a494", "annotation_ref": "a135", "value": "(AV\u00d3=?)", "start_time": "81365", "end_time": "81755"}], "parent_ref": "GLOSAS_P1"}, "GLOSA_P1-M2": {"linguistic_type_ref": "Symbolic Association", "tier_id": "GLOSA_P1-M2", "annotations": [{"annotation_id": "a241", "annotation_ref": "a76", "value": "CASA", "start_time": "33065", "end_time": "34190"}, {"annotation_id": "a242", "annotation_ref": "a82", "value": "PORTA", "start_time": "39182", "end_time": "39752"}, {"annotation_id": "a243", "annotation_ref": "a83", "value": "PORTA", "start_time": "39782", "end_time": "40012"}, {"annotation_id": "a244", "annotation_ref": "a84", "value": "PORTA", "start_time": "40042", "end_time": "40452"}, {"annotation_id": "a245", "annotation_ref": "a85", "value": "PORTA", "start_time": "40522", "end_time": "41512"}, {"annotation_id": "a246", "annotation_ref": "a88", "value": "SURPRESA", "start_time": "43067", "end_time": "43397"}, {"annotation_id": "a253", "annotation_ref": "a114", "value": "ORELHAS", "start_time": "63035", "end_time": "63765"}, {"annotation_id": "a255", "annotation_ref": "a117", "value": "COMER", "start_time": "65845", "end_time": "66615"}], "parent_ref": "GLOSAS_P1"}, "Comen_GlosaP1": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Comen_GlosaP1", "annotations": [{"annotation_id": "a262", "annotation_ref": "a69", "value": "gesto de mulher usado para mencionar a menina", "start_time": "27530", "end_time": "27950"}, {"annotation_id": "a263", "annotation_ref": "a74", "value": "INT", "start_time": "31505", "end_time": "31795"}, {"annotation_id": "a264", "annotation_ref": "a75", "value": "faz o gesto de neto para av\u00f3", "start_time": "31855", "end_time": "32805"}, {"annotation_id": "a265", "annotation_ref": "a84", "value": "o gesto de neto para av\u00f3", "start_time": "40042", "end_time": "40452"}, {"annotation_id": "a266", "annotation_ref": "a86", "value": "o gesto de neto para av\u00f3", "start_time": "41572", "end_time": "42132"}, {"annotation_id": "a267", "annotation_ref": "a103", "value": "o gesto de neto para av\u00f3", "start_time": "53865", "end_time": "54315"}, {"annotation_id": "a268", "annotation_ref": "a105", "value": "o gesto de neto para av\u00f3", "start_time": "56075", "end_time": "56515"}, {"annotation_id": "a384", "annotation_ref": "a118", "value": "menina", "start_time": "67320", "end_time": "67640"}, {"annotation_id": "a385", "annotation_ref": "a128", "value": "Localiza\u00e7\u00e3o errada de casa", "start_time": "74560", "end_time": "76080"}, {"annotation_id": "a386", "annotation_ref": "a129", "value": "menina", "start_time": "77350", "end_time": "77930"}, {"annotation_id": "a270", "annotation_ref": "a135", "value": "o gesto de neto para av\u00f3", "start_time": "81365", "end_time": "81755"}], "parent_ref": "GLOSAS_P1"}, "M2_ClassGram": {"linguistic_type_ref": "Symbolic Association", "tier_id": "M2_ClassGram", "annotations": [{"annotation_id": "a273", "annotation_ref": "a82", "value": "N", "start_time": "39182", "end_time": "39752"}, {"annotation_id": "a387", "annotation_ref": "a85", "value": "N", "start_time": "40522", "end_time": "41512"}, {"annotation_id": "a274", "annotation_ref": "a88", "value": "INTJ", "start_time": "43067", "end_time": "43397"}, {"annotation_id": "a280", "annotation_ref": "a99", "value": "CL_V", "start_time": "50593", "end_time": "51543"}, {"annotation_id": "a284", "annotation_ref": "a114", "value": "N", "start_time": "63035", "end_time": "63765"}, {"annotation_id": "a286", "annotation_ref": "a117", "value": "V_TRA", "start_time": "65845", "end_time": "66615"}, {"annotation_id": "a288", "annotation_ref": "a121", "value": "V_INT", "start_time": "68640", "end_time": "69210"}], "parent_ref": "GLOSAS_P1"}, "M1_ClassGram": {"linguistic_type_ref": "Symbolic Association", "tier_id": "M1_ClassGram", "annotations": [{"annotation_id": "a413", "annotation_ref": "a393", "value": "N", "start_time": "11370", "end_time": "12590"}, {"annotation_id": "a414", "annotation_ref": "a394", "value": "ADJ", "start_time": "12665", "end_time": "13385"}, {"annotation_id": "a415", "annotation_ref": "a395", "value": "N", "start_time": "13410", "end_time": "13780"}, {"annotation_id": "a416", "annotation_ref": "a396", "value": "V_DITRA", "start_time": "13820", "end_time": "14960"}, {"annotation_id": "a417", "annotation_ref": "a397", "value": "N", "start_time": "15045", "end_time": "16095"}, {"annotation_id": "a418", "annotation_ref": "a398", "value": "N", "start_time": "16215", "end_time": "16725"}, {"annotation_id": "a419", "annotation_ref": "a399", "value": "N", "start_time": "16815", "end_time": "17675"}, {"annotation_id": "a420", "annotation_ref": "a400", "value": "N", "start_time": "17755", "end_time": "18345"}, {"annotation_id": "a300", "annotation_ref": "a59", "value": "V_INT", "start_time": "18396", "end_time": "20115"}, {"annotation_id": "a301", "annotation_ref": "a60", "value": "CONJ", "start_time": "20210", "end_time": "20670"}, {"annotation_id": "a302", "annotation_ref": "a61", "value": "V_TRA", "start_time": "20725", "end_time": "21035"}, {"annotation_id": "a303", "annotation_ref": "a62", "value": "N", "start_time": "21075", "end_time": "22015"}, {"annotation_id": "a304", "annotation_ref": "a63", "value": "NUM", "start_time": "22080", "end_time": "22460"}, {"annotation_id": "a305", "annotation_ref": "a64", "value": "N", "start_time": "22515", "end_time": "23095"}, {"annotation_id": "a306", "annotation_ref": "a65", "value": "V_TRA", "start_time": "23150", "end_time": "24370"}, {"annotation_id": "a307", "annotation_ref": "a66", "value": "CL_V", "start_time": "24465", "end_time": "25310"}, {"annotation_id": "a439", "annotation_ref": "a437", "value": "N", "start_time": "25317", "end_time": "26207"}, {"annotation_id": "a309", "annotation_ref": "a68", "value": "ADV", "start_time": "26895", "end_time": "27495"}, {"annotation_id": "a310", "annotation_ref": "a69", "value": "N", "start_time": "27530", "end_time": "27950"}, {"annotation_id": "a311", "annotation_ref": "a70", "value": "V_INT", "start_time": "28005", "end_time": "29235"}, {"annotation_id": "a312", "annotation_ref": "a71", "value": "N", "start_time": "29265", "end_time": "29575"}, {"annotation_id": "a313", "annotation_ref": "a72", "value": "V_INT", "start_time": "29625", "end_time": "30955"}, {"annotation_id": "a314", "annotation_ref": "a73", "value": "ADV", "start_time": "30995", "end_time": "31465"}, {"annotation_id": "a315", "annotation_ref": "a74", "value": "V_TRA", "start_time": "31505", "end_time": "31795"}, {"annotation_id": "a316", "annotation_ref": "a75", "value": "N", "start_time": "31855", "end_time": "32805"}, {"annotation_id": "a317", "annotation_ref": "a76", "value": "N", "start_time": "33065", "end_time": "34190"}, {"annotation_id": "a318", "annotation_ref": "a77", "value": "N", "start_time": "35212", "end_time": "35722"}, {"annotation_id": "a319", "annotation_ref": "a78", "value": "N", "start_time": "35760", "end_time": "36170"}, {"annotation_id": "a320", "annotation_ref": "a79", "value": "N", "start_time": "36232", "end_time": "36862"}, {"annotation_id": "a321", "annotation_ref": "a80", "value": "V_INT", "start_time": "36942", "end_time": "38342"}, {"annotation_id": "a322", "annotation_ref": "a81", "value": "V_TRA", "start_time": "38607", "end_time": "39147"}, {"annotation_id": "a323", "annotation_ref": "a82", "value": "N", "start_time": "39182", "end_time": "39752"}, {"annotation_id": "a324", "annotation_ref": "a83", "value": "N", "start_time": "39782", "end_time": "40012"}, {"annotation_id": "a325", "annotation_ref": "a84", "value": "N", "start_time": "40042", "end_time": "40452"}, {"annotation_id": "a326", "annotation_ref": "a85", "value": "CL_V", "start_time": "40522", "end_time": "41512"}, {"annotation_id": "a327", "annotation_ref": "a86", "value": "N", "start_time": "41572", "end_time": "42132"}, {"annotation_id": "a328", "annotation_ref": "a87", "value": "CL_V", "start_time": "42192", "end_time": "43032"}, {"annotation_id": "a329", "annotation_ref": "a88", "value": "INTJ", "start_time": "43067", "end_time": "43397"}, {"annotation_id": "a330", "annotation_ref": "a89", "value": "N", "start_time": "43477", "end_time": "44060"}, {"annotation_id": "a331", "annotation_ref": "a90", "value": "V_TRA", "start_time": "44163", "end_time": "44453"}, {"annotation_id": "a332", "annotation_ref": "a91", "value": "V_TRA", "start_time": "44523", "end_time": "45613"}, {"annotation_id": "a333", "annotation_ref": "a92", "value": "N", "start_time": "45753", "end_time": "46163"}, {"annotation_id": "a334", "annotation_ref": "a93", "value": "CL_V", "start_time": "46253", "end_time": "46843"}, {"annotation_id": "a335", "annotation_ref": "a94", "value": "N", "start_time": "46900", "end_time": "47410"}, {"annotation_id": "a336", "annotation_ref": "a95", "value": "CL_V", "start_time": "47463", "end_time": "48523"}, {"annotation_id": "a337", "annotation_ref": "a96", "value": "N", "start_time": "48578", "end_time": "49348"}, {"annotation_id": "a338", "annotation_ref": "a97", "value": "V_PRON", "start_time": "49398", "end_time": "50108"}, {"annotation_id": "a339", "annotation_ref": "a98", "value": "N", "start_time": "50158", "end_time": "50538"}, {"annotation_id": "a340", "annotation_ref": "a99", "value": "CL_V", "start_time": "50593", "end_time": "51543"}, {"annotation_id": "a341", "annotation_ref": "a100", "value": "N", "start_time": "51700", "end_time": "52450"}, {"annotation_id": "a342", "annotation_ref": "a101", "value": "V_INT", "start_time": "52510", "end_time": "52710"}, {"annotation_id": "a343", "annotation_ref": "a102", "value": "CL_V", "start_time": "52795", "end_time": "53805"}, {"annotation_id": "a344", "annotation_ref": "a103", "value": "N", "start_time": "53865", "end_time": "54315"}, {"annotation_id": "a345", "annotation_ref": "a104", "value": "INTERJ", "start_time": "55110", "end_time": "55520"}, {"annotation_id": "a346", "annotation_ref": "a105", "value": "N", "start_time": "56075", "end_time": "56515"}, {"annotation_id": "a347", "annotation_ref": "a106", "value": "N", "start_time": "57010", "end_time": "57900"}, {"annotation_id": "a348", "annotation_ref": "a107", "value": "CL_V_COP", "start_time": "57980", "end_time": "58390"}, {"annotation_id": "a349", "annotation_ref": "a108", "value": "ARG_INT", "start_time": "58420", "end_time": "59070"}, {"annotation_id": "a350", "annotation_ref": "a109", "value": "N", "start_time": "59130", "end_time": "59670"}, {"annotation_id": "a351", "annotation_ref": "a110", "value": "ADJ", "start_time": "59715", "end_time": "60795"}, {"annotation_id": "a352", "annotation_ref": "a111", "value": "N", "start_time": "60850", "end_time": "61370"}, {"annotation_id": "a353", "annotation_ref": "a112", "value": "ADJ", "start_time": "61405", "end_time": "62005"}, {"annotation_id": "a354", "annotation_ref": "a113", "value": "ADJ", "start_time": "62030", "end_time": "62770"}, {"annotation_id": "a355", "annotation_ref": "a114", "value": "N", "start_time": "63035", "end_time": "63765"}, {"annotation_id": "a356", "annotation_ref": "a115", "value": "ADJ", "start_time": "63825", "end_time": "64735"}, {"annotation_id": "a357", "annotation_ref": "a116", "value": "N", "start_time": "65135", "end_time": "65765"}, {"annotation_id": "a358", "annotation_ref": "a117", "value": "V_TRA", "start_time": "65845", "end_time": "66615"}, {"annotation_id": "a359", "annotation_ref": "a118", "value": "N", "start_time": "67320", "end_time": "67640"}, {"annotation_id": "a360", "annotation_ref": "a119", "value": "V_INT", "start_time": "67700", "end_time": "68170"}, {"annotation_id": "a361", "annotation_ref": "a120", "value": "ADJ", "start_time": "68200", "end_time": "68595"}, {"annotation_id": "a362", "annotation_ref": "a121", "value": "V_INT", "start_time": "68640", "end_time": "69210"}, {"annotation_id": "a363", "annotation_ref": "a122", "value": "CL_V_COP", "start_time": "69340", "end_time": "69980"}, {"annotation_id": "a364", "annotation_ref": "a123", "value": "N", "start_time": "70415", "end_time": "70775"}, {"annotation_id": "a365", "annotation_ref": "a124", "value": "NUM", "start_time": "70820", "end_time": "71000"}, {"annotation_id": "a366", "annotation_ref": "a125", "value": "V_INT", "start_time": "71045", "end_time": "72145"}, {"annotation_id": "a367", "annotation_ref": "a126", "value": "V_INT", "start_time": "72620", "end_time": "73700"}, {"annotation_id": "a368", "annotation_ref": "a127", "value": "V_TRA", "start_time": "73795", "end_time": "74515"}, {"annotation_id": "a369", "annotation_ref": "a128", "value": "N", "start_time": "74560", "end_time": "76080"}, {"annotation_id": "a370", "annotation_ref": "a129", "value": "N", "start_time": "77350", "end_time": "77930"}, {"annotation_id": "a371", "annotation_ref": "a130", "value": "V_INT", "start_time": "77995", "end_time": "78365"}, {"annotation_id": "a372", "annotation_ref": "a131", "value": "CL_V_TRA", "start_time": "78415", "end_time": "79175"}, {"annotation_id": "a373", "annotation_ref": "a132", "value": "N", "start_time": "79230", "end_time": "79570"}, {"annotation_id": "a374", "annotation_ref": "a133", "value": "V_INT", "start_time": "79625", "end_time": "80165"}, {"annotation_id": "a389", "annotation_ref": "a380", "value": "V_INT", "start_time": "80216", "end_time": "80688"}, {"annotation_id": "a376", "annotation_ref": "a135", "value": "N", "start_time": "81365", "end_time": "81755"}], "parent_ref": "GLOSAS_P1"}, "GLOSA_P1_EXPRESSAO": {"linguistic_type_ref": "Symbolic Association", "tier_id": "GLOSA_P1_EXPRESSAO", "annotations": [{"annotation_id": "a390", "annotation_ref": "a69", "value": "MENINA(mouthing)", "start_time": "27530", "end_time": "27950"}, {"annotation_id": "a391", "annotation_ref": "a108", "value": "QUEM_m(\u00e9)", "start_time": "58420", "end_time": "59070"}], "parent_ref": "GLOSAS_P1"}, "EXPRE_ClassGram": {"linguistic_type_ref": "Symbolic Association", "tier_id": "EXPRE_ClassGram", "annotations": [{"annotation_id": "a539", "annotation_ref": "a108", "value": "PRO-INT", "start_time": "58420", "end_time": "59070"}, {"annotation_id": "a495", "annotation_ref": "a134", "value": "V_INT", "start_time": "80720", "end_time": "81300"}], "parent_ref": "GLOSAS_P1"}, "Fono_Hamnosys": {"linguistic_type_ref": "default-lt", "tier_id": "Fono_Hamnosys", "annotations": [], "parent_ref": null}, "Config": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Config", "annotations": [], "parent_ref": "Fono_Hamnosys"}, "Orient": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Orient", "annotations": [], "parent_ref": "Fono_Hamnosys"}, "Local": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Local", "annotations": [], "parent_ref": "Fono_Hamnosys"}, "Movim": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Movim", "annotations": [], "parent_ref": "Fono_Hamnosys"}, "Seman_Estr": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Seman_Estr", "annotations": [], "parent_ref": "Sint_Constituinte"}, "M1_CONSTITUINTE": {"linguistic_type_ref": "default-lt", "tier_id": "M1_CONSTITUINTE", "annotations": [{"annotation_id": "a423", "start_time": "11371", "end_time": "13373", "value": "ARG_EXT"}, {"annotation_id": "a424", "start_time": "13410", "end_time": "13780", "value": "ARG_INT"}, {"annotation_id": "a425", "start_time": "13820", "end_time": "14960", "value": "V_DITRA"}, {"annotation_id": "a426", "start_time": "15030", "end_time": "18340", "value": "ARG_INT2"}, {"annotation_id": "a429", "start_time": "20725", "end_time": "21035", "value": "V_TRA"}, {"annotation_id": "a430", "start_time": "21075", "end_time": "22015", "value": "ARG_INT"}, {"annotation_id": "a435", "start_time": "22085", "end_time": "23095", "value": "ARG_EXT"}, {"annotation_id": "a442", "start_time": "23152", "end_time": "24362", "value": "V_TRA"}, {"annotation_id": "a452", "start_time": "24465", "end_time": "25310", "value": "V_TRA"}, {"annotation_id": "a453", "start_time": "25317", "end_time": "26207", "value": "ADJT"}, {"annotation_id": "a443", "start_time": "27530", "end_time": "27950", "value": "ARG_EXT"}, {"annotation_id": "a444", "start_time": "28005", "end_time": "29235", "value": "V_INT"}, {"annotation_id": "a461", "start_time": "29265", "end_time": "29575", "value": "AGENTE"}, {"annotation_id": "a462", "start_time": "29610", "end_time": "30950", "value": "V_INT"}, {"annotation_id": "a458", "start_time": "30995", "end_time": "31465", "value": "E-INT"}, {"annotation_id": "a459", "start_time": "31505", "end_time": "31795", "value": "V_INT"}, {"annotation_id": "a463", "start_time": "35207", "end_time": "36877", "value": "ARG_EXT"}, {"annotation_id": "a464", "start_time": "36942", "end_time": "38342", "value": "V_INT"}, {"annotation_id": "a469", "start_time": "38607", "end_time": "39147", "value": "V_TRA"}, {"annotation_id": "a470", "start_time": "39187", "end_time": "40457", "value": "ARG_INT"}, {"annotation_id": "a471", "start_time": "40522", "end_time": "41512", "value": "V_TRA"}, {"annotation_id": "a482", "start_time": "41572", "end_time": "42132", "value": "ARG_EXT"}, {"annotation_id": "a483", "start_time": "42192", "end_time": "43032", "value": "V_TRA"}, {"annotation_id": "a484", "start_time": "43477", "end_time": "44060", "value": "ARG_EXT"}, {"annotation_id": "a485", "start_time": "44163", "end_time": "44453", "value": "V_TRA"}, {"annotation_id": "a486", "start_time": "44523", "end_time": "45613", "value": "V_TRA"}, {"annotation_id": "a503", "start_time": "45753", "end_time": "46163", "value": "ADJT"}, {"annotation_id": "a504", "start_time": "46253", "end_time": "46843", "value": "V_TRA-ARG_INT"}, {"annotation_id": "a505", "start_time": "46900", "end_time": "47410", "value": "ARG_INT"}, {"annotation_id": "a506", "start_time": "47463", "end_time": "48523", "value": "V-TRA-ARG_INT"}, {"annotation_id": "a507", "start_time": "48578", "end_time": "49348", "value": "ARG_INT"}, {"annotation_id": "a567", "start_time": "49398", "end_time": "50108", "value": "V_PRON"}, {"annotation_id": "a569", "start_time": "50158", "end_time": "50538", "value": "MODIF"}, {"annotation_id": "a568", "start_time": "50593", "end_time": "51543", "value": "V_PRON"}, {"annotation_id": "a559", "start_time": "51700", "end_time": "52450", "value": "ARG_EXT"}, {"annotation_id": "a560", "start_time": "52510", "end_time": "52710", "value": "V_INT"}, {"annotation_id": "a561", "start_time": "52795", "end_time": "53805", "value": "V_TRA"}, {"annotation_id": "a562", "start_time": "53865", "end_time": "54315", "value": "ARG_INT"}, {"annotation_id": "a551", "start_time": "57010", "end_time": "57900", "value": "ARG_EXT"}, {"annotation_id": "a552", "start_time": "57980", "end_time": "58390", "value": "V_AGENTIVO"}, {"annotation_id": "a541", "start_time": "58431", "end_time": "59090", "value": "ARG_INT"}, {"annotation_id": "a542", "start_time": "59135", "end_time": "60795", "value": "ARG_INT"}, {"annotation_id": "a543", "start_time": "60855", "end_time": "62775", "value": "ARG_INT"}, {"annotation_id": "a544", "start_time": "63045", "end_time": "64735", "value": "ARG_INT"}, {"annotation_id": "a545", "start_time": "65135", "end_time": "65765", "value": "ARG_EXT"}, {"annotation_id": "a546", "start_time": "65845", "end_time": "66615", "value": "V_TRA"}, {"annotation_id": "a528", "start_time": "67320", "end_time": "67640", "value": "ARG_EXT"}, {"annotation_id": "a529", "start_time": "67700", "end_time": "68170", "value": "V_INT"}, {"annotation_id": "a530", "start_time": "68200", "end_time": "68595", "value": "ADJT"}, {"annotation_id": "a531", "start_time": "68641", "end_time": "69230", "value": "V_INT"}, {"annotation_id": "a532", "start_time": "69340", "end_time": "69980", "value": "V_INT"}, {"annotation_id": "a533", "start_time": "70410", "end_time": "71000", "value": "ARG_EXT"}, {"annotation_id": "a534", "start_time": "71045", "end_time": "72145", "value": "V_INT"}, {"annotation_id": "a521", "start_time": "72627", "end_time": "73720", "value": "V_INT"}, {"annotation_id": "a522", "start_time": "73795", "end_time": "74515", "value": "V_TRA"}, {"annotation_id": "a523", "start_time": "74560", "end_time": "76080", "value": "ARG_INT"}, {"annotation_id": "a508", "start_time": "77350", "end_time": "77930", "value": "ARG_EXT"}, {"annotation_id": "a509", "start_time": "77995", "end_time": "78365", "value": "V_INT"}, {"annotation_id": "a510", "start_time": "78415", "end_time": "79175", "value": "V_TRA"}, {"annotation_id": "a511", "start_time": "79230", "end_time": "79570", "value": "ARG_INT"}, {"annotation_id": "a512", "start_time": "79625", "end_time": "80165", "value": "V_INT"}, {"annotation_id": "a513", "start_time": "80216", "end_time": "80688", "value": "V_INT"}, {"annotation_id": "a514", "start_time": "81365", "end_time": "81755", "value": "ARG_EXT"}], "parent_ref": null}, "M2_CONSTITUINTE": {"linguistic_type_ref": "default-lt", "tier_id": "M2_CONSTITUINTE", "annotations": [{"annotation_id": "a472", "start_time": "39182", "end_time": "39752", "value": "ARG_INT"}, {"annotation_id": "a473", "start_time": "40522", "end_time": "41512", "value": "ARG_INT"}, {"annotation_id": "a547", "start_time": "63035", "end_time": "63765", "value": "ARG_INT"}], "parent_ref": null}, "EXP_CONSTITUINTE": {"linguistic_type_ref": "default-lt", "tier_id": "EXP_CONSTITUINTE", "annotations": [{"annotation_id": "a548", "start_time": "58420", "end_time": "59070", "value": "E-INT"}, {"annotation_id": "a515", "start_time": "80720", "end_time": "81300", "value": "V_INT"}], "parent_ref": null}, "LGP_P1 Trans_Literal-cp": {"linguistic_type_ref": "Time Subdivision", "tier_id": "LGP_P1 Trans_Literal-cp", "annotations": [{"annotation_id": "a570", "start_time": "11370", "end_time": "18356", "value": "[MULHER] PEQUENA M\u00c3E DAR CESTO FRUTA P\u00c3O CHOURI\u00c7O"}, {"annotation_id": "a571", "start_time": "18396", "end_time": "20120", "value": "ANDAR_"}, {"annotation_id": "a572", "start_time": "20210", "end_time": "22019", "value": "MAS APANHAR FLOR"}, {"annotation_id": "a573", "start_time": "22090", "end_time": "24370", "value": "[1] LOBO VER "}, {"annotation_id": "a574", "start_time": "24455", "end_time": "26210", "value": "[ESCONDER-SE-ATR\u00c1S] ATR\u00c1S"}, {"annotation_id": "a575", "start_time": "26895", "end_time": "29250", "value": "DEPOIS MENINA ANDAR_ "}, {"annotation_id": "a576", "start_time": "29260", "end_time": "30940", "value": "LOBO APROVEITAR"}, {"annotation_id": "a577", "start_time": "31005", "end_time": "31804", "value": "ONDE IR"}, {"annotation_id": "a578", "start_time": "31862", "end_time": "34206", "value": "AV\u00d3 CASA"}, {"annotation_id": "a579", "start_time": "35220", "end_time": "38350", "value": "[MULHER] HOMEM LOBO ANDAR_"}, {"annotation_id": "a580", "start_time": "38610", "end_time": "40460", "value": "VER PORTA CASA AV\u00d3"}, {"annotation_id": "a581", "start_time": "40536", "end_time": "41520", "value": "BATER-PORTA"}, {"annotation_id": "a582", "start_time": "41578", "end_time": "43060", "value": " AV\u00d3 [ABRIR-A-PORTA]"}, {"annotation_id": "a583", "start_time": "43067", "end_time": "43397", "value": "SURPRESA"}, {"annotation_id": "a584", "start_time": "43486", "end_time": "44460", "value": "LOBO AGARRAR"}, {"annotation_id": "a585", "start_time": "44523", "end_time": "45613", "value": "COMER"}, {"annotation_id": "a586", "start_time": "45752", "end_time": "46844", "value": "CAMA [TAPAR-SE] "}, {"annotation_id": "a587", "start_time": "46898", "end_time": "49370", "value": "\u00d3CULOS [COLOCAR-TOUCA] VESTIDO"}, {"annotation_id": "a588", "start_time": "49392", "end_time": "50532", "value": "MUDAR CAMA"}, {"annotation_id": "a589", "start_time": "50593", "end_time": "51543", "value": "TAPAR-SE"}, {"annotation_id": "a590", "start_time": "51701", "end_time": "52730", "value": "MENINA ANDAR_"}, {"annotation_id": "a591", "start_time": "52775", "end_time": "54315", "value": " [BATER-\u00c0-PORTA] NETO"}, {"annotation_id": "a592", "start_time": "55116", "end_time": "55532", "value": "OK"}, {"annotation_id": "a593", "start_time": "56071", "end_time": "56512", "value": "NETO"}, {"annotation_id": "a594", "start_time": "57009", "end_time": "58405", "value": "LOBO deitado"}, {"annotation_id": "a595", "start_time": "58431", "end_time": "59080", "value": "QUEM TU?"}, {"annotation_id": "a596", "start_time": "59130", "end_time": "64730", "value": " OLHOS GRANDE NARIZ GRANDE ORELHAS GRANDE"}, {"annotation_id": "a597", "start_time": "65142", "end_time": "66616", "value": "LOBO COMER"}, {"annotation_id": "a598", "start_time": "67324", "end_time": "68603", "value": "MENINA FUGIR MEDO"}, {"annotation_id": "a599", "start_time": "68641", "end_time": "69220", "value": "CORRER [IR-A-CORRER]"}, {"annotation_id": "a600", "start_time": "70426", "end_time": "72147", "value": "HOMEM DOIS OUVIR"}, {"annotation_id": "a601", "start_time": "72627", "end_time": "73710", "value": "CORRER"}, {"annotation_id": "a602", "start_time": "73795", "end_time": "76095", "value": "[BATAR_PORTA] CASA"}, {"annotation_id": "a603", "start_time": "77343", "end_time": "78382", "value": "MENINA CORRER"}, {"annotation_id": "a604", "start_time": "78417", "end_time": "79580", "value": "[DISPARAR-ARMA] LOBO"}, {"annotation_id": "a605", "start_time": "79625", "end_time": "80165", "value": "MORRER"}, {"annotation_id": "a606", "start_time": "80216", "end_time": "80688", "value": "ACABAR"}, {"annotation_id": "a607", "start_time": "80716", "end_time": "81755", "value": "VIVER NETO"}], "parent_ref": "LP_P1 transcri\u00e7\u00e3o livre"}, "Come_P1Literal-cp": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Come_P1Literal-cp", "annotations": [{"annotation_id": "a608", "annotation_ref": "a570", "value": "ROLE - verbo", "start_time": "11370", "end_time": "18356"}, {"annotation_id": "a609", "annotation_ref": "a573", "value": "ROLE", "start_time": "22090", "end_time": "24370"}, {"annotation_id": "a610", "annotation_ref": "a574", "value": "ROLE", "start_time": "24455", "end_time": "26210"}, {"annotation_id": "a611", "annotation_ref": "a577", "value": "INT", "start_time": "31005", "end_time": "31804"}, {"annotation_id": "a612", "annotation_ref": "a578", "value": "DP POSSESSIVO", "start_time": "31862", "end_time": "34206"}], "parent_ref": "LGP_P1 Trans_Literal-cp"}, "Sint_Constituinte-cp": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Sint_Constituinte-cp", "annotations": [{"annotation_id": "a613", "annotation_ref": "a570", "value": "ARG_EXT ARG_INT V_DITRA ARG_INT2", "start_time": "11370", "end_time": "18356"}, {"annotation_id": "a614", "annotation_ref": "a571", "value": "V_TRA", "start_time": "18396", "end_time": "20120"}, {"annotation_id": "a615", "annotation_ref": "a572", "value": "V_TRA ARG_INT", "start_time": "20210", "end_time": "22019"}, {"annotation_id": "a616", "annotation_ref": "a573", "value": "ARG_EXT V_TRA ARG_INT[-]", "start_time": "22090", "end_time": "24370"}, {"annotation_id": "a617", "annotation_ref": "a574", "value": "V_INT ADJT", "start_time": "24455", "end_time": "26210"}, {"annotation_id": "a618", "annotation_ref": "a575", "value": "ADJT ARG_EXT V_INT", "start_time": "26895", "end_time": "29250"}, {"annotation_id": "a619", "annotation_ref": "a576", "value": "ARG_EXT V_INT", "start_time": "29260", "end_time": "30940"}, {"annotation_id": "a620", "annotation_ref": "a577", "value": "ADJT V_INT", "start_time": "31005", "end_time": "31804"}, {"annotation_id": "a621", "annotation_ref": "a579", "value": "ARG_EXT V_INT", "start_time": "35220", "end_time": "38350"}, {"annotation_id": "a622", "annotation_ref": "a580", "value": "V_TRA ARG_INT", "start_time": "38610", "end_time": "40460"}, {"annotation_id": "a623", "annotation_ref": "a581", "value": "V_TRA ARG_INT", "start_time": "40536", "end_time": "41520"}, {"annotation_id": "a624", "annotation_ref": "a582", "value": "ARG_EXT V_TRA-ARG_INT", "start_time": "41578", "end_time": "43060"}, {"annotation_id": "a625", "annotation_ref": "a584", "value": "ARG_EXT V_TRA", "start_time": "43486", "end_time": "44460"}, {"annotation_id": "a626", "annotation_ref": "a585", "value": "V_TRA", "start_time": "44523", "end_time": "45613"}, {"annotation_id": "a627", "annotation_ref": "a586", "value": "ADJT V_INT-ARG_EXT", "start_time": "45752", "end_time": "46844"}, {"annotation_id": "a628", "annotation_ref": "a587", "value": "ARG_INT V_TRA-ARG_INT2 ARG_INT3", "start_time": "46898", "end_time": "49370"}, {"annotation_id": "a629", "annotation_ref": "a588", "value": "V_PRON ADJT", "start_time": "49392", "end_time": "50532"}, {"annotation_id": "a630", "annotation_ref": "a589", "value": "V_PRON", "start_time": "50593", "end_time": "51543"}, {"annotation_id": "a631", "annotation_ref": "a590", "value": "ARG_EXT V_INT", "start_time": "51701", "end_time": "52730"}, {"annotation_id": "a632", "annotation_ref": "a591", "value": "V_TRA ARG_INT", "start_time": "52775", "end_time": "54315"}, {"annotation_id": "a633", "annotation_ref": "a592", "value": "INTERJ", "start_time": "55116", "end_time": "55532"}, {"annotation_id": "a634", "annotation_ref": "a594", "value": "ARG_EXT V_INT", "start_time": "57009", "end_time": "58405"}, {"annotation_id": "a635", "annotation_ref": "a595", "value": "E_INT V_COP[-] ARG_INT ", "start_time": "58431", "end_time": "59080"}, {"annotation_id": "a636", "annotation_ref": "a596", "value": "[-]V_COP ARG_INT ARG_INT2 ARG_INT3", "start_time": "59130", "end_time": "64730"}, {"annotation_id": "a637", "annotation_ref": "a597", "value": "ARG_EXT V_TRA ARG_INT[-]", "start_time": "65142", "end_time": "66616"}, {"annotation_id": "a638", "annotation_ref": "a598", "value": "ARG_EXT V_INT ADJT", "start_time": "67324", "end_time": "68603"}, {"annotation_id": "a639", "annotation_ref": "a599", "value": "V_INT", "start_time": "68641", "end_time": "69220"}, {"annotation_id": "a640", "annotation_ref": "a600", "value": "ARG_EXT V_INT", "start_time": "70426", "end_time": "72147"}, {"annotation_id": "a641", "annotation_ref": "a601", "value": "V_INT", "start_time": "72627", "end_time": "73710"}, {"annotation_id": "a642", "annotation_ref": "a602", "value": "V_TRA ARG_INT", "start_time": "73795", "end_time": "76095"}, {"annotation_id": "a643", "annotation_ref": "a603", "value": "ARG_EXT V_INT", "start_time": "77343", "end_time": "78382"}, {"annotation_id": "a644", "annotation_ref": "a604", "value": "V_TRA ARG_INT", "start_time": "78417", "end_time": "79580"}, {"annotation_id": "a645", "annotation_ref": "a605", "value": "V_INT", "start_time": "79625", "end_time": "80165"}, {"annotation_id": "a646", "annotation_ref": "a606", "value": "V_INT", "start_time": "80216", "end_time": "80688"}, {"annotation_id": "a647", "annotation_ref": "a607", "value": "V_INT ARG_EXT", "start_time": "80716", "end_time": "81755"}], "parent_ref": "LGP_P1 Trans_Literal-cp"}, "Seman_Estr-cp": {"linguistic_type_ref": "Symbolic Association", "tier_id": "Seman_Estr-cp", "annotations": [], "parent_ref": "Sint_Constituinte-cp"}}
+{
+  "LP_P1 transcri\u00e7\u00e3o livre": {
+    "linguistic_type_ref": "default-lt",
+    "tier_id": "LP_P1 transcri\u00e7\u00e3o livre",
+    "annotations": [
+      {
+        "annotation_id": "a1",
+        "start_time": "11370",
+        "end_time": "18356",
+        "value": " a m\u00e3e deu \u00e0 menina um cesto com fruta e p\u00e3o"
+      },
+      {
+        "annotation_id": "a2",
+        "start_time": "18396",
+        "end_time": "20120",
+        "value": "estava a ANDAR_"
+      },
+      {
+        "annotation_id": "a445",
+        "start_time": "20210",
+        "end_time": "22019",
+        "value": " mas parou para ir buscar umas flores"
+      },
+      {
+        "annotation_id": "a3",
+        "start_time": "22090",
+        "end_time": "24370",
+        "value": "Um lobo viu"
+      },
+      {
+        "annotation_id": "a446",
+        "start_time": "24455",
+        "end_time": "26210",
+        "value": "escondeu-se atr\u00e1s da \u00e1rvore"
+      },
+      {
+        "annotation_id": "a4",
+        "start_time": "26895",
+        "end_time": "29250",
+        "value": "a menina estava a ANDAR_ "
+      },
+      {
+        "annotation_id": "a454",
+        "start_time": "29260",
+        "end_time": "30940",
+        "value": "o lobo aproveitou"
+      },
+      {
+        "annotation_id": "a5",
+        "start_time": "31005",
+        "end_time": "31804",
+        "value": "onde vais?"
+      },
+      {
+        "annotation_id": "a6",
+        "start_time": "31862",
+        "end_time": "34206",
+        "value": "casa da av\u00f3"
+      },
+      {
+        "annotation_id": "a7",
+        "start_time": "35220",
+        "end_time": "38350",
+        "value": "lobo continuou o seu caminho"
+      },
+      {
+        "annotation_id": "a8",
+        "start_time": "38610",
+        "end_time": "40460",
+        "value": "viu a porta da casa da av\u00f3"
+      },
+      {
+        "annotation_id": "a9",
+        "start_time": "40536",
+        "end_time": "41520",
+        "value": "bateu \u00e0 porta"
+      },
+      {
+        "annotation_id": "a465",
+        "start_time": "41578",
+        "end_time": "43060",
+        "value": "a av\u00f3 surpresa abriu a porta e gritou"
+      },
+      {
+        "annotation_id": "a474",
+        "start_time": "43067",
+        "end_time": "43397",
+        "value": "ol\u00e1"
+      },
+      {
+        "annotation_id": "a10",
+        "start_time": "43486",
+        "end_time": "44460",
+        "value": "o lobo agarrou-a"
+      },
+      {
+        "annotation_id": "a475",
+        "start_time": "44523",
+        "end_time": "45613",
+        "value": "comeu-a"
+      },
+      {
+        "annotation_id": "a11",
+        "start_time": "45752",
+        "end_time": "46844",
+        "value": "deitou-se na cama e tapou-se"
+      },
+      {
+        "annotation_id": "a12",
+        "start_time": "46898",
+        "end_time": "49370",
+        "value": "colocou os \u00f3culos, a touca"
+      },
+      {
+        "annotation_id": "a487",
+        "start_time": "49392",
+        "end_time": "50532",
+        "value": "mudou-se para a cama"
+      },
+      {
+        "annotation_id": "a563",
+        "start_time": "50593",
+        "end_time": "51543",
+        "value": "tapou-se"
+      },
+      {
+        "annotation_id": "a13",
+        "start_time": "51701",
+        "end_time": "52730",
+        "value": "a menina chegou"
+      },
+      {
+        "annotation_id": "a553",
+        "start_time": "52775",
+        "end_time": "54315",
+        "value": "bateu \u00e0 porta da av\u00f3"
+      },
+      {
+        "annotation_id": "a14",
+        "start_time": "55116",
+        "end_time": "55532",
+        "value": "ok"
+      },
+      {
+        "annotation_id": "a15",
+        "start_time": "56071",
+        "end_time": "56512",
+        "value": "av\u00f3"
+      },
+      {
+        "annotation_id": "a16",
+        "start_time": "57009",
+        "end_time": "58405",
+        "value": "o lobo estava deitado"
+      },
+      {
+        "annotation_id": "a17",
+        "start_time": "58431",
+        "end_time": "59080",
+        "value": "quem \u00e9s tu?"
+      },
+      {
+        "annotation_id": "a535",
+        "start_time": "59130",
+        "end_time": "64730",
+        "value": " Tens os olhos grandes, o rariz comprido e grande, as orelhas grandes"
+      },
+      {
+        "annotation_id": "a18",
+        "start_time": "65142",
+        "end_time": "66616",
+        "value": "o lobo comeu-a"
+      },
+      {
+        "annotation_id": "a19",
+        "start_time": "67324",
+        "end_time": "68603",
+        "value": "a menina fugiu com medo"
+      },
+      {
+        "annotation_id": "a20",
+        "start_time": "68641",
+        "end_time": "69220",
+        "value": "fugiu"
+      },
+      {
+        "annotation_id": "a524",
+        "start_time": "69340",
+        "end_time": "69980",
+        "value": " a correr"
+      },
+      {
+        "annotation_id": "a21",
+        "start_time": "70426",
+        "end_time": "72147",
+        "value": "dois homens ouviram"
+      },
+      {
+        "annotation_id": "a22",
+        "start_time": "72627",
+        "end_time": "73710",
+        "value": "correram"
+      },
+      {
+        "annotation_id": "a516",
+        "start_time": "73795",
+        "end_time": "76095",
+        "value": "bateram \u00e0 porta"
+      },
+      {
+        "annotation_id": "a23",
+        "start_time": "77343",
+        "end_time": "78382",
+        "value": "A menina a correr"
+      },
+      {
+        "annotation_id": "a24",
+        "start_time": "78417",
+        "end_time": "79580",
+        "value": "deram um tiro ao lobo"
+      },
+      {
+        "annotation_id": "a488",
+        "start_time": "79625",
+        "end_time": "80165",
+        "value": "ele morreu"
+      },
+      {
+        "annotation_id": "a378",
+        "start_time": "80216",
+        "end_time": "80688",
+        "value": "acabar"
+      },
+      {
+        "annotation_id": "a25",
+        "start_time": "80716",
+        "end_time": "81755",
+        "value": "a av\u00f3 sobreviveu"
+      }
+    ],
+    "parent_ref": null
+  },
+  "LGP_P1 Trans_Literal": {
+    "linguistic_type_ref": "default-lt",
+    "tier_id": "LGP_P1 Trans_Literal",
+    "annotations": [
+      {
+        "annotation_id": "a26",
+        "start_time": "11370",
+        "end_time": "18356",
+        "value": "[MULHER] PEQUENA M\u00c3E DAR CESTO FRUTA P\u00c3O CHOURI\u00c7O"
+      },
+      {
+        "annotation_id": "a392",
+        "start_time": "18394",
+        "end_time": "20114",
+        "value": "ANDAR_"
+      },
+      {
+        "annotation_id": "a27",
+        "start_time": "20210",
+        "end_time": "22019",
+        "value": "MAS APANHAR FLORES"
+      },
+      {
+        "annotation_id": "a28",
+        "start_time": "22090",
+        "end_time": "24370",
+        "value": "[1] LOBO VER "
+      },
+      {
+        "annotation_id": "a432",
+        "start_time": "24455",
+        "end_time": "26210",
+        "value": "[ESCONDER-SE-ATR\u00c1S] ATR\u00c1S"
+      },
+      {
+        "annotation_id": "a29",
+        "start_time": "26895",
+        "end_time": "29240",
+        "value": "DEPOIS MENINA ANDAR_ "
+      },
+      {
+        "annotation_id": "a440",
+        "start_time": "29260",
+        "end_time": "30940",
+        "value": "LOBO APROVEITAR"
+      },
+      {
+        "annotation_id": "a30",
+        "start_time": "31005",
+        "end_time": "31804",
+        "value": "ONDE IR"
+      },
+      {
+        "annotation_id": "a31",
+        "start_time": "31862",
+        "end_time": "34206",
+        "value": "AV\u00d3 CASA"
+      },
+      {
+        "annotation_id": "a32",
+        "start_time": "35220",
+        "end_time": "38350",
+        "value": "[MULHER] HOMEM LOBO ANDAR_"
+      },
+      {
+        "annotation_id": "a33",
+        "start_time": "38610",
+        "end_time": "40460",
+        "value": "VER PORTA CASA AV\u00d3"
+      },
+      {
+        "annotation_id": "a34",
+        "start_time": "40536",
+        "end_time": "41520",
+        "value": "BATER-PORTA"
+      },
+      {
+        "annotation_id": "a466",
+        "start_time": "41578",
+        "end_time": "43050",
+        "value": " AV\u00d3 [ABRIR-A-PORTA]"
+      },
+      {
+        "annotation_id": "a476",
+        "start_time": "43067",
+        "end_time": "43397",
+        "value": "SURPRESA"
+      },
+      {
+        "annotation_id": "a35",
+        "start_time": "43486",
+        "end_time": "44450",
+        "value": "LOBO AGARRAR"
+      },
+      {
+        "annotation_id": "a477",
+        "start_time": "44523",
+        "end_time": "45613",
+        "value": "COMER"
+      },
+      {
+        "annotation_id": "a36",
+        "start_time": "45752",
+        "end_time": "46844",
+        "value": "CAMA [TAPAR-SE] "
+      },
+      {
+        "annotation_id": "a37",
+        "start_time": "46898",
+        "end_time": "49360",
+        "value": "\u00d3CULOS [COLOCAR-TOUCA] VESTIDO"
+      },
+      {
+        "annotation_id": "a489",
+        "start_time": "49392",
+        "end_time": "50532",
+        "value": "MUDAR CAMA"
+      },
+      {
+        "annotation_id": "a564",
+        "start_time": "50593",
+        "end_time": "51543",
+        "value": "TAPAR-SE"
+      },
+      {
+        "annotation_id": "a38",
+        "start_time": "51701",
+        "end_time": "52730",
+        "value": "MENINA ANDAR_"
+      },
+      {
+        "annotation_id": "a554",
+        "start_time": "52780",
+        "end_time": "54310",
+        "value": " [BATER-\u00c0-PORTA] NETO"
+      },
+      {
+        "annotation_id": "a39",
+        "start_time": "55116",
+        "end_time": "55532",
+        "value": "OK"
+      },
+      {
+        "annotation_id": "a40",
+        "start_time": "56077",
+        "end_time": "56519",
+        "value": "NETO"
+      },
+      {
+        "annotation_id": "a41",
+        "start_time": "57009",
+        "end_time": "58405",
+        "value": "LOBO deitado"
+      },
+      {
+        "annotation_id": "a42",
+        "start_time": "58431",
+        "end_time": "59090",
+        "value": "QUEM TU?"
+      },
+      {
+        "annotation_id": "a536",
+        "start_time": "59130",
+        "end_time": "64730",
+        "value": " OLHOS GRANDE NARIZ GRANDE ORELHAS GRANDE"
+      },
+      {
+        "annotation_id": "a43",
+        "start_time": "65142",
+        "end_time": "66616",
+        "value": "LOBO COMER"
+      },
+      {
+        "annotation_id": "a44",
+        "start_time": "67324",
+        "end_time": "68603",
+        "value": "MENINA FUGIR MEDO"
+      },
+      {
+        "annotation_id": "a45",
+        "start_time": "68641",
+        "end_time": "69230",
+        "value": "CORRER [IR-A-CORRER]"
+      },
+      {
+        "annotation_id": "a46",
+        "start_time": "70426",
+        "end_time": "72147",
+        "value": "HOMEM DOIS OUVIR"
+      },
+      {
+        "annotation_id": "a47",
+        "start_time": "72627",
+        "end_time": "73720",
+        "value": "CORRER"
+      },
+      {
+        "annotation_id": "a517",
+        "start_time": "73795",
+        "end_time": "76095",
+        "value": "[BATAR_PORTA] CASA"
+      },
+      {
+        "annotation_id": "a48",
+        "start_time": "77343",
+        "end_time": "78382",
+        "value": "MENINA CORRER"
+      },
+      {
+        "annotation_id": "a49",
+        "start_time": "78417",
+        "end_time": "79590",
+        "value": "[DISPARAR-ARMA] LOBO"
+      },
+      {
+        "annotation_id": "a490",
+        "start_time": "79625",
+        "end_time": "80165",
+        "value": "MORRER"
+      },
+      {
+        "annotation_id": "a379",
+        "start_time": "80216",
+        "end_time": "80688",
+        "value": "ACABAR"
+      },
+      {
+        "annotation_id": "a50",
+        "start_time": "80716",
+        "end_time": "81755",
+        "value": "VIVER NETO"
+      }
+    ],
+    "parent_ref": null
+  },
+  "GLOSAS_P1": {
+    "linguistic_type_ref": "default-lt",
+    "tier_id": "GLOSAS_P1",
+    "annotations": [
+      {
+        "annotation_id": "a393",
+        "start_time": "11370",
+        "end_time": "12590",
+        "value": "FG(mulher)"
+      },
+      {
+        "annotation_id": "a394",
+        "start_time": "12665",
+        "end_time": "13385",
+        "value": "PEQUENA"
+      },
+      {
+        "annotation_id": "a395",
+        "start_time": "13410",
+        "end_time": "13780",
+        "value": "M\u00c3E"
+      },
+      {
+        "annotation_id": "a396",
+        "start_time": "13820",
+        "end_time": "14960",
+        "value": "DAR"
+      },
+      {
+        "annotation_id": "a397",
+        "start_time": "15045",
+        "end_time": "16095",
+        "value": "CESTO"
+      },
+      {
+        "annotation_id": "a398",
+        "start_time": "16215",
+        "end_time": "16725",
+        "value": "FRUTA"
+      },
+      {
+        "annotation_id": "a399",
+        "start_time": "16815",
+        "end_time": "17675",
+        "value": "P\u00c3O"
+      },
+      {
+        "annotation_id": "a400",
+        "start_time": "17755",
+        "end_time": "18345",
+        "value": "CHOURI\u00c7O"
+      },
+      {
+        "annotation_id": "a59",
+        "start_time": "18396",
+        "end_time": "20115",
+        "value": "ANDAR_"
+      },
+      {
+        "annotation_id": "a60",
+        "start_time": "20210",
+        "end_time": "20670",
+        "value": "MAS"
+      },
+      {
+        "annotation_id": "a61",
+        "start_time": "20725",
+        "end_time": "21035",
+        "value": "APANHAR"
+      },
+      {
+        "annotation_id": "a62",
+        "start_time": "21075",
+        "end_time": "22015",
+        "value": "FLORES"
+      },
+      {
+        "annotation_id": "a63",
+        "start_time": "22080",
+        "end_time": "22460",
+        "value": "N(1)"
+      },
+      {
+        "annotation_id": "a64",
+        "start_time": "22515",
+        "end_time": "23095",
+        "value": "LOBO"
+      },
+      {
+        "annotation_id": "a65",
+        "start_time": "23150",
+        "end_time": "24370",
+        "value": "VER"
+      },
+      {
+        "annotation_id": "a66",
+        "start_time": "24465",
+        "end_time": "25310",
+        "value": "CL(esconder-se-atr\u00e1s)"
+      },
+      {
+        "annotation_id": "a437",
+        "start_time": "25317",
+        "end_time": "26207",
+        "value": "\u00c1RVORE"
+      },
+      {
+        "annotation_id": "a68",
+        "start_time": "26895",
+        "end_time": "27495",
+        "value": "DEPOIS"
+      },
+      {
+        "annotation_id": "a69",
+        "start_time": "27530",
+        "end_time": "27950",
+        "value": " (MULHER=?)"
+      },
+      {
+        "annotation_id": "a70",
+        "start_time": "28005",
+        "end_time": "29235",
+        "value": "ANDAR_"
+      },
+      {
+        "annotation_id": "a71",
+        "start_time": "29265",
+        "end_time": "29575",
+        "value": "LOBO"
+      },
+      {
+        "annotation_id": "a72",
+        "start_time": "29625",
+        "end_time": "30955",
+        "value": "APROVEITAR"
+      },
+      {
+        "annotation_id": "a73",
+        "start_time": "30995",
+        "end_time": "31465",
+        "value": "ONDE"
+      },
+      {
+        "annotation_id": "a74",
+        "start_time": "31505",
+        "end_time": "31795",
+        "value": "IR"
+      },
+      {
+        "annotation_id": "a75",
+        "start_time": "31855",
+        "end_time": "32805",
+        "value": "(AV\u00d3=?)"
+      },
+      {
+        "annotation_id": "a76",
+        "start_time": "33065",
+        "end_time": "34190",
+        "value": "CASA"
+      },
+      {
+        "annotation_id": "a77",
+        "start_time": "35212",
+        "end_time": "35722",
+        "value": "FG(mulher)"
+      },
+      {
+        "annotation_id": "a78",
+        "start_time": "35760",
+        "end_time": "36170",
+        "value": "HOMEM"
+      },
+      {
+        "annotation_id": "a79",
+        "start_time": "36232",
+        "end_time": "36862",
+        "value": "LOBO"
+      },
+      {
+        "annotation_id": "a80",
+        "start_time": "36942",
+        "end_time": "38342",
+        "value": "ANDAR_"
+      },
+      {
+        "annotation_id": "a81",
+        "start_time": "38607",
+        "end_time": "39147",
+        "value": "VER"
+      },
+      {
+        "annotation_id": "a82",
+        "start_time": "39182",
+        "end_time": "39752",
+        "value": "PORTA"
+      },
+      {
+        "annotation_id": "a83",
+        "start_time": "39782",
+        "end_time": "40012",
+        "value": "CASA"
+      },
+      {
+        "annotation_id": "a84",
+        "start_time": "40042",
+        "end_time": "40452",
+        "value": "(AV\u00d3=?)"
+      },
+      {
+        "annotation_id": "a85",
+        "start_time": "40522",
+        "end_time": "41512",
+        "value": "BATER-PORTA"
+      },
+      {
+        "annotation_id": "a86",
+        "start_time": "41572",
+        "end_time": "42132",
+        "value": "(AV\u00d3=?)"
+      },
+      {
+        "annotation_id": "a87",
+        "start_time": "42192",
+        "end_time": "43032",
+        "value": "CL(abrir-porta)"
+      },
+      {
+        "annotation_id": "a88",
+        "start_time": "43067",
+        "end_time": "43397",
+        "value": "SURPRESA"
+      },
+      {
+        "annotation_id": "a89",
+        "start_time": "43477",
+        "end_time": "44060",
+        "value": "LOBO"
+      },
+      {
+        "annotation_id": "a90",
+        "start_time": "44163",
+        "end_time": "44453",
+        "value": "AGARRAR"
+      },
+      {
+        "annotation_id": "a91",
+        "start_time": "44523",
+        "end_time": "45613",
+        "value": "COMER"
+      },
+      {
+        "annotation_id": "a92",
+        "start_time": "45753",
+        "end_time": "46163",
+        "value": "CAMA"
+      },
+      {
+        "annotation_id": "a93",
+        "start_time": "46253",
+        "end_time": "46843",
+        "value": "CL(tapar-se)"
+      },
+      {
+        "annotation_id": "a94",
+        "start_time": "46900",
+        "end_time": "47410",
+        "value": "\u00d3CULOS"
+      },
+      {
+        "annotation_id": "a95",
+        "start_time": "47463",
+        "end_time": "48523",
+        "value": "CL(colocar-touca)"
+      },
+      {
+        "annotation_id": "a96",
+        "start_time": "48578",
+        "end_time": "49348",
+        "value": "VESTIDO"
+      },
+      {
+        "annotation_id": "a97",
+        "start_time": "49398",
+        "end_time": "50108",
+        "value": "MUDAR"
+      },
+      {
+        "annotation_id": "a98",
+        "start_time": "50158",
+        "end_time": "50538",
+        "value": "CAMA"
+      },
+      {
+        "annotation_id": "a99",
+        "start_time": "50593",
+        "end_time": "51543",
+        "value": "CL(tapar-se)"
+      },
+      {
+        "annotation_id": "a100",
+        "start_time": "51700",
+        "end_time": "52450",
+        "value": "FG(mulher)"
+      },
+      {
+        "annotation_id": "a101",
+        "start_time": "52510",
+        "end_time": "52710",
+        "value": "ANDAR_"
+      },
+      {
+        "annotation_id": "a102",
+        "start_time": "52795",
+        "end_time": "53805",
+        "value": "CL(bater-\u00e0-porta)"
+      },
+      {
+        "annotation_id": "a103",
+        "start_time": "53865",
+        "end_time": "54315",
+        "value": "NETO"
+      },
+      {
+        "annotation_id": "a104",
+        "start_time": "55110",
+        "end_time": "55520",
+        "value": "OK"
+      },
+      {
+        "annotation_id": "a105",
+        "start_time": "56075",
+        "end_time": "56515",
+        "value": "NETO"
+      },
+      {
+        "annotation_id": "a106",
+        "start_time": "57010",
+        "end_time": "57900",
+        "value": "LOBO"
+      },
+      {
+        "annotation_id": "a107",
+        "start_time": "57980",
+        "end_time": "58390",
+        "value": "CL(estar-deitado))"
+      },
+      {
+        "annotation_id": "a108",
+        "start_time": "58420",
+        "end_time": "59070",
+        "value": "[QUEM-TU]"
+      },
+      {
+        "annotation_id": "a109",
+        "start_time": "59130",
+        "end_time": "59670",
+        "value": "OLHOS"
+      },
+      {
+        "annotation_id": "a110",
+        "start_time": "59715",
+        "end_time": "60795",
+        "value": "GRANDE"
+      },
+      {
+        "annotation_id": "a111",
+        "start_time": "60850",
+        "end_time": "61370",
+        "value": "NARIZ"
+      },
+      {
+        "annotation_id": "a112",
+        "start_time": "61405",
+        "end_time": "62005",
+        "value": "CL(nariz-comprido)"
+      },
+      {
+        "annotation_id": "a113",
+        "start_time": "62030",
+        "end_time": "62770",
+        "value": "GRANDE"
+      },
+      {
+        "annotation_id": "a114",
+        "start_time": "63035",
+        "end_time": "63765",
+        "value": "ORELHAS"
+      },
+      {
+        "annotation_id": "a115",
+        "start_time": "63825",
+        "end_time": "64735",
+        "value": "GRANDES"
+      },
+      {
+        "annotation_id": "a116",
+        "start_time": "65135",
+        "end_time": "65765",
+        "value": "LOBO"
+      },
+      {
+        "annotation_id": "a117",
+        "start_time": "65845",
+        "end_time": "66615",
+        "value": "COMER"
+      },
+      {
+        "annotation_id": "a118",
+        "start_time": "67320",
+        "end_time": "67640",
+        "value": "FG(mulher)"
+      },
+      {
+        "annotation_id": "a119",
+        "start_time": "67700",
+        "end_time": "68170",
+        "value": "FUGIR"
+      },
+      {
+        "annotation_id": "a120",
+        "start_time": "68200",
+        "end_time": "68595",
+        "value": "MEDO"
+      },
+      {
+        "annotation_id": "a121",
+        "start_time": "68640",
+        "end_time": "69210",
+        "value": "CORRER"
+      },
+      {
+        "annotation_id": "a122",
+        "start_time": "69340",
+        "end_time": "69980",
+        "value": "CL(ir-a-correr)"
+      },
+      {
+        "annotation_id": "a123",
+        "start_time": "70415",
+        "end_time": "70775",
+        "value": "HOMEM"
+      },
+      {
+        "annotation_id": "a124",
+        "start_time": "70820",
+        "end_time": "71000",
+        "value": "N(2)"
+      },
+      {
+        "annotation_id": "a125",
+        "start_time": "71045",
+        "end_time": "72145",
+        "value": "OUVIR"
+      },
+      {
+        "annotation_id": "a126",
+        "start_time": "72620",
+        "end_time": "73700",
+        "value": "CORRER"
+      },
+      {
+        "annotation_id": "a127",
+        "start_time": "73795",
+        "end_time": "74515",
+        "value": "CL(bater-\u00e0-porta)"
+      },
+      {
+        "annotation_id": "a128",
+        "start_time": "74560",
+        "end_time": "76080",
+        "value": "CASA"
+      },
+      {
+        "annotation_id": "a129",
+        "start_time": "77350",
+        "end_time": "77930",
+        "value": "(MENINAFG(mulher)=?)"
+      },
+      {
+        "annotation_id": "a130",
+        "start_time": "77995",
+        "end_time": "78365",
+        "value": "CORRER"
+      },
+      {
+        "annotation_id": "a131",
+        "start_time": "78415",
+        "end_time": "79175",
+        "value": "[DISPARAR-ARMA]"
+      },
+      {
+        "annotation_id": "a132",
+        "start_time": "79230",
+        "end_time": "79570",
+        "value": "LOBO"
+      },
+      {
+        "annotation_id": "a133",
+        "start_time": "79625",
+        "end_time": "80165",
+        "value": "MORRER"
+      },
+      {
+        "annotation_id": "a380",
+        "start_time": "80216",
+        "end_time": "80688",
+        "value": "ACABAR"
+      },
+      {
+        "annotation_id": "a134",
+        "start_time": "80720",
+        "end_time": "81300",
+        "value": "(VIVER=?)"
+      },
+      {
+        "annotation_id": "a135",
+        "start_time": "81365",
+        "end_time": "81755",
+        "value": "(AV\u00d3=?)"
+      }
+    ],
+    "parent_ref": null
+  },
+  "Come_P1Literal": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Come_P1Literal",
+    "annotations": [
+      {
+        "annotation_id": "a431",
+        "annotation_ref": "a26",
+        "value": "ROLE - verbo",
+        "start_time": "11370",
+        "end_time": "18356"
+      },
+      {
+        "annotation_id": "a433",
+        "annotation_ref": "a28",
+        "value": "ROLE",
+        "start_time": "22090",
+        "end_time": "24370"
+      },
+      {
+        "annotation_id": "a447",
+        "annotation_ref": "a432",
+        "value": "ROLE",
+        "start_time": "24455",
+        "end_time": "26210"
+      },
+      {
+        "annotation_id": "a455",
+        "annotation_ref": "a30",
+        "value": "INT",
+        "start_time": "31005",
+        "end_time": "31804"
+      },
+      {
+        "annotation_id": "a456",
+        "annotation_ref": "a31",
+        "value": "DP POSSESSIVO",
+        "start_time": "31862",
+        "end_time": "34206"
+      }
+    ],
+    "parent_ref": "LGP_P1 Trans_Literal"
+  },
+  "Sint_Constituinte": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Sint_Constituinte",
+    "annotations": [
+      {
+        "annotation_id": "a401",
+        "annotation_ref": "a26",
+        "value": "ARG_INT ARG_EXT V_DITRA ARG_INT2",
+        "start_time": "11370",
+        "end_time": "18356"
+      },
+      {
+        "annotation_id": "a402",
+        "annotation_ref": "a392",
+        "value": "V_TRA",
+        "start_time": "18394",
+        "end_time": "20114"
+      },
+      {
+        "annotation_id": "a137",
+        "annotation_ref": "a27",
+        "value": "V_TRA ARG_INT",
+        "start_time": "20210",
+        "end_time": "22019"
+      },
+      {
+        "annotation_id": "a138",
+        "annotation_ref": "a28",
+        "value": "ARG_EXT V_TRA ARG_INT[-]",
+        "start_time": "22090",
+        "end_time": "24370"
+      },
+      {
+        "annotation_id": "a448",
+        "annotation_ref": "a432",
+        "value": "V_INT ADJT",
+        "start_time": "24455",
+        "end_time": "26210"
+      },
+      {
+        "annotation_id": "a139",
+        "annotation_ref": "a29",
+        "value": "ADJT ARG_EXT V_INT",
+        "start_time": "26895",
+        "end_time": "29240"
+      },
+      {
+        "annotation_id": "a449",
+        "annotation_ref": "a440",
+        "value": "ARG_EXT V_INT",
+        "start_time": "29260",
+        "end_time": "30940"
+      },
+      {
+        "annotation_id": "a140",
+        "annotation_ref": "a30",
+        "value": "ADJT V_INT",
+        "start_time": "31005",
+        "end_time": "31804"
+      },
+      {
+        "annotation_id": "a142",
+        "annotation_ref": "a32",
+        "value": "ARG_EXT V_INT",
+        "start_time": "35220",
+        "end_time": "38350"
+      },
+      {
+        "annotation_id": "a143",
+        "annotation_ref": "a33",
+        "value": "V_TRA ARG_INT",
+        "start_time": "38610",
+        "end_time": "40460"
+      },
+      {
+        "annotation_id": "a144",
+        "annotation_ref": "a34",
+        "value": "V_TRA ARG_INT",
+        "start_time": "40536",
+        "end_time": "41520"
+      },
+      {
+        "annotation_id": "a478",
+        "annotation_ref": "a466",
+        "value": "ARG_EXT V_TRA-ARG_INT",
+        "start_time": "41578",
+        "end_time": "43050"
+      },
+      {
+        "annotation_id": "a145",
+        "annotation_ref": "a35",
+        "value": "ARG_EXT V_TRA",
+        "start_time": "43486",
+        "end_time": "44450"
+      },
+      {
+        "annotation_id": "a479",
+        "annotation_ref": "a477",
+        "value": "V_TRA",
+        "start_time": "44523",
+        "end_time": "45613"
+      },
+      {
+        "annotation_id": "a146",
+        "annotation_ref": "a36",
+        "value": "ADJT V_INT-ARG_EXT",
+        "start_time": "45752",
+        "end_time": "46844"
+      },
+      {
+        "annotation_id": "a147",
+        "annotation_ref": "a37",
+        "value": "ARG_INT V_TRA-ARG_INT2 ARG_INT3",
+        "start_time": "46898",
+        "end_time": "49360"
+      },
+      {
+        "annotation_id": "a491",
+        "annotation_ref": "a489",
+        "value": "V_PRON ADJT",
+        "start_time": "49392",
+        "end_time": "50532"
+      },
+      {
+        "annotation_id": "a565",
+        "annotation_ref": "a564",
+        "value": "V_PRON",
+        "start_time": "50593",
+        "end_time": "51543"
+      },
+      {
+        "annotation_id": "a148",
+        "annotation_ref": "a38",
+        "value": "ARG_EXT V_INT",
+        "start_time": "51701",
+        "end_time": "52730"
+      },
+      {
+        "annotation_id": "a555",
+        "annotation_ref": "a554",
+        "value": "V_TRA ARG_INT",
+        "start_time": "52780",
+        "end_time": "54310"
+      },
+      {
+        "annotation_id": "a556",
+        "annotation_ref": "a39",
+        "value": "INTERJ",
+        "start_time": "55116",
+        "end_time": "55532"
+      },
+      {
+        "annotation_id": "a151",
+        "annotation_ref": "a41",
+        "value": "ARG_EXT V_INT",
+        "start_time": "57009",
+        "end_time": "58405"
+      },
+      {
+        "annotation_id": "a537",
+        "annotation_ref": "a42",
+        "value": "E_INT V_COP[-] ARG_INT ",
+        "start_time": "58431",
+        "end_time": "59090"
+      },
+      {
+        "annotation_id": "a538",
+        "annotation_ref": "a536",
+        "value": "[-]V_COP ARG_INT ARG_INT2 ARG_INT3",
+        "start_time": "59130",
+        "end_time": "64730"
+      },
+      {
+        "annotation_id": "a153",
+        "annotation_ref": "a43",
+        "value": "ARG_EXT V_TRA ARG_INT[-]",
+        "start_time": "65142",
+        "end_time": "66616"
+      },
+      {
+        "annotation_id": "a154",
+        "annotation_ref": "a44",
+        "value": "ARG_EXT V_INT ADJT",
+        "start_time": "67324",
+        "end_time": "68603"
+      },
+      {
+        "annotation_id": "a155",
+        "annotation_ref": "a45",
+        "value": "V_INT",
+        "start_time": "68641",
+        "end_time": "69230"
+      },
+      {
+        "annotation_id": "a156",
+        "annotation_ref": "a46",
+        "value": "ARG_EXT V_INT",
+        "start_time": "70426",
+        "end_time": "72147"
+      },
+      {
+        "annotation_id": "a157",
+        "annotation_ref": "a47",
+        "value": "V_INT",
+        "start_time": "72627",
+        "end_time": "73720"
+      },
+      {
+        "annotation_id": "a518",
+        "annotation_ref": "a517",
+        "value": "V_TRA ARG_INT",
+        "start_time": "73795",
+        "end_time": "76095"
+      },
+      {
+        "annotation_id": "a158",
+        "annotation_ref": "a48",
+        "value": "ARG_EXT V_INT",
+        "start_time": "77343",
+        "end_time": "78382"
+      },
+      {
+        "annotation_id": "a159",
+        "annotation_ref": "a49",
+        "value": "V_TRA ARG_INT",
+        "start_time": "78417",
+        "end_time": "79590"
+      },
+      {
+        "annotation_id": "a492",
+        "annotation_ref": "a490",
+        "value": "V_INT",
+        "start_time": "79625",
+        "end_time": "80165"
+      },
+      {
+        "annotation_id": "a493",
+        "annotation_ref": "a379",
+        "value": "V_INT",
+        "start_time": "80216",
+        "end_time": "80688"
+      },
+      {
+        "annotation_id": "a160",
+        "annotation_ref": "a50",
+        "value": "V_INT ARG_EXT",
+        "start_time": "80716",
+        "end_time": "81755"
+      }
+    ],
+    "parent_ref": "LGP_P1 Trans_Literal"
+  },
+  "GLOSA_P1-M1": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "GLOSA_P1-M1",
+    "annotations": [
+      {
+        "annotation_id": "a403",
+        "annotation_ref": "a393",
+        "value": "FG(mulher)",
+        "start_time": "11370",
+        "end_time": "12590"
+      },
+      {
+        "annotation_id": "a404",
+        "annotation_ref": "a394",
+        "value": "PEQUENA",
+        "start_time": "12665",
+        "end_time": "13385"
+      },
+      {
+        "annotation_id": "a405",
+        "annotation_ref": "a395",
+        "value": "M\u00c3E",
+        "start_time": "13410",
+        "end_time": "13780"
+      },
+      {
+        "annotation_id": "a406",
+        "annotation_ref": "a396",
+        "value": "(1sg)DAR(3sg)",
+        "start_time": "13820",
+        "end_time": "14960"
+      },
+      {
+        "annotation_id": "a407",
+        "annotation_ref": "a397",
+        "value": "CESTO",
+        "start_time": "15045",
+        "end_time": "16095"
+      },
+      {
+        "annotation_id": "a408",
+        "annotation_ref": "a398",
+        "value": "FRUTA",
+        "start_time": "16215",
+        "end_time": "16725"
+      },
+      {
+        "annotation_id": "a409",
+        "annotation_ref": "a399",
+        "value": "P\u00c3O",
+        "start_time": "16815",
+        "end_time": "17675"
+      },
+      {
+        "annotation_id": "a410",
+        "annotation_ref": "a400",
+        "value": "CHOURI\u00c7O",
+        "start_time": "17755",
+        "end_time": "18345"
+      },
+      {
+        "annotation_id": "a169",
+        "annotation_ref": "a59",
+        "value": "(1sg)ANDAR_",
+        "start_time": "18396",
+        "end_time": "20115"
+      },
+      {
+        "annotation_id": "a170",
+        "annotation_ref": "a60",
+        "value": "MAS",
+        "start_time": "20210",
+        "end_time": "20670"
+      },
+      {
+        "annotation_id": "a171",
+        "annotation_ref": "a61",
+        "value": "(1sg)APANHAR",
+        "start_time": "20725",
+        "end_time": "21035"
+      },
+      {
+        "annotation_id": "a172",
+        "annotation_ref": "a62",
+        "value": "FLOR+",
+        "start_time": "21075",
+        "end_time": "22015"
+      },
+      {
+        "annotation_id": "a173",
+        "annotation_ref": "a63",
+        "value": "N(1)",
+        "start_time": "22080",
+        "end_time": "22460"
+      },
+      {
+        "annotation_id": "a174",
+        "annotation_ref": "a64",
+        "value": "LOBO",
+        "start_time": "22515",
+        "end_time": "23095"
+      },
+      {
+        "annotation_id": "a175",
+        "annotation_ref": "a65",
+        "value": "(1sg)VER",
+        "start_time": "23150",
+        "end_time": "24370"
+      },
+      {
+        "annotation_id": "a176",
+        "annotation_ref": "a66",
+        "value": "CL(esconder-se-atr\u00e1s-da-\u00e1rvore)",
+        "start_time": "24465",
+        "end_time": "25310"
+      },
+      {
+        "annotation_id": "a438",
+        "annotation_ref": "a437",
+        "value": "\u00c1RVORE",
+        "start_time": "25317",
+        "end_time": "26207"
+      },
+      {
+        "annotation_id": "a178",
+        "annotation_ref": "a68",
+        "value": "DEPOIS",
+        "start_time": "26895",
+        "end_time": "27495"
+      },
+      {
+        "annotation_id": "a179",
+        "annotation_ref": "a69",
+        "value": "FG(mulher)",
+        "start_time": "27530",
+        "end_time": "27950"
+      },
+      {
+        "annotation_id": "a180",
+        "annotation_ref": "a70",
+        "value": "ANDAR_",
+        "start_time": "28005",
+        "end_time": "29235"
+      },
+      {
+        "annotation_id": "a181",
+        "annotation_ref": "a71",
+        "value": "LOBO",
+        "start_time": "29265",
+        "end_time": "29575"
+      },
+      {
+        "annotation_id": "a182",
+        "annotation_ref": "a72",
+        "value": "APROVEITAR_",
+        "start_time": "29625",
+        "end_time": "30955"
+      },
+      {
+        "annotation_id": "a183",
+        "annotation_ref": "a74",
+        "value": "IR",
+        "start_time": "31505",
+        "end_time": "31795"
+      },
+      {
+        "annotation_id": "a184",
+        "annotation_ref": "a75",
+        "value": "NETO",
+        "start_time": "31855",
+        "end_time": "32805"
+      },
+      {
+        "annotation_id": "a185",
+        "annotation_ref": "a77",
+        "value": "FG(mulher)",
+        "start_time": "35212",
+        "end_time": "35722"
+      },
+      {
+        "annotation_id": "a186",
+        "annotation_ref": "a78",
+        "value": "HOMEM",
+        "start_time": "35760",
+        "end_time": "36170"
+      },
+      {
+        "annotation_id": "a187",
+        "annotation_ref": "a79",
+        "value": "LOBO",
+        "start_time": "36232",
+        "end_time": "36862"
+      },
+      {
+        "annotation_id": "a188",
+        "annotation_ref": "a80",
+        "value": "ANDAR_",
+        "start_time": "36942",
+        "end_time": "38342"
+      },
+      {
+        "annotation_id": "a189",
+        "annotation_ref": "a81",
+        "value": "VER",
+        "start_time": "38607",
+        "end_time": "39147"
+      },
+      {
+        "annotation_id": "a190",
+        "annotation_ref": "a82",
+        "value": "PORTA",
+        "start_time": "39182",
+        "end_time": "39752"
+      },
+      {
+        "annotation_id": "a191",
+        "annotation_ref": "a83",
+        "value": "CASA",
+        "start_time": "39782",
+        "end_time": "40012"
+      },
+      {
+        "annotation_id": "a192",
+        "annotation_ref": "a85",
+        "value": "CL(bater-\u00e0-porta)",
+        "start_time": "40522",
+        "end_time": "41512"
+      },
+      {
+        "annotation_id": "a193",
+        "annotation_ref": "a86",
+        "value": "NETO",
+        "start_time": "41572",
+        "end_time": "42132"
+      },
+      {
+        "annotation_id": "a194",
+        "annotation_ref": "a87",
+        "value": "CL(abrir-porta)",
+        "start_time": "42192",
+        "end_time": "43032"
+      },
+      {
+        "annotation_id": "a195",
+        "annotation_ref": "a88",
+        "value": "SURPRESA",
+        "start_time": "43067",
+        "end_time": "43397"
+      },
+      {
+        "annotation_id": "a196",
+        "annotation_ref": "a89",
+        "value": "LOBO",
+        "start_time": "43477",
+        "end_time": "44060"
+      },
+      {
+        "annotation_id": "a197",
+        "annotation_ref": "a90",
+        "value": "(1sg)AGARRAR(3sg)",
+        "start_time": "44163",
+        "end_time": "44453"
+      },
+      {
+        "annotation_id": "a198",
+        "annotation_ref": "a91",
+        "value": "(1sg)COMER(3sg)",
+        "start_time": "44523",
+        "end_time": "45613"
+      },
+      {
+        "annotation_id": "a199",
+        "annotation_ref": "a92",
+        "value": "CAMA",
+        "start_time": "45753",
+        "end_time": "46163"
+      },
+      {
+        "annotation_id": "a200",
+        "annotation_ref": "a93",
+        "value": "CL(tapar-se-com-cobertores)",
+        "start_time": "46253",
+        "end_time": "46843"
+      },
+      {
+        "annotation_id": "a201",
+        "annotation_ref": "a94",
+        "value": "\u00d3CULOS",
+        "start_time": "46900",
+        "end_time": "47410"
+      },
+      {
+        "annotation_id": "a202",
+        "annotation_ref": "a95",
+        "value": "CL(colocar-a-touca)",
+        "start_time": "47463",
+        "end_time": "48523"
+      },
+      {
+        "annotation_id": "a203",
+        "annotation_ref": "a96",
+        "value": "VESTIDO",
+        "start_time": "48578",
+        "end_time": "49348"
+      },
+      {
+        "annotation_id": "a204",
+        "annotation_ref": "a97",
+        "value": "MUDAR",
+        "start_time": "49398",
+        "end_time": "50108"
+      },
+      {
+        "annotation_id": "a205",
+        "annotation_ref": "a98",
+        "value": "CAMA",
+        "start_time": "50158",
+        "end_time": "50538"
+      },
+      {
+        "annotation_id": "a206",
+        "annotation_ref": "a99",
+        "value": "CL(tapar-se)",
+        "start_time": "50593",
+        "end_time": "51543"
+      },
+      {
+        "annotation_id": "a207",
+        "annotation_ref": "a100",
+        "value": "FG(mulher)",
+        "start_time": "51700",
+        "end_time": "52450"
+      },
+      {
+        "annotation_id": "a208",
+        "annotation_ref": "a101",
+        "value": "ANDAR_",
+        "start_time": "52510",
+        "end_time": "52710"
+      },
+      {
+        "annotation_id": "a209",
+        "annotation_ref": "a102",
+        "value": "CL(bater-\u00e0-porta)",
+        "start_time": "52795",
+        "end_time": "53805"
+      },
+      {
+        "annotation_id": "a210",
+        "annotation_ref": "a103",
+        "value": "NETO",
+        "start_time": "53865",
+        "end_time": "54315"
+      },
+      {
+        "annotation_id": "a211",
+        "annotation_ref": "a106",
+        "value": "LOBO",
+        "start_time": "57010",
+        "end_time": "57900"
+      },
+      {
+        "annotation_id": "a212",
+        "annotation_ref": "a107",
+        "value": "CL(estar-na-cama)",
+        "start_time": "57980",
+        "end_time": "58390"
+      },
+      {
+        "annotation_id": "a213",
+        "annotation_ref": "a108",
+        "value": "IX(quem)",
+        "start_time": "58420",
+        "end_time": "59070"
+      },
+      {
+        "annotation_id": "a214",
+        "annotation_ref": "a109",
+        "value": "OLHOS",
+        "start_time": "59130",
+        "end_time": "59670"
+      },
+      {
+        "annotation_id": "a215",
+        "annotation_ref": "a110",
+        "value": "GRANDE",
+        "start_time": "59715",
+        "end_time": "60795"
+      },
+      {
+        "annotation_id": "a216",
+        "annotation_ref": "a111",
+        "value": "NARIZ",
+        "start_time": "60850",
+        "end_time": "61370"
+      },
+      {
+        "annotation_id": "a217",
+        "annotation_ref": "a112",
+        "value": "CL(nariz-comprido))",
+        "start_time": "61405",
+        "end_time": "62005"
+      },
+      {
+        "annotation_id": "a218",
+        "annotation_ref": "a113",
+        "value": "GRANDE",
+        "start_time": "62030",
+        "end_time": "62770"
+      },
+      {
+        "annotation_id": "a219",
+        "annotation_ref": "a114",
+        "value": "ORELHAS",
+        "start_time": "63035",
+        "end_time": "63765"
+      },
+      {
+        "annotation_id": "a220",
+        "annotation_ref": "a115",
+        "value": "GRANDES",
+        "start_time": "63825",
+        "end_time": "64735"
+      },
+      {
+        "annotation_id": "a221",
+        "annotation_ref": "a116",
+        "value": "LOBO",
+        "start_time": "65135",
+        "end_time": "65765"
+      },
+      {
+        "annotation_id": "a222",
+        "annotation_ref": "a117",
+        "value": "COMER",
+        "start_time": "65845",
+        "end_time": "66615"
+      },
+      {
+        "annotation_id": "a223",
+        "annotation_ref": "a118",
+        "value": "FG(mulher)",
+        "start_time": "67320",
+        "end_time": "67640"
+      },
+      {
+        "annotation_id": "a224",
+        "annotation_ref": "a119",
+        "value": "FUGIR",
+        "start_time": "67700",
+        "end_time": "68170"
+      },
+      {
+        "annotation_id": "a225",
+        "annotation_ref": "a120",
+        "value": "MEDO",
+        "start_time": "68200",
+        "end_time": "68595"
+      },
+      {
+        "annotation_id": "a226",
+        "annotation_ref": "a121",
+        "value": "CORRER",
+        "start_time": "68640",
+        "end_time": "69210"
+      },
+      {
+        "annotation_id": "a227",
+        "annotation_ref": "a122",
+        "value": "CL(ir-a-correr)",
+        "start_time": "69340",
+        "end_time": "69980"
+      },
+      {
+        "annotation_id": "a228",
+        "annotation_ref": "a123",
+        "value": "HOMEM",
+        "start_time": "70415",
+        "end_time": "70775"
+      },
+      {
+        "annotation_id": "a229",
+        "annotation_ref": "a124",
+        "value": "N(2)",
+        "start_time": "70820",
+        "end_time": "71000"
+      },
+      {
+        "annotation_id": "a230",
+        "annotation_ref": "a125",
+        "value": "OUVIR",
+        "start_time": "71045",
+        "end_time": "72145"
+      },
+      {
+        "annotation_id": "a231",
+        "annotation_ref": "a126",
+        "value": "CORRER",
+        "start_time": "72620",
+        "end_time": "73700"
+      },
+      {
+        "annotation_id": "a232",
+        "annotation_ref": "a127",
+        "value": "CL(bater-\u00e0-porta)",
+        "start_time": "73795",
+        "end_time": "74515"
+      },
+      {
+        "annotation_id": "a382",
+        "annotation_ref": "a128",
+        "value": "CASA",
+        "start_time": "74560",
+        "end_time": "76080"
+      },
+      {
+        "annotation_id": "a233",
+        "annotation_ref": "a129",
+        "value": "FG(mulher)",
+        "start_time": "77350",
+        "end_time": "77930"
+      },
+      {
+        "annotation_id": "a234",
+        "annotation_ref": "a130",
+        "value": "CORRER",
+        "start_time": "77995",
+        "end_time": "78365"
+      },
+      {
+        "annotation_id": "a235",
+        "annotation_ref": "a131",
+        "value": "CL(dar-tiro)",
+        "start_time": "78415",
+        "end_time": "79175"
+      },
+      {
+        "annotation_id": "a236",
+        "annotation_ref": "a132",
+        "value": "LOBO",
+        "start_time": "79230",
+        "end_time": "79570"
+      },
+      {
+        "annotation_id": "a237",
+        "annotation_ref": "a133",
+        "value": "MORRER",
+        "start_time": "79625",
+        "end_time": "80165"
+      },
+      {
+        "annotation_id": "a383",
+        "annotation_ref": "a380",
+        "value": "ACABAR",
+        "start_time": "80216",
+        "end_time": "80688"
+      },
+      {
+        "annotation_id": "a494",
+        "annotation_ref": "a135",
+        "value": "(AV\u00d3=?)",
+        "start_time": "81365",
+        "end_time": "81755"
+      }
+    ],
+    "parent_ref": "GLOSAS_P1"
+  },
+  "GLOSA_P1-M2": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "GLOSA_P1-M2",
+    "annotations": [
+      {
+        "annotation_id": "a241",
+        "annotation_ref": "a76",
+        "value": "CASA",
+        "start_time": "33065",
+        "end_time": "34190"
+      },
+      {
+        "annotation_id": "a242",
+        "annotation_ref": "a82",
+        "value": "PORTA",
+        "start_time": "39182",
+        "end_time": "39752"
+      },
+      {
+        "annotation_id": "a243",
+        "annotation_ref": "a83",
+        "value": "PORTA",
+        "start_time": "39782",
+        "end_time": "40012"
+      },
+      {
+        "annotation_id": "a244",
+        "annotation_ref": "a84",
+        "value": "PORTA",
+        "start_time": "40042",
+        "end_time": "40452"
+      },
+      {
+        "annotation_id": "a245",
+        "annotation_ref": "a85",
+        "value": "PORTA",
+        "start_time": "40522",
+        "end_time": "41512"
+      },
+      {
+        "annotation_id": "a246",
+        "annotation_ref": "a88",
+        "value": "SURPRESA",
+        "start_time": "43067",
+        "end_time": "43397"
+      },
+      {
+        "annotation_id": "a253",
+        "annotation_ref": "a114",
+        "value": "ORELHAS",
+        "start_time": "63035",
+        "end_time": "63765"
+      },
+      {
+        "annotation_id": "a255",
+        "annotation_ref": "a117",
+        "value": "COMER",
+        "start_time": "65845",
+        "end_time": "66615"
+      }
+    ],
+    "parent_ref": "GLOSAS_P1"
+  },
+  "Comen_GlosaP1": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Comen_GlosaP1",
+    "annotations": [
+      {
+        "annotation_id": "a262",
+        "annotation_ref": "a69",
+        "value": "gesto de mulher usado para mencionar a menina",
+        "start_time": "27530",
+        "end_time": "27950"
+      },
+      {
+        "annotation_id": "a263",
+        "annotation_ref": "a74",
+        "value": "INT",
+        "start_time": "31505",
+        "end_time": "31795"
+      },
+      {
+        "annotation_id": "a264",
+        "annotation_ref": "a75",
+        "value": "faz o gesto de neto para av\u00f3",
+        "start_time": "31855",
+        "end_time": "32805"
+      },
+      {
+        "annotation_id": "a265",
+        "annotation_ref": "a84",
+        "value": "o gesto de neto para av\u00f3",
+        "start_time": "40042",
+        "end_time": "40452"
+      },
+      {
+        "annotation_id": "a266",
+        "annotation_ref": "a86",
+        "value": "o gesto de neto para av\u00f3",
+        "start_time": "41572",
+        "end_time": "42132"
+      },
+      {
+        "annotation_id": "a267",
+        "annotation_ref": "a103",
+        "value": "o gesto de neto para av\u00f3",
+        "start_time": "53865",
+        "end_time": "54315"
+      },
+      {
+        "annotation_id": "a268",
+        "annotation_ref": "a105",
+        "value": "o gesto de neto para av\u00f3",
+        "start_time": "56075",
+        "end_time": "56515"
+      },
+      {
+        "annotation_id": "a384",
+        "annotation_ref": "a118",
+        "value": "menina",
+        "start_time": "67320",
+        "end_time": "67640"
+      },
+      {
+        "annotation_id": "a385",
+        "annotation_ref": "a128",
+        "value": "Localiza\u00e7\u00e3o errada de casa",
+        "start_time": "74560",
+        "end_time": "76080"
+      },
+      {
+        "annotation_id": "a386",
+        "annotation_ref": "a129",
+        "value": "menina",
+        "start_time": "77350",
+        "end_time": "77930"
+      },
+      {
+        "annotation_id": "a270",
+        "annotation_ref": "a135",
+        "value": "o gesto de neto para av\u00f3",
+        "start_time": "81365",
+        "end_time": "81755"
+      }
+    ],
+    "parent_ref": "GLOSAS_P1"
+  },
+  "M2_ClassGram": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "M2_ClassGram",
+    "annotations": [
+      {
+        "annotation_id": "a273",
+        "annotation_ref": "a82",
+        "value": "N",
+        "start_time": "39182",
+        "end_time": "39752"
+      },
+      {
+        "annotation_id": "a387",
+        "annotation_ref": "a85",
+        "value": "N",
+        "start_time": "40522",
+        "end_time": "41512"
+      },
+      {
+        "annotation_id": "a274",
+        "annotation_ref": "a88",
+        "value": "INTJ",
+        "start_time": "43067",
+        "end_time": "43397"
+      },
+      {
+        "annotation_id": "a280",
+        "annotation_ref": "a99",
+        "value": "CL_V",
+        "start_time": "50593",
+        "end_time": "51543"
+      },
+      {
+        "annotation_id": "a284",
+        "annotation_ref": "a114",
+        "value": "N",
+        "start_time": "63035",
+        "end_time": "63765"
+      },
+      {
+        "annotation_id": "a286",
+        "annotation_ref": "a117",
+        "value": "V_TRA",
+        "start_time": "65845",
+        "end_time": "66615"
+      },
+      {
+        "annotation_id": "a288",
+        "annotation_ref": "a121",
+        "value": "V_INT",
+        "start_time": "68640",
+        "end_time": "69210"
+      }
+    ],
+    "parent_ref": "GLOSAS_P1"
+  },
+  "M1_ClassGram": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "M1_ClassGram",
+    "annotations": [
+      {
+        "annotation_id": "a413",
+        "annotation_ref": "a393",
+        "value": "N",
+        "start_time": "11370",
+        "end_time": "12590"
+      },
+      {
+        "annotation_id": "a414",
+        "annotation_ref": "a394",
+        "value": "ADJ",
+        "start_time": "12665",
+        "end_time": "13385"
+      },
+      {
+        "annotation_id": "a415",
+        "annotation_ref": "a395",
+        "value": "N",
+        "start_time": "13410",
+        "end_time": "13780"
+      },
+      {
+        "annotation_id": "a416",
+        "annotation_ref": "a396",
+        "value": "V_DITRA",
+        "start_time": "13820",
+        "end_time": "14960"
+      },
+      {
+        "annotation_id": "a417",
+        "annotation_ref": "a397",
+        "value": "N",
+        "start_time": "15045",
+        "end_time": "16095"
+      },
+      {
+        "annotation_id": "a418",
+        "annotation_ref": "a398",
+        "value": "N",
+        "start_time": "16215",
+        "end_time": "16725"
+      },
+      {
+        "annotation_id": "a419",
+        "annotation_ref": "a399",
+        "value": "N",
+        "start_time": "16815",
+        "end_time": "17675"
+      },
+      {
+        "annotation_id": "a420",
+        "annotation_ref": "a400",
+        "value": "N",
+        "start_time": "17755",
+        "end_time": "18345"
+      },
+      {
+        "annotation_id": "a300",
+        "annotation_ref": "a59",
+        "value": "V_INT",
+        "start_time": "18396",
+        "end_time": "20115"
+      },
+      {
+        "annotation_id": "a301",
+        "annotation_ref": "a60",
+        "value": "CONJ",
+        "start_time": "20210",
+        "end_time": "20670"
+      },
+      {
+        "annotation_id": "a302",
+        "annotation_ref": "a61",
+        "value": "V_TRA",
+        "start_time": "20725",
+        "end_time": "21035"
+      },
+      {
+        "annotation_id": "a303",
+        "annotation_ref": "a62",
+        "value": "N",
+        "start_time": "21075",
+        "end_time": "22015"
+      },
+      {
+        "annotation_id": "a304",
+        "annotation_ref": "a63",
+        "value": "NUM",
+        "start_time": "22080",
+        "end_time": "22460"
+      },
+      {
+        "annotation_id": "a305",
+        "annotation_ref": "a64",
+        "value": "N",
+        "start_time": "22515",
+        "end_time": "23095"
+      },
+      {
+        "annotation_id": "a306",
+        "annotation_ref": "a65",
+        "value": "V_TRA",
+        "start_time": "23150",
+        "end_time": "24370"
+      },
+      {
+        "annotation_id": "a307",
+        "annotation_ref": "a66",
+        "value": "CL_V",
+        "start_time": "24465",
+        "end_time": "25310"
+      },
+      {
+        "annotation_id": "a439",
+        "annotation_ref": "a437",
+        "value": "N",
+        "start_time": "25317",
+        "end_time": "26207"
+      },
+      {
+        "annotation_id": "a309",
+        "annotation_ref": "a68",
+        "value": "ADV",
+        "start_time": "26895",
+        "end_time": "27495"
+      },
+      {
+        "annotation_id": "a310",
+        "annotation_ref": "a69",
+        "value": "N",
+        "start_time": "27530",
+        "end_time": "27950"
+      },
+      {
+        "annotation_id": "a311",
+        "annotation_ref": "a70",
+        "value": "V_INT",
+        "start_time": "28005",
+        "end_time": "29235"
+      },
+      {
+        "annotation_id": "a312",
+        "annotation_ref": "a71",
+        "value": "N",
+        "start_time": "29265",
+        "end_time": "29575"
+      },
+      {
+        "annotation_id": "a313",
+        "annotation_ref": "a72",
+        "value": "V_INT",
+        "start_time": "29625",
+        "end_time": "30955"
+      },
+      {
+        "annotation_id": "a314",
+        "annotation_ref": "a73",
+        "value": "ADV",
+        "start_time": "30995",
+        "end_time": "31465"
+      },
+      {
+        "annotation_id": "a315",
+        "annotation_ref": "a74",
+        "value": "V_TRA",
+        "start_time": "31505",
+        "end_time": "31795"
+      },
+      {
+        "annotation_id": "a316",
+        "annotation_ref": "a75",
+        "value": "N",
+        "start_time": "31855",
+        "end_time": "32805"
+      },
+      {
+        "annotation_id": "a317",
+        "annotation_ref": "a76",
+        "value": "N",
+        "start_time": "33065",
+        "end_time": "34190"
+      },
+      {
+        "annotation_id": "a318",
+        "annotation_ref": "a77",
+        "value": "N",
+        "start_time": "35212",
+        "end_time": "35722"
+      },
+      {
+        "annotation_id": "a319",
+        "annotation_ref": "a78",
+        "value": "N",
+        "start_time": "35760",
+        "end_time": "36170"
+      },
+      {
+        "annotation_id": "a320",
+        "annotation_ref": "a79",
+        "value": "N",
+        "start_time": "36232",
+        "end_time": "36862"
+      },
+      {
+        "annotation_id": "a321",
+        "annotation_ref": "a80",
+        "value": "V_INT",
+        "start_time": "36942",
+        "end_time": "38342"
+      },
+      {
+        "annotation_id": "a322",
+        "annotation_ref": "a81",
+        "value": "V_TRA",
+        "start_time": "38607",
+        "end_time": "39147"
+      },
+      {
+        "annotation_id": "a323",
+        "annotation_ref": "a82",
+        "value": "N",
+        "start_time": "39182",
+        "end_time": "39752"
+      },
+      {
+        "annotation_id": "a324",
+        "annotation_ref": "a83",
+        "value": "N",
+        "start_time": "39782",
+        "end_time": "40012"
+      },
+      {
+        "annotation_id": "a325",
+        "annotation_ref": "a84",
+        "value": "N",
+        "start_time": "40042",
+        "end_time": "40452"
+      },
+      {
+        "annotation_id": "a326",
+        "annotation_ref": "a85",
+        "value": "CL_V",
+        "start_time": "40522",
+        "end_time": "41512"
+      },
+      {
+        "annotation_id": "a327",
+        "annotation_ref": "a86",
+        "value": "N",
+        "start_time": "41572",
+        "end_time": "42132"
+      },
+      {
+        "annotation_id": "a328",
+        "annotation_ref": "a87",
+        "value": "CL_V",
+        "start_time": "42192",
+        "end_time": "43032"
+      },
+      {
+        "annotation_id": "a329",
+        "annotation_ref": "a88",
+        "value": "INTJ",
+        "start_time": "43067",
+        "end_time": "43397"
+      },
+      {
+        "annotation_id": "a330",
+        "annotation_ref": "a89",
+        "value": "N",
+        "start_time": "43477",
+        "end_time": "44060"
+      },
+      {
+        "annotation_id": "a331",
+        "annotation_ref": "a90",
+        "value": "V_TRA",
+        "start_time": "44163",
+        "end_time": "44453"
+      },
+      {
+        "annotation_id": "a332",
+        "annotation_ref": "a91",
+        "value": "V_TRA",
+        "start_time": "44523",
+        "end_time": "45613"
+      },
+      {
+        "annotation_id": "a333",
+        "annotation_ref": "a92",
+        "value": "N",
+        "start_time": "45753",
+        "end_time": "46163"
+      },
+      {
+        "annotation_id": "a334",
+        "annotation_ref": "a93",
+        "value": "CL_V",
+        "start_time": "46253",
+        "end_time": "46843"
+      },
+      {
+        "annotation_id": "a335",
+        "annotation_ref": "a94",
+        "value": "N",
+        "start_time": "46900",
+        "end_time": "47410"
+      },
+      {
+        "annotation_id": "a336",
+        "annotation_ref": "a95",
+        "value": "CL_V",
+        "start_time": "47463",
+        "end_time": "48523"
+      },
+      {
+        "annotation_id": "a337",
+        "annotation_ref": "a96",
+        "value": "N",
+        "start_time": "48578",
+        "end_time": "49348"
+      },
+      {
+        "annotation_id": "a338",
+        "annotation_ref": "a97",
+        "value": "V_PRON",
+        "start_time": "49398",
+        "end_time": "50108"
+      },
+      {
+        "annotation_id": "a339",
+        "annotation_ref": "a98",
+        "value": "N",
+        "start_time": "50158",
+        "end_time": "50538"
+      },
+      {
+        "annotation_id": "a340",
+        "annotation_ref": "a99",
+        "value": "CL_V",
+        "start_time": "50593",
+        "end_time": "51543"
+      },
+      {
+        "annotation_id": "a341",
+        "annotation_ref": "a100",
+        "value": "N",
+        "start_time": "51700",
+        "end_time": "52450"
+      },
+      {
+        "annotation_id": "a342",
+        "annotation_ref": "a101",
+        "value": "V_INT",
+        "start_time": "52510",
+        "end_time": "52710"
+      },
+      {
+        "annotation_id": "a343",
+        "annotation_ref": "a102",
+        "value": "CL_V",
+        "start_time": "52795",
+        "end_time": "53805"
+      },
+      {
+        "annotation_id": "a344",
+        "annotation_ref": "a103",
+        "value": "N",
+        "start_time": "53865",
+        "end_time": "54315"
+      },
+      {
+        "annotation_id": "a345",
+        "annotation_ref": "a104",
+        "value": "INTERJ",
+        "start_time": "55110",
+        "end_time": "55520"
+      },
+      {
+        "annotation_id": "a346",
+        "annotation_ref": "a105",
+        "value": "N",
+        "start_time": "56075",
+        "end_time": "56515"
+      },
+      {
+        "annotation_id": "a347",
+        "annotation_ref": "a106",
+        "value": "N",
+        "start_time": "57010",
+        "end_time": "57900"
+      },
+      {
+        "annotation_id": "a348",
+        "annotation_ref": "a107",
+        "value": "CL_V_COP",
+        "start_time": "57980",
+        "end_time": "58390"
+      },
+      {
+        "annotation_id": "a349",
+        "annotation_ref": "a108",
+        "value": "ARG_INT",
+        "start_time": "58420",
+        "end_time": "59070"
+      },
+      {
+        "annotation_id": "a350",
+        "annotation_ref": "a109",
+        "value": "N",
+        "start_time": "59130",
+        "end_time": "59670"
+      },
+      {
+        "annotation_id": "a351",
+        "annotation_ref": "a110",
+        "value": "ADJ",
+        "start_time": "59715",
+        "end_time": "60795"
+      },
+      {
+        "annotation_id": "a352",
+        "annotation_ref": "a111",
+        "value": "N",
+        "start_time": "60850",
+        "end_time": "61370"
+      },
+      {
+        "annotation_id": "a353",
+        "annotation_ref": "a112",
+        "value": "ADJ",
+        "start_time": "61405",
+        "end_time": "62005"
+      },
+      {
+        "annotation_id": "a354",
+        "annotation_ref": "a113",
+        "value": "ADJ",
+        "start_time": "62030",
+        "end_time": "62770"
+      },
+      {
+        "annotation_id": "a355",
+        "annotation_ref": "a114",
+        "value": "N",
+        "start_time": "63035",
+        "end_time": "63765"
+      },
+      {
+        "annotation_id": "a356",
+        "annotation_ref": "a115",
+        "value": "ADJ",
+        "start_time": "63825",
+        "end_time": "64735"
+      },
+      {
+        "annotation_id": "a357",
+        "annotation_ref": "a116",
+        "value": "N",
+        "start_time": "65135",
+        "end_time": "65765"
+      },
+      {
+        "annotation_id": "a358",
+        "annotation_ref": "a117",
+        "value": "V_TRA",
+        "start_time": "65845",
+        "end_time": "66615"
+      },
+      {
+        "annotation_id": "a359",
+        "annotation_ref": "a118",
+        "value": "N",
+        "start_time": "67320",
+        "end_time": "67640"
+      },
+      {
+        "annotation_id": "a360",
+        "annotation_ref": "a119",
+        "value": "V_INT",
+        "start_time": "67700",
+        "end_time": "68170"
+      },
+      {
+        "annotation_id": "a361",
+        "annotation_ref": "a120",
+        "value": "ADJ",
+        "start_time": "68200",
+        "end_time": "68595"
+      },
+      {
+        "annotation_id": "a362",
+        "annotation_ref": "a121",
+        "value": "V_INT",
+        "start_time": "68640",
+        "end_time": "69210"
+      },
+      {
+        "annotation_id": "a363",
+        "annotation_ref": "a122",
+        "value": "CL_V_COP",
+        "start_time": "69340",
+        "end_time": "69980"
+      },
+      {
+        "annotation_id": "a364",
+        "annotation_ref": "a123",
+        "value": "N",
+        "start_time": "70415",
+        "end_time": "70775"
+      },
+      {
+        "annotation_id": "a365",
+        "annotation_ref": "a124",
+        "value": "NUM",
+        "start_time": "70820",
+        "end_time": "71000"
+      },
+      {
+        "annotation_id": "a366",
+        "annotation_ref": "a125",
+        "value": "V_INT",
+        "start_time": "71045",
+        "end_time": "72145"
+      },
+      {
+        "annotation_id": "a367",
+        "annotation_ref": "a126",
+        "value": "V_INT",
+        "start_time": "72620",
+        "end_time": "73700"
+      },
+      {
+        "annotation_id": "a368",
+        "annotation_ref": "a127",
+        "value": "V_TRA",
+        "start_time": "73795",
+        "end_time": "74515"
+      },
+      {
+        "annotation_id": "a369",
+        "annotation_ref": "a128",
+        "value": "N",
+        "start_time": "74560",
+        "end_time": "76080"
+      },
+      {
+        "annotation_id": "a370",
+        "annotation_ref": "a129",
+        "value": "N",
+        "start_time": "77350",
+        "end_time": "77930"
+      },
+      {
+        "annotation_id": "a371",
+        "annotation_ref": "a130",
+        "value": "V_INT",
+        "start_time": "77995",
+        "end_time": "78365"
+      },
+      {
+        "annotation_id": "a372",
+        "annotation_ref": "a131",
+        "value": "CL_V_TRA",
+        "start_time": "78415",
+        "end_time": "79175"
+      },
+      {
+        "annotation_id": "a373",
+        "annotation_ref": "a132",
+        "value": "N",
+        "start_time": "79230",
+        "end_time": "79570"
+      },
+      {
+        "annotation_id": "a374",
+        "annotation_ref": "a133",
+        "value": "V_INT",
+        "start_time": "79625",
+        "end_time": "80165"
+      },
+      {
+        "annotation_id": "a389",
+        "annotation_ref": "a380",
+        "value": "V_INT",
+        "start_time": "80216",
+        "end_time": "80688"
+      },
+      {
+        "annotation_id": "a376",
+        "annotation_ref": "a135",
+        "value": "N",
+        "start_time": "81365",
+        "end_time": "81755"
+      }
+    ],
+    "parent_ref": "GLOSAS_P1"
+  },
+  "GLOSA_P1_EXPRESSAO": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "GLOSA_P1_EXPRESSAO",
+    "annotations": [
+      {
+        "annotation_id": "a390",
+        "annotation_ref": "a69",
+        "value": "MENINA(mouthing)",
+        "start_time": "27530",
+        "end_time": "27950"
+      },
+      {
+        "annotation_id": "a391",
+        "annotation_ref": "a108",
+        "value": "QUEM_m(\u00e9)",
+        "start_time": "58420",
+        "end_time": "59070"
+      }
+    ],
+    "parent_ref": "GLOSAS_P1"
+  },
+  "EXPRE_ClassGram": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "EXPRE_ClassGram",
+    "annotations": [
+      {
+        "annotation_id": "a539",
+        "annotation_ref": "a108",
+        "value": "PRO-INT",
+        "start_time": "58420",
+        "end_time": "59070"
+      },
+      {
+        "annotation_id": "a495",
+        "annotation_ref": "a134",
+        "value": "V_INT",
+        "start_time": "80720",
+        "end_time": "81300"
+      }
+    ],
+    "parent_ref": "GLOSAS_P1"
+  },
+  "Fono_Hamnosys": {
+    "linguistic_type_ref": "default-lt",
+    "tier_id": "Fono_Hamnosys",
+    "annotations": [],
+    "parent_ref": null
+  },
+  "Config": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Config",
+    "annotations": [],
+    "parent_ref": "Fono_Hamnosys"
+  },
+  "Orient": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Orient",
+    "annotations": [],
+    "parent_ref": "Fono_Hamnosys"
+  },
+  "Local": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Local",
+    "annotations": [],
+    "parent_ref": "Fono_Hamnosys"
+  },
+  "Movim": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Movim",
+    "annotations": [],
+    "parent_ref": "Fono_Hamnosys"
+  },
+  "Seman_Estr": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Seman_Estr",
+    "annotations": [],
+    "parent_ref": "Sint_Constituinte"
+  },
+  "M1_CONSTITUINTE": {
+    "linguistic_type_ref": "default-lt",
+    "tier_id": "M1_CONSTITUINTE",
+    "annotations": [
+      {
+        "annotation_id": "a423",
+        "start_time": "11371",
+        "end_time": "13373",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a424",
+        "start_time": "13410",
+        "end_time": "13780",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a425",
+        "start_time": "13820",
+        "end_time": "14960",
+        "value": "V_DITRA"
+      },
+      {
+        "annotation_id": "a426",
+        "start_time": "15030",
+        "end_time": "18340",
+        "value": "ARG_INT2"
+      },
+      {
+        "annotation_id": "a429",
+        "start_time": "20725",
+        "end_time": "21035",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a430",
+        "start_time": "21075",
+        "end_time": "22015",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a435",
+        "start_time": "22085",
+        "end_time": "23095",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a442",
+        "start_time": "23152",
+        "end_time": "24362",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a452",
+        "start_time": "24465",
+        "end_time": "25310",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a453",
+        "start_time": "25317",
+        "end_time": "26207",
+        "value": "ADJT"
+      },
+      {
+        "annotation_id": "a443",
+        "start_time": "27530",
+        "end_time": "27950",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a444",
+        "start_time": "28005",
+        "end_time": "29235",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a461",
+        "start_time": "29265",
+        "end_time": "29575",
+        "value": "AGENTE"
+      },
+      {
+        "annotation_id": "a462",
+        "start_time": "29610",
+        "end_time": "30950",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a458",
+        "start_time": "30995",
+        "end_time": "31465",
+        "value": "E-INT"
+      },
+      {
+        "annotation_id": "a459",
+        "start_time": "31505",
+        "end_time": "31795",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a463",
+        "start_time": "35207",
+        "end_time": "36877",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a464",
+        "start_time": "36942",
+        "end_time": "38342",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a469",
+        "start_time": "38607",
+        "end_time": "39147",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a470",
+        "start_time": "39187",
+        "end_time": "40457",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a471",
+        "start_time": "40522",
+        "end_time": "41512",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a482",
+        "start_time": "41572",
+        "end_time": "42132",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a483",
+        "start_time": "42192",
+        "end_time": "43032",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a484",
+        "start_time": "43477",
+        "end_time": "44060",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a485",
+        "start_time": "44163",
+        "end_time": "44453",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a486",
+        "start_time": "44523",
+        "end_time": "45613",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a503",
+        "start_time": "45753",
+        "end_time": "46163",
+        "value": "ADJT"
+      },
+      {
+        "annotation_id": "a504",
+        "start_time": "46253",
+        "end_time": "46843",
+        "value": "V_TRA-ARG_INT"
+      },
+      {
+        "annotation_id": "a505",
+        "start_time": "46900",
+        "end_time": "47410",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a506",
+        "start_time": "47463",
+        "end_time": "48523",
+        "value": "V-TRA-ARG_INT"
+      },
+      {
+        "annotation_id": "a507",
+        "start_time": "48578",
+        "end_time": "49348",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a567",
+        "start_time": "49398",
+        "end_time": "50108",
+        "value": "V_PRON"
+      },
+      {
+        "annotation_id": "a569",
+        "start_time": "50158",
+        "end_time": "50538",
+        "value": "MODIF"
+      },
+      {
+        "annotation_id": "a568",
+        "start_time": "50593",
+        "end_time": "51543",
+        "value": "V_PRON"
+      },
+      {
+        "annotation_id": "a559",
+        "start_time": "51700",
+        "end_time": "52450",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a560",
+        "start_time": "52510",
+        "end_time": "52710",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a561",
+        "start_time": "52795",
+        "end_time": "53805",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a562",
+        "start_time": "53865",
+        "end_time": "54315",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a551",
+        "start_time": "57010",
+        "end_time": "57900",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a552",
+        "start_time": "57980",
+        "end_time": "58390",
+        "value": "V_AGENTIVO"
+      },
+      {
+        "annotation_id": "a541",
+        "start_time": "58431",
+        "end_time": "59090",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a542",
+        "start_time": "59135",
+        "end_time": "60795",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a543",
+        "start_time": "60855",
+        "end_time": "62775",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a544",
+        "start_time": "63045",
+        "end_time": "64735",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a545",
+        "start_time": "65135",
+        "end_time": "65765",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a546",
+        "start_time": "65845",
+        "end_time": "66615",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a528",
+        "start_time": "67320",
+        "end_time": "67640",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a529",
+        "start_time": "67700",
+        "end_time": "68170",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a530",
+        "start_time": "68200",
+        "end_time": "68595",
+        "value": "ADJT"
+      },
+      {
+        "annotation_id": "a531",
+        "start_time": "68641",
+        "end_time": "69230",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a532",
+        "start_time": "69340",
+        "end_time": "69980",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a533",
+        "start_time": "70410",
+        "end_time": "71000",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a534",
+        "start_time": "71045",
+        "end_time": "72145",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a521",
+        "start_time": "72627",
+        "end_time": "73720",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a522",
+        "start_time": "73795",
+        "end_time": "74515",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a523",
+        "start_time": "74560",
+        "end_time": "76080",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a508",
+        "start_time": "77350",
+        "end_time": "77930",
+        "value": "ARG_EXT"
+      },
+      {
+        "annotation_id": "a509",
+        "start_time": "77995",
+        "end_time": "78365",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a510",
+        "start_time": "78415",
+        "end_time": "79175",
+        "value": "V_TRA"
+      },
+      {
+        "annotation_id": "a511",
+        "start_time": "79230",
+        "end_time": "79570",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a512",
+        "start_time": "79625",
+        "end_time": "80165",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a513",
+        "start_time": "80216",
+        "end_time": "80688",
+        "value": "V_INT"
+      },
+      {
+        "annotation_id": "a514",
+        "start_time": "81365",
+        "end_time": "81755",
+        "value": "ARG_EXT"
+      }
+    ],
+    "parent_ref": null
+  },
+  "M2_CONSTITUINTE": {
+    "linguistic_type_ref": "default-lt",
+    "tier_id": "M2_CONSTITUINTE",
+    "annotations": [
+      {
+        "annotation_id": "a472",
+        "start_time": "39182",
+        "end_time": "39752",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a473",
+        "start_time": "40522",
+        "end_time": "41512",
+        "value": "ARG_INT"
+      },
+      {
+        "annotation_id": "a547",
+        "start_time": "63035",
+        "end_time": "63765",
+        "value": "ARG_INT"
+      }
+    ],
+    "parent_ref": null
+  },
+  "EXP_CONSTITUINTE": {
+    "linguistic_type_ref": "default-lt",
+    "tier_id": "EXP_CONSTITUINTE",
+    "annotations": [
+      {
+        "annotation_id": "a548",
+        "start_time": "58420",
+        "end_time": "59070",
+        "value": "E-INT"
+      },
+      {
+        "annotation_id": "a515",
+        "start_time": "80720",
+        "end_time": "81300",
+        "value": "V_INT"
+      }
+    ],
+    "parent_ref": null
+  },
+  "LGP_P1 Trans_Literal-cp": {
+    "linguistic_type_ref": "Time Subdivision",
+    "tier_id": "LGP_P1 Trans_Literal-cp",
+    "annotations": [
+      {
+        "annotation_id": "a570",
+        "start_time": "11370",
+        "end_time": "18356",
+        "value": "[MULHER] PEQUENA M\u00c3E DAR CESTO FRUTA P\u00c3O CHOURI\u00c7O"
+      },
+      {
+        "annotation_id": "a571",
+        "start_time": "18396",
+        "end_time": "20120",
+        "value": "ANDAR_"
+      },
+      {
+        "annotation_id": "a572",
+        "start_time": "20210",
+        "end_time": "22019",
+        "value": "MAS APANHAR FLOR"
+      },
+      {
+        "annotation_id": "a573",
+        "start_time": "22090",
+        "end_time": "24370",
+        "value": "[1] LOBO VER "
+      },
+      {
+        "annotation_id": "a574",
+        "start_time": "24455",
+        "end_time": "26210",
+        "value": "[ESCONDER-SE-ATR\u00c1S] ATR\u00c1S"
+      },
+      {
+        "annotation_id": "a575",
+        "start_time": "26895",
+        "end_time": "29250",
+        "value": "DEPOIS MENINA ANDAR_ "
+      },
+      {
+        "annotation_id": "a576",
+        "start_time": "29260",
+        "end_time": "30940",
+        "value": "LOBO APROVEITAR"
+      },
+      {
+        "annotation_id": "a577",
+        "start_time": "31005",
+        "end_time": "31804",
+        "value": "ONDE IR"
+      },
+      {
+        "annotation_id": "a578",
+        "start_time": "31862",
+        "end_time": "34206",
+        "value": "AV\u00d3 CASA"
+      },
+      {
+        "annotation_id": "a579",
+        "start_time": "35220",
+        "end_time": "38350",
+        "value": "[MULHER] HOMEM LOBO ANDAR_"
+      },
+      {
+        "annotation_id": "a580",
+        "start_time": "38610",
+        "end_time": "40460",
+        "value": "VER PORTA CASA AV\u00d3"
+      },
+      {
+        "annotation_id": "a581",
+        "start_time": "40536",
+        "end_time": "41520",
+        "value": "BATER-PORTA"
+      },
+      {
+        "annotation_id": "a582",
+        "start_time": "41578",
+        "end_time": "43060",
+        "value": " AV\u00d3 [ABRIR-A-PORTA]"
+      },
+      {
+        "annotation_id": "a583",
+        "start_time": "43067",
+        "end_time": "43397",
+        "value": "SURPRESA"
+      },
+      {
+        "annotation_id": "a584",
+        "start_time": "43486",
+        "end_time": "44460",
+        "value": "LOBO AGARRAR"
+      },
+      {
+        "annotation_id": "a585",
+        "start_time": "44523",
+        "end_time": "45613",
+        "value": "COMER"
+      },
+      {
+        "annotation_id": "a586",
+        "start_time": "45752",
+        "end_time": "46844",
+        "value": "CAMA [TAPAR-SE] "
+      },
+      {
+        "annotation_id": "a587",
+        "start_time": "46898",
+        "end_time": "49370",
+        "value": "\u00d3CULOS [COLOCAR-TOUCA] VESTIDO"
+      },
+      {
+        "annotation_id": "a588",
+        "start_time": "49392",
+        "end_time": "50532",
+        "value": "MUDAR CAMA"
+      },
+      {
+        "annotation_id": "a589",
+        "start_time": "50593",
+        "end_time": "51543",
+        "value": "TAPAR-SE"
+      },
+      {
+        "annotation_id": "a590",
+        "start_time": "51701",
+        "end_time": "52730",
+        "value": "MENINA ANDAR_"
+      },
+      {
+        "annotation_id": "a591",
+        "start_time": "52775",
+        "end_time": "54315",
+        "value": " [BATER-\u00c0-PORTA] NETO"
+      },
+      {
+        "annotation_id": "a592",
+        "start_time": "55116",
+        "end_time": "55532",
+        "value": "OK"
+      },
+      {
+        "annotation_id": "a593",
+        "start_time": "56071",
+        "end_time": "56512",
+        "value": "NETO"
+      },
+      {
+        "annotation_id": "a594",
+        "start_time": "57009",
+        "end_time": "58405",
+        "value": "LOBO deitado"
+      },
+      {
+        "annotation_id": "a595",
+        "start_time": "58431",
+        "end_time": "59080",
+        "value": "QUEM TU?"
+      },
+      {
+        "annotation_id": "a596",
+        "start_time": "59130",
+        "end_time": "64730",
+        "value": " OLHOS GRANDE NARIZ GRANDE ORELHAS GRANDE"
+      },
+      {
+        "annotation_id": "a597",
+        "start_time": "65142",
+        "end_time": "66616",
+        "value": "LOBO COMER"
+      },
+      {
+        "annotation_id": "a598",
+        "start_time": "67324",
+        "end_time": "68603",
+        "value": "MENINA FUGIR MEDO"
+      },
+      {
+        "annotation_id": "a599",
+        "start_time": "68641",
+        "end_time": "69220",
+        "value": "CORRER [IR-A-CORRER]"
+      },
+      {
+        "annotation_id": "a600",
+        "start_time": "70426",
+        "end_time": "72147",
+        "value": "HOMEM DOIS OUVIR"
+      },
+      {
+        "annotation_id": "a601",
+        "start_time": "72627",
+        "end_time": "73710",
+        "value": "CORRER"
+      },
+      {
+        "annotation_id": "a602",
+        "start_time": "73795",
+        "end_time": "76095",
+        "value": "[BATAR_PORTA] CASA"
+      },
+      {
+        "annotation_id": "a603",
+        "start_time": "77343",
+        "end_time": "78382",
+        "value": "MENINA CORRER"
+      },
+      {
+        "annotation_id": "a604",
+        "start_time": "78417",
+        "end_time": "79580",
+        "value": "[DISPARAR-ARMA] LOBO"
+      },
+      {
+        "annotation_id": "a605",
+        "start_time": "79625",
+        "end_time": "80165",
+        "value": "MORRER"
+      },
+      {
+        "annotation_id": "a606",
+        "start_time": "80216",
+        "end_time": "80688",
+        "value": "ACABAR"
+      },
+      {
+        "annotation_id": "a607",
+        "start_time": "80716",
+        "end_time": "81755",
+        "value": "VIVER NETO"
+      }
+    ],
+    "parent_ref": "LP_P1 transcri\u00e7\u00e3o livre"
+  },
+  "Come_P1Literal-cp": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Come_P1Literal-cp",
+    "annotations": [
+      {
+        "annotation_id": "a608",
+        "annotation_ref": "a570",
+        "value": "ROLE - verbo",
+        "start_time": "11370",
+        "end_time": "18356"
+      },
+      {
+        "annotation_id": "a609",
+        "annotation_ref": "a573",
+        "value": "ROLE",
+        "start_time": "22090",
+        "end_time": "24370"
+      },
+      {
+        "annotation_id": "a610",
+        "annotation_ref": "a574",
+        "value": "ROLE",
+        "start_time": "24455",
+        "end_time": "26210"
+      },
+      {
+        "annotation_id": "a611",
+        "annotation_ref": "a577",
+        "value": "INT",
+        "start_time": "31005",
+        "end_time": "31804"
+      },
+      {
+        "annotation_id": "a612",
+        "annotation_ref": "a578",
+        "value": "DP POSSESSIVO",
+        "start_time": "31862",
+        "end_time": "34206"
+      }
+    ],
+    "parent_ref": "LGP_P1 Trans_Literal-cp"
+  },
+  "Sint_Constituinte-cp": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Sint_Constituinte-cp",
+    "annotations": [
+      {
+        "annotation_id": "a613",
+        "annotation_ref": "a570",
+        "value": "ARG_EXT ARG_INT V_DITRA ARG_INT2",
+        "start_time": "11370",
+        "end_time": "18356"
+      },
+      {
+        "annotation_id": "a614",
+        "annotation_ref": "a571",
+        "value": "V_TRA",
+        "start_time": "18396",
+        "end_time": "20120"
+      },
+      {
+        "annotation_id": "a615",
+        "annotation_ref": "a572",
+        "value": "V_TRA ARG_INT",
+        "start_time": "20210",
+        "end_time": "22019"
+      },
+      {
+        "annotation_id": "a616",
+        "annotation_ref": "a573",
+        "value": "ARG_EXT V_TRA ARG_INT[-]",
+        "start_time": "22090",
+        "end_time": "24370"
+      },
+      {
+        "annotation_id": "a617",
+        "annotation_ref": "a574",
+        "value": "V_INT ADJT",
+        "start_time": "24455",
+        "end_time": "26210"
+      },
+      {
+        "annotation_id": "a618",
+        "annotation_ref": "a575",
+        "value": "ADJT ARG_EXT V_INT",
+        "start_time": "26895",
+        "end_time": "29250"
+      },
+      {
+        "annotation_id": "a619",
+        "annotation_ref": "a576",
+        "value": "ARG_EXT V_INT",
+        "start_time": "29260",
+        "end_time": "30940"
+      },
+      {
+        "annotation_id": "a620",
+        "annotation_ref": "a577",
+        "value": "ADJT V_INT",
+        "start_time": "31005",
+        "end_time": "31804"
+      },
+      {
+        "annotation_id": "a621",
+        "annotation_ref": "a579",
+        "value": "ARG_EXT V_INT",
+        "start_time": "35220",
+        "end_time": "38350"
+      },
+      {
+        "annotation_id": "a622",
+        "annotation_ref": "a580",
+        "value": "V_TRA ARG_INT",
+        "start_time": "38610",
+        "end_time": "40460"
+      },
+      {
+        "annotation_id": "a623",
+        "annotation_ref": "a581",
+        "value": "V_TRA ARG_INT",
+        "start_time": "40536",
+        "end_time": "41520"
+      },
+      {
+        "annotation_id": "a624",
+        "annotation_ref": "a582",
+        "value": "ARG_EXT V_TRA-ARG_INT",
+        "start_time": "41578",
+        "end_time": "43060"
+      },
+      {
+        "annotation_id": "a625",
+        "annotation_ref": "a584",
+        "value": "ARG_EXT V_TRA",
+        "start_time": "43486",
+        "end_time": "44460"
+      },
+      {
+        "annotation_id": "a626",
+        "annotation_ref": "a585",
+        "value": "V_TRA",
+        "start_time": "44523",
+        "end_time": "45613"
+      },
+      {
+        "annotation_id": "a627",
+        "annotation_ref": "a586",
+        "value": "ADJT V_INT-ARG_EXT",
+        "start_time": "45752",
+        "end_time": "46844"
+      },
+      {
+        "annotation_id": "a628",
+        "annotation_ref": "a587",
+        "value": "ARG_INT V_TRA-ARG_INT2 ARG_INT3",
+        "start_time": "46898",
+        "end_time": "49370"
+      },
+      {
+        "annotation_id": "a629",
+        "annotation_ref": "a588",
+        "value": "V_PRON ADJT",
+        "start_time": "49392",
+        "end_time": "50532"
+      },
+      {
+        "annotation_id": "a630",
+        "annotation_ref": "a589",
+        "value": "V_PRON",
+        "start_time": "50593",
+        "end_time": "51543"
+      },
+      {
+        "annotation_id": "a631",
+        "annotation_ref": "a590",
+        "value": "ARG_EXT V_INT",
+        "start_time": "51701",
+        "end_time": "52730"
+      },
+      {
+        "annotation_id": "a632",
+        "annotation_ref": "a591",
+        "value": "V_TRA ARG_INT",
+        "start_time": "52775",
+        "end_time": "54315"
+      },
+      {
+        "annotation_id": "a633",
+        "annotation_ref": "a592",
+        "value": "INTERJ",
+        "start_time": "55116",
+        "end_time": "55532"
+      },
+      {
+        "annotation_id": "a634",
+        "annotation_ref": "a594",
+        "value": "ARG_EXT V_INT",
+        "start_time": "57009",
+        "end_time": "58405"
+      },
+      {
+        "annotation_id": "a635",
+        "annotation_ref": "a595",
+        "value": "E_INT V_COP[-] ARG_INT ",
+        "start_time": "58431",
+        "end_time": "59080"
+      },
+      {
+        "annotation_id": "a636",
+        "annotation_ref": "a596",
+        "value": "[-]V_COP ARG_INT ARG_INT2 ARG_INT3",
+        "start_time": "59130",
+        "end_time": "64730"
+      },
+      {
+        "annotation_id": "a637",
+        "annotation_ref": "a597",
+        "value": "ARG_EXT V_TRA ARG_INT[-]",
+        "start_time": "65142",
+        "end_time": "66616"
+      },
+      {
+        "annotation_id": "a638",
+        "annotation_ref": "a598",
+        "value": "ARG_EXT V_INT ADJT",
+        "start_time": "67324",
+        "end_time": "68603"
+      },
+      {
+        "annotation_id": "a639",
+        "annotation_ref": "a599",
+        "value": "V_INT",
+        "start_time": "68641",
+        "end_time": "69220"
+      },
+      {
+        "annotation_id": "a640",
+        "annotation_ref": "a600",
+        "value": "ARG_EXT V_INT",
+        "start_time": "70426",
+        "end_time": "72147"
+      },
+      {
+        "annotation_id": "a641",
+        "annotation_ref": "a601",
+        "value": "V_INT",
+        "start_time": "72627",
+        "end_time": "73710"
+      },
+      {
+        "annotation_id": "a642",
+        "annotation_ref": "a602",
+        "value": "V_TRA ARG_INT",
+        "start_time": "73795",
+        "end_time": "76095"
+      },
+      {
+        "annotation_id": "a643",
+        "annotation_ref": "a603",
+        "value": "ARG_EXT V_INT",
+        "start_time": "77343",
+        "end_time": "78382"
+      },
+      {
+        "annotation_id": "a644",
+        "annotation_ref": "a604",
+        "value": "V_TRA ARG_INT",
+        "start_time": "78417",
+        "end_time": "79580"
+      },
+      {
+        "annotation_id": "a645",
+        "annotation_ref": "a605",
+        "value": "V_INT",
+        "start_time": "79625",
+        "end_time": "80165"
+      },
+      {
+        "annotation_id": "a646",
+        "annotation_ref": "a606",
+        "value": "V_INT",
+        "start_time": "80216",
+        "end_time": "80688"
+      },
+      {
+        "annotation_id": "a647",
+        "annotation_ref": "a607",
+        "value": "V_INT ARG_EXT",
+        "start_time": "80716",
+        "end_time": "81755"
+      }
+    ],
+    "parent_ref": "LGP_P1 Trans_Literal-cp"
+  },
+  "Seman_Estr-cp": {
+    "linguistic_type_ref": "Symbolic Association",
+    "tier_id": "Seman_Estr-cp",
+    "annotations": [],
+    "parent_ref": "Sint_Constituinte-cp"
+  }
+}

@@ -4,66 +4,105 @@ import json
 import subprocess
 import re
 
-VIDEOS_DIR = "app/static/videofiles/mp4"
-FRAMES_DIR = "app/static/videofiles/frames"
-ANNOTATIONS_DIR = "app/static/videofiles/annotations"
+N_VIDEOS_TO_PROCESS = 3
+PHRASES_DIR = "LP_P1 transcrição livre"
+FACIAL_EXPRESSIONS_DIR = "GLOSA_P1_EXPRESSAO"
 
 
-def extract_facial_expressions_frames():
+def extract_frames(videos_dir, frames_dir, annotations_dir):
+    """ Extract the frames from the videos and save them in the static/videofiles/frames folder. """
+
+    for i, video in enumerate(os.listdir(videos_dir)):
+        if i >= N_VIDEOS_TO_PROCESS:  # Stop the loop after processing #N_VIDEOS_TO_PROCESS videos
+            break
+
+        video_path = os.path.join(videos_dir, video)
+        videoname, extension = os.path.splitext(video)
+        video_phrases_dir = os.path.join(frames_dir, PHRASES_DIR, videoname)
+        video_facial_expressions_dir = os.path.join(frames_dir, FACIAL_EXPRESSIONS_DIR, videoname)
+        annotation_path = os.path.join(annotations_dir, f"{videoname}.json")
+
+        if os.path.isdir(video_phrases_dir):
+            continue
+
+        # Create the directories for the video if it doesn't exist
+        os.makedirs(video_phrases_dir, exist_ok=True)
+        os.makedirs(video_facial_expressions_dir, exist_ok=True)
+
+        extract_facial_expressions_frames(video_path, video_facial_expressions_dir, annotation_path)
+
+        extract_phrases_frames(video_path, video_phrases_dir, annotation_path)
+
+
+def extract_facial_expressions_frames(video_path, facial_expressions_dir, annotation_path):
     """ Extract the facial expressions frames from the videos
     and save them in the static/videofiles/frames folder. """
 
-    for i, video in enumerate(os.listdir(VIDEOS_DIR)):
-        if i >= 3:  # Stop the loop after processing 3 videos
-            break
+    # Cycle through the annotations referring facial expressions
+    with open(annotation_path, "r") as f:
+        annotations = json.load(f)
+        print(annotation_path)
 
-        video_path = os.path.join(VIDEOS_DIR, video)
-        videoname, extension = os.path.splitext(video)
-        annotation_path = os.path.join(ANNOTATIONS_DIR, f"{videoname}.json")
-        video_dir = os.path.join(FRAMES_DIR, videoname)
+        if FACIAL_EXPRESSIONS_DIR in annotations:
+            for facial_expression in annotations[FACIAL_EXPRESSIONS_DIR]["annotations"]:
+                # Convert start and end time from milliseconds to hh:mm:ss format
+                start_time_milliseconds = facial_expression["start_time"]
+                start_time_seconds = int(start_time_milliseconds) / 1000  # convert milliseconds to seconds
+                start_time_str = str(datetime.timedelta(seconds=start_time_seconds))
 
-        if os.path.isdir(video_dir):
-            continue
+                end_time_milliseconds = facial_expression["end_time"]
+                end_time_seconds = int(end_time_milliseconds) / 1000
+                end_time_str = str(datetime.timedelta(seconds=end_time_seconds))
 
-        # Cycle through the annotations referring facial expressions
-        with open(annotation_path, "r") as f:
-            annotations = json.load(f)
-            print(annotation_path)
-            annotations_keys = ["GLOSA_P1_EXPRESSÃO", "GLOSA_P1_EXPRESSAO"]
+                annotation_id = facial_expression["annotation_id"]
 
-            for key in annotations_keys:
-                if key in annotations:
-                    for facial_expression in annotations[key]["annotations"]:
-                        # Convert start and end time from milliseconds to hh:mm:ss format
-                        start_time_milliseconds = facial_expression["start_time"]
-                        start_time_seconds = int(start_time_milliseconds) / 1000  # convert milliseconds to seconds
-                        start_time_str = str(datetime.timedelta(seconds=start_time_seconds))
+                # Create a directory for the facial expression inside the video directory
+                expression_dir = os.path.join(facial_expressions_dir, f"{annotation_id}")
+                os.makedirs(expression_dir, exist_ok=True)
 
-                        end_time_milliseconds = facial_expression["end_time"]
-                        end_time_seconds = int(end_time_milliseconds) / 1000
-                        end_time_str = str(datetime.timedelta(seconds=end_time_seconds))
+                # Extract the facial expressions frames from the video
+                command = ["ffmpeg",
+                           "-i", video_path,  # input file
+                           "-ss", start_time_str,  # start time
+                           "-to", end_time_str,  # end time
+                           # "-vf", "fps=1",  # extract 1 frame per second
+                           os.path.join(expression_dir, f"{annotation_id}_%02d.png")  # output file
+                           ]
 
-                        value = facial_expression["value"]
+                subprocess.call(command)
 
-                        # Create a directory for the video if it doesn't exist
-                        os.makedirs(video_dir, exist_ok=True)
 
-                        # Create a directory for the facial expression inside the video directory
-                        expression_dir = os.path.join(video_dir, f"{value}_{start_time_milliseconds}")
+def extract_phrases_frames(video_path, phrases_dir, annotation_path):
+    """" Extract one frame per phrase from the videos """
 
-                        # Erase invalid characters
-                        safe_expression_dir = re.sub(r'[*?:"<>|]', '', expression_dir)
-                        safe_expression_value = re.sub(r'[*?:"<>|]', '', value)
+    # Cycle through the annotations referring facial expressions
+    with open(annotation_path, "r") as f:
+        annotations = json.load(f)
+        print(annotation_path)
 
-                        os.makedirs(safe_expression_dir, exist_ok=True)
+        if PHRASES_DIR in annotations:
+            for phrase in annotations[PHRASES_DIR]["annotations"]:
+                # Convert start and end time from milliseconds to hh:mm:ss format
+                start_time_milliseconds = int(phrase["start_time"])
 
-                        # Extract the facial expressions frames from the video
-                        command = ["ffmpeg",
-                                   "-i", video_path,  # input file
-                                   "-ss", start_time_str,  # start time
-                                   "-to", end_time_str,  # end time
-                                   # "-vf", "fps=1",  # extract 1 frame per second
-                                   os.path.join(safe_expression_dir, f"{safe_expression_value}_%02d.png")  # output file
-                                   ]
+                end_time_milliseconds = int(phrase["end_time"])
 
-                        subprocess.call(command)
+                middle_time_seconds = ((start_time_milliseconds + end_time_milliseconds) / 2) / 1000
+                middle_time_str = str(datetime.timedelta(seconds=middle_time_seconds))
+
+                annotation_id = phrase["annotation_id"]
+
+                # Create a directory for the facial expression inside the video directory
+                annotation_dir = os.path.join(phrases_dir, f"{annotation_id}")
+                os.makedirs(annotation_dir, exist_ok=True)
+
+                # Extract the phrase middle frame from the video
+                command = ["ffmpeg",
+                           "-i", video_path,  # input file
+                           "-ss", middle_time_str,  # start time
+                           "-vframes", "1",  # output one frame
+                           "-update", "1",  # write a single image
+                           os.path.join(annotation_dir, f"{annotation_id}.png")  # output file
+                           ]
+
+                subprocess.call(command)

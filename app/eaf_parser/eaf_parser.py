@@ -76,6 +76,11 @@ def parse_eaf_files(eaf_dir):
                             'end_time': annotation_timestamps[annotation_ref]['end_time']
                         })
 
+            # Check if GLOSA_P1_EXPRESSÃO is in the data_dict and replace for GLOSA_P1_EXPRESSAO
+            if 'GLOSA_P1_EXPRESSÃO' in data_dict:
+                data_dict['GLOSA_P1_EXPRESSAO'] = data_dict.pop('GLOSA_P1_EXPRESSÃO')
+
+
             # Save the data dict as a json file
             with open(video_annotations_path, 'w') as f:
             #with open(os.path.join("../static/videofiles/annotations", videoname + '.json'), 'w', encoding='utf-8') as f:

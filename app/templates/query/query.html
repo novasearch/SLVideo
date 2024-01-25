@@ -14,7 +14,14 @@
           <option value="4">True Expression</option>
         </select>
         <br>
-        <input type="text" name="query" placeholder="Enter query">
+        <label for="search_mode">Mode:</label>
+        <select name="mode" id="search_mode">
+          <option value="LP_P1 transcrição livre">Phrase</option>
+          <option value="GLOSA_P1_EXPRESSAO">Facial Expression</option>
+        </select>
+        <br>
+        <label for="search">Search:</label>
+        <input type="text" name="query" placeholder="Enter query" id="search">
         <input type="submit" value="Submit">
     </form>
 {% endblock %}
