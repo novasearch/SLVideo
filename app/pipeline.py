@@ -1,3 +1,4 @@
+import os
 import pickle
 import torch
 import io
@@ -6,12 +7,17 @@ import time
 from .eaf_parser import eaf_parser
 from .opensearch.opensearch import LGPOpenSearch
 from .frame_extraction import frame_extraction
+from .embeddings import generate_embeddings
 
 RESULTS_PATH = "app/static/videofiles"  # sys.argv[exp9]
 VIDEO_PATH = "app/static/videofiles/mp4"  # sys.argv[exp10]
 EAF_PATH = "app/static/videofiles/eaf"  # sys.argv[exp11]
 ANNOTATIONS_PATH = "app/static/videofiles/annotations"  # sys.argv[4]
 FRAMES_PATH = "app/static/videofiles/frames"  # sys.argv[5]
+EMBEDDINGS_PATH = "app/embeddings"  # sys.argv[6]
+
+PHRASES_ID = "LP_P1 transcrição livre"
+FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"
 
 opensearch = LGPOpenSearch()
 
@@ -52,6 +58,35 @@ def preprocess_videos():
     frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
     print("Extracted facial expressions frames")
     time.sleep(1)
+
+    facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
+
+    # Generate the base frames embeddings
+    generate_embeddings.generate_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+    print("Frame embeddings generated")
+    time.sleep(1)
+
+    # Generate the average frames embeddings
+    generate_embeddings.generate_average_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+    print("Average frame embeddings generated")
+    time.sleep(1)
+
+    # Generate the best frame embeddings
+    generate_embeddings.generate_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+    print("Best frame embeddings generated")
+    time.sleep(1)
+
+    print("Reading base frames embeddings")
+    with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:
+        base_frame_embeddings = CPU_Unpickler(f).load()
+
+    print("Reading average frame embeddings")
+    with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
+        average_frame_embeddings = CPU_Unpickler(f).load()
+
+    print("Reading best frame embeddings")
+    with open(os.path.join(EMBEDDINGS_PATH, "best_frame_embeddings.json.embeddings"), "rb") as f:
+        best_frame_embeddings = CPU_Unpickler(f).load()
 
 
 """

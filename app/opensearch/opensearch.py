@@ -47,22 +47,15 @@ class LGPOpenSearch:
                     "timestamp": {
                         "type": "double"
                     },
-                    "linguistic_type_ref": {
-                        "type": "keyword"
-                    },
-                    "annotation": {
+                    "annotation_value": {
                         'analyzer': 'standard',
                         'similarity': 'BM25',
                         'type': 'text'
                     },
-                    #"frame_embedding": {
-                    #    'dimension': 512,
-                    #    'type': 'knn_vector'
-                    #},
-                    "annotation_embedding": {
+                    "frame_embedding": {
                         'dimension': 512,
                         'type': 'knn_vector'
-                    }
+                    },
                 }
             }
         }

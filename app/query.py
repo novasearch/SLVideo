@@ -84,7 +84,6 @@ def results():
             if len(all_frames) <= num_frames_to_display:
                 step_size = 1
             else:
-                # Calculate the step size
                 step_size = (len(all_frames) - 1) // num_frames_to_display + 1
 
             # Select frames to display
