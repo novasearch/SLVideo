@@ -76,7 +76,7 @@ def generate_frame_embeddings(frames_dir, result_dir):
 
         for annotation in os.listdir(video_dir):
             expression_frames_dir = os.path.join(video_dir, annotation)
-            embeddings[video][annotation] = {}
+            embeddings[video][annotation] = None
 
             all_frames = os.listdir(expression_frames_dir)
 
@@ -92,9 +92,13 @@ def generate_frame_embeddings(frames_dir, result_dir):
 
             for frame in frames_to_encode:
                 full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
-                frame_id = os.path.splitext(frame)[0]
-                # generate embedding
-                embeddings[video][annotation][frame_id] = st.image_encode(full_path)
+
+                # Initialize embeddings[video][annotation] as a zero tensor if it's not already initialized
+                if embeddings[video][annotation] is None:
+                    embeddings[video][annotation] = torch.zeros_like(st.image_encode(full_path))
+
+                # generate embedding and sum it to the total embedding
+                embeddings[video][annotation] += st.image_encode(full_path)
 
     pickle.dump(embeddings, open(os.path.join(result_dir, 'frame_embeddings.json.embeddings'), 'wb'))
 

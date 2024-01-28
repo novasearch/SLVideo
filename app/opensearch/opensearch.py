@@ -32,27 +32,26 @@ class LGPOpenSearch:
             },
             "mappings": {
                 "properties": {
-                    "frame_id": {
-                        "type": "keyword"
-                    },
                     "video_id": {
                         "type": "keyword"
                     },
                     "annotation_id": {
                         "type": "keyword"
                     },
-                    "path": {
-                        "type": "keyword"
-                    },
-                    "timestamp": {
-                        "type": "double"
-                    },
                     "annotation_value": {
                         'analyzer': 'standard',
                         'similarity': 'BM25',
                         'type': 'text'
                     },
-                    "frame_embedding": {
+                    "base_frame_embedding": {
+                        'dimension': 512,
+                        'type': 'knn_vector'
+                    },
+                    "average_frame_embedding": {
+                        'dimension': 512,
+                        'type': 'knn_vector'
+                    },
+                    "best_frame_embedding": {
                         'dimension': 512,
                         'type': 'knn_vector'
                     },
@@ -103,7 +102,7 @@ class LGPOpenSearch:
 
     def index_if_not_exists(self, doc):
         try:
-            self.client.create(index=self.index_name, id=doc["frame_id"], body=doc)
+            self.client.create(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"], body=doc)
             return True
         except OpenSearchException as e:
             if 'version_conflict_engine_exception' in str(e):
