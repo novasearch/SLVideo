@@ -1,11 +1,13 @@
 import datetime
 import json
 import os
-import re
+from .embeddings import generate_embeddings
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+
+from .opensearch.opensearch import LGPOpenSearch
 
 FRAMES_PATH = "app/static/videofiles/frames"
 ANNOTATIONS_PATH = "app/static/videofiles/annotations"
@@ -14,6 +16,7 @@ PHRASES_ID = "LP_P1 transcrição livre"
 FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"
 
 bp = Blueprint('query', __name__)
+opensearch = LGPOpenSearch()
 
 
 @bp.route("/", methods=("GET", "POST"))
@@ -33,12 +36,12 @@ def query():
         else:
 
             # TODO: Query opensearch for videos matching query
-            if selected_field == 1:  # Frames Embeddings
-                flash("Not Implemented")
+            if selected_field == 1:  # Base Frames Embeddings
+                session['query_results'] = query_frames_embeddings(query_input)
             elif selected_field == 2:  # Average Frames Embeddings
-                flash("Not Implemented")
+                session['query_results'] = query_average_frames_embeddings(query_input)
             elif selected_field == 3:  # Best Frame Embedding
-                flash("Not Implemented")
+                session['query_results'] = query_best_frame_embedding(query_input)
             elif selected_field == 4:  # True Expression
                 session['query_results'] = query_true_expression(query_input)
 
@@ -127,6 +130,42 @@ def play_selected_result(video, annotation_id):
 
     return render_template("query/play_expression.html", value=annotation["value"], video=video,
                            timestamp=timestamp_seconds)
+
+
+def query_frames_embeddings(query_input):
+    query_embedding = generate_embeddings.generate_query_embeddings(query_input)
+
+    search_results = opensearch.knn_query(query_embedding)
+    query_results = []
+
+    for hit in search_results['hits']['hits']:
+        query_results.append(hit['_id'])
+
+    return query_results
+
+
+def query_average_frames_embeddings(query_input):
+    query_embedding = generate_embeddings.generate_query_embeddings(query_input)
+
+    search_results = opensearch.knn_query_average(query_embedding)
+    query_results = []
+
+    for hit in search_results['hits']['hits']:
+        query_results.append(hit['_id'])
+
+    return query_results
+
+
+def query_best_frame_embedding(query_input):
+    query_embedding = generate_embeddings.generate_query_embeddings(query_input)
+
+    search_results = opensearch.knn_query_best(query_embedding)
+    query_results = []
+
+    for hit in search_results['hits']['hits']:
+        query_results.append(hit['_id'])
+
+    return query_results
 
 
 def query_true_expression(query_input):

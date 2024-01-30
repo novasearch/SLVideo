@@ -19,39 +19,6 @@ class CPU_Unpickler(pickle.Unpickler):
         else:
             return super().find_class(module, name)
 
-# Generates annotation embeddings, where frame_annotations is the path
-# to the json files of several types of annotations of multiple videos
-#
-# ** Not being used currently **
-def generate_annotation_embeddings(annotations_dir, result_dir):
-    embeddings = {}
-
-    for annotations_file in os.listdir(annotations_dir):
-
-        with open(os.path.join(annotations_dir, annotations_file), 'r') as f:
-
-            print(f"Embedding {annotations_file} annotations")
-            data = json.load(f)
-
-            for tier in data:
-                annotation_embeddings = {}
-                if len(data[tier]['annotations']) == 0:
-                    continue
-
-                # filter out the null values from the data[tier]['annotations'] list
-                data[tier]['annotations'] = list(
-                    filter(lambda annotation: annotation['value'] is not None, data[tier]['annotations']))
-
-                # encode only the values of each annotation
-                embed_buffer = st.text_encode(list(annotation['value'] for annotation in data[tier]['annotations']))
-                for i, annotation_id in enumerate(
-                        annotation['annotation_id'] for annotation in data[tier]['annotations']):
-                    annotation_embeddings[annotation_id] = embed_buffer[i]
-
-                embeddings[annotations_file][tier] = annotation_embeddings
-
-    pickle.dump(embeddings, open(os.path.join(result_dir, 'annotation_embeddings.json.embeddings'), 'wb'))
-
 
 # Generates frame embeddings for all the frames of a folder of videos
 def generate_frame_embeddings(frames_dir, result_dir):
@@ -93,6 +60,10 @@ def generate_frame_embeddings(frames_dir, result_dir):
             for frame in frames_to_encode:
                 full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
 
+                # Skip if the path is not a file
+                if not os.path.isfile(full_path):
+                    continue
+
                 # Initialize embeddings[video][annotation] as a zero tensor if it's not already initialized
                 if embeddings[video][annotation] is None:
                     embeddings[video][annotation] = torch.zeros_like(st.image_encode(full_path))
@@ -131,6 +102,11 @@ def generate_average_frame_embeddings(frames_dir, result_dir):
 
             for frame in os.listdir(expression_frames_dir):
                 full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
+
+                # Skip if the path is not a file
+                if not os.path.isfile(full_path):
+                    continue
+
                 # generate embedding
                 current_embedding = st.image_encode(full_path)
                 if total_embedding is None:
@@ -175,6 +151,11 @@ def generate_best_frame_embeddings(frames_dir, result_dir):
 
             for frame in os.listdir(expression_frames_dir):
                 full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
+
+                # Skip if the path is not a file
+                if not os.path.isfile(full_path):
+                    continue
+
                 # generate embedding
                 current_embedding = st.image_encode(full_path)
 
@@ -189,3 +170,8 @@ def generate_best_frame_embeddings(frames_dir, result_dir):
             embeddings[video][annotation] = best_embedding
 
     pickle.dump(embeddings, open(os.path.join(result_dir, 'best_frame_embeddings.json.embeddings'), 'wb'))
+
+
+# Generate query embeddings
+def generate_query_embeddings(query_input):
+    return st.text_encode(query_input)

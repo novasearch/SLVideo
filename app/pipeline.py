@@ -88,24 +88,23 @@ def preprocess_videos():
         with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
             video_annotations = json.load(f)
 
+            if FACIAL_EXPRESSIONS_ID not in video_annotations:
+                continue
+
             annotations = video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]
 
             for annotation in annotations:
                 annotation_id = annotation["annotation_id"]
                 annotation_value = annotation["value"]
 
+
                 doc = gen_doc(
                     video_id=video_id,
                     annotation_id=annotation_id,
                     annotation_value=annotation_value,
-                    base_frame_embedding=base_frame_embeddings[video_id][annotation_id],
-                    average_frame_embedding=average_frame_embeddings[video_id][annotation_id],
-                    best_frame_embedding=best_frame_embeddings[video_id][annotation_id]
+                    base_frame_embedding=base_frame_embeddings[video_id][annotation_id].tolist(),
+                    average_frame_embedding=average_frame_embeddings[video_id][annotation_id].tolist(),
+                    best_frame_embedding=best_frame_embeddings[video_id][annotation_id].tolist()
                 )
 
                 opensearch.index_if_not_exists(doc)
-
-                print("###########")
-                print(doc)
-                print("###########")
-                print("\n\n")

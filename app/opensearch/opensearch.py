@@ -5,7 +5,7 @@ from opensearchpy import OpenSearch, OpenSearchException
 class LGPOpenSearch:
 
     def __init__(self):
-        host = 'exp10.exp10.255.202'
+        host = '10.10.255.202'
         port = 8200
         user = 'pt.sign.language'
         password = '_2@Vu6Z%a#jPv#6'
@@ -116,19 +116,13 @@ class LGPOpenSearch:
         )
         return True
 
-    def annotation_query(self, video_id, query):
+    def knn_query(self, embedding, k=10):
         query_obj = {
             "query": {
-                "bool": {
-                    "must": {
-                        "term": {
-                            "video_id": video_id
-                        }
-                    },
-                    "should": {
-                        "match": {
-                            "annotation": query
-                        }
+                "knn": {
+                    "base_frame_embedding": {
+                        "vector": embedding,
+                        "k": k
                     }
                 }
             }
@@ -138,22 +132,29 @@ class LGPOpenSearch:
             index=self.index_name
         )
 
-    def annotation_embeddings_query(self, video_id, query):
-
-        query_embedding = self.st.text_encode(query).cpu()
-
+    def knn_query_average(self, embedding, k=10):
         query_obj = {
-            'size': 5,
-            '_source': ['frame_id', "video_id", "annotation", "timestamp", "path", "annotation_embedding"],
             "query": {
-                "bool": {
-                    "should": {
-                        "knn": {
-                            "annotation_embedding": {
-                                "vector": query_embedding.numpy(),
-                                "k": 10
-                            }
-                        }
+                "knn": {
+                    "average_frame_embedding": {
+                        "vector": embedding,
+                        "k": k
+                    }
+                }
+            }
+        }
+        return self.client.search(
+            body=query_obj,
+            index=self.index_name
+        )
+
+    def knn_query_best(self, embedding, k=10):
+        query_obj = {
+            "query": {
+                "knn": {
+                    "best_frame_embedding": {
+                        "vector": embedding,
+                        "k": k
                     }
                 }
             }
