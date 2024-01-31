@@ -26,6 +26,7 @@ def query():
         query_input = request.form["query"]
         selected_field = int(request.form.get('field'))
         session['search_mode'] = request.form.get('mode')
+        session['similarity_scores'] = {}
         error = None
 
         if not query_input:
@@ -35,7 +36,6 @@ def query():
             flash(error)
         else:
 
-            # TODO: Query opensearch for videos matching query
             if selected_field == 1:  # Base Frames Embeddings
                 session['query_results'] = query_frames_embeddings(query_input)
             elif selected_field == 2:  # Average Frames Embeddings
@@ -73,6 +73,7 @@ def results():
                     frames_info[retrieved_annotation] = annotation
                     converted_start_time = str(datetime.timedelta(seconds=int(annotation["start_time"]) // 1000))
                     frames_info[retrieved_annotation]["converted_start_time"] = converted_start_time
+                    frames_info[retrieved_annotation]["similarity_score"] = session['similarity_scores'][retrieved_annotation]
                     break
 
     if search_mode == FACIAL_EXPRESSIONS_ID:
@@ -140,6 +141,7 @@ def query_frames_embeddings(query_input):
 
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
+        session['similarity_scores'][hit['_id']] = hit['_score']
 
     return query_results
 
@@ -152,6 +154,7 @@ def query_average_frames_embeddings(query_input):
 
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
+        session['similarity_scores'][hit['_id']] = hit['_score']
 
     return query_results
 
@@ -164,6 +167,7 @@ def query_best_frame_embedding(query_input):
 
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
+        session['similarity_scores'][hit['_id']] = hit['_score']
 
     return query_results
 
@@ -179,6 +183,8 @@ def query_true_expression(query_input):
             if search_mode in video_annotations:
                 for annotation in video_annotations[search_mode]["annotations"]:
                     if annotation["value"] is not None and query_input.lower() in annotation["value"].lower():
-                        query_results.append(video + "_" + annotation["annotation_id"])
+                        result_id = video + "_" + annotation["annotation_id"]
+                        query_results.append(result_id)
+                        session['similarity_scores'][result_id] = 1
 
     return query_results

@@ -12,6 +12,7 @@
         <button type="submit" id="expression_block_1" class="expression">{{ frames_info[result]["value"] }}</button>
         <input type="hidden" name="selected_result" value="{{ result }}">
         <p class="expression_description">Video: {{ video }} ; Timestamp: {{ frames_info[result]["converted_start_time"]}}</p>
+        <p class="expression_description" style="font-weight: bold;"> Similarity Score: {{ frames_info[result]["similarity_score"] }}</p>
     </form>
     <div id="expression_block_2">
         {% for frame in frames[result] %}
