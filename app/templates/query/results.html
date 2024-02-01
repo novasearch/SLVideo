@@ -8,12 +8,16 @@
 {% for result in frames %}
 {% set video, annotation_id = result.split('_') %}
 <div id="expression_block">
-    <form action="{{ url_for('query.results') }}" method="post">
-        <button type="submit" id="expression_block_1" class="expression">{{ frames_info[result]["value"] }}</button>
-        <input type="hidden" name="selected_result" value="{{ result }}">
-        <p class="expression_description">Video: {{ video }} ; Timestamp: {{ frames_info[result]["converted_start_time"]}}</p>
-        <p class="expression_description" style="font-weight: bold;"> Similarity Score: {{ frames_info[result]["similarity_score"] }}</p>
-    </form>
+    <div id="expression_block_1" style="width: 2000px">
+        <form action="{{ url_for('query.results') }}" method="post">
+            <button type="submit" class="expression">{{ frames_info[result]["value"] }}</button>
+            <input type="hidden" name="selected_result" value="{{ result }}">
+            <p class="expression_description">Video: {{ video }} ; Timestamp: {{
+                frames_info[result]["converted_start_time"]}}</p>
+            <p class="expression_description" style="font-weight: bold;"> Similarity Score: {{
+                frames_info[result]["similarity_score"] }}</p>
+        </form>
+    </div>
     <div id="expression_block_2">
         {% for frame in frames[result] %}
         <img class="frame"

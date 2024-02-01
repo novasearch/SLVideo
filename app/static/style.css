@@ -19,7 +19,6 @@
     border: none;
     text-decoration: none;
     outline: none;
-    text-align: center;
 }
 
 .frame {
@@ -42,5 +41,5 @@
 }
 
 #expression_block_1, #expression_block_2 {
-    display:inline;
+    display: inline;
 }

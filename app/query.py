@@ -136,12 +136,14 @@ def play_selected_result(video, annotation_id):
 def query_frames_embeddings(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
 
-    search_results = opensearch.knn_query(query_embedding)
+    search_results = opensearch.knn_query(query_embedding.tolist())
     query_results = []
 
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
+
+    print(query_results)
 
     return query_results
 
@@ -149,7 +151,7 @@ def query_frames_embeddings(query_input):
 def query_average_frames_embeddings(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
 
-    search_results = opensearch.knn_query_average(query_embedding)
+    search_results = opensearch.knn_query_average(query_embedding.tolist())
     query_results = []
 
     for hit in search_results['hits']['hits']:
@@ -162,7 +164,7 @@ def query_average_frames_embeddings(query_input):
 def query_best_frame_embedding(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
 
-    search_results = opensearch.knn_query_best(query_embedding)
+    search_results = opensearch.knn_query_best(query_embedding.tolist())
     query_results = []
 
     for hit in search_results['hits']['hits']:
@@ -185,6 +187,6 @@ def query_true_expression(query_input):
                     if annotation["value"] is not None and query_input.lower() in annotation["value"].lower():
                         result_id = video + "_" + annotation["annotation_id"]
                         query_results.append(result_id)
-                        session['similarity_scores'][result_id] = 1
+                        session['similarity_scores'][result_id] = "N/A"
 
     return query_results

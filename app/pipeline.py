@@ -81,6 +81,7 @@ def preprocess_videos():
         best_frame_embeddings = CPU_Unpickler(f).load()
 
     print("ENTERING INDEXING LOOP")
+    opensearch.delete_index()
     opensearch.create_index()
     for video_id in os.listdir(facial_expressions_frames_path):
 
@@ -89,6 +90,9 @@ def preprocess_videos():
             video_annotations = json.load(f)
 
             if FACIAL_EXPRESSIONS_ID not in video_annotations:
+                continue
+
+            if video_id not in os.listdir(facial_expressions_frames_path):
                 continue
 
             annotations = video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]

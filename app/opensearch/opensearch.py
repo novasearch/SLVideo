@@ -5,8 +5,8 @@ from opensearchpy import OpenSearch, OpenSearchException
 class LGPOpenSearch:
 
     def __init__(self):
-        host = '10.10.255.202'
-        port = 8200
+        host = 'api.novasearch.org'
+        port = 443
         user = 'pt.sign.language'
         password = '_2@Vu6Z%a#jPv#6'
 
@@ -14,8 +14,9 @@ class LGPOpenSearch:
 
         self.client = OpenSearch(
             hosts=[{'host': host, 'port': port}],
-            http_compress=True,
+            http_compress=True,  # enables gzip compression for request bodies
             http_auth=(user, password),
+            url_prefix='opensearch',
             use_ssl=True,
             verify_certs=False,
             ssl_assert_hostname=False,
