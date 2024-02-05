@@ -117,7 +117,8 @@ def results():
             return redirect(url_for("query.play_selected_result", video=video, annotation_id=annotation_id))
 
     return render_template("query/results.html", frames=frames_to_display, frames_info=frames_info,
-                           search_mode=search_mode)
+                           search_mode=search_mode, precision=session.get('precision', 0), recall=session.get('recall', 0),
+                            f1=session.get('f1', 0))
 
 
 @bp.route("/results/<video>/<annotation_id>", methods=("GET", "POST"))
@@ -143,7 +144,11 @@ def query_frames_embeddings(query_input):
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
-    print(query_results)
+    compare_results = query_true_expression(query_input)
+
+    session['precision'] = len(set(query_results).intersection(compare_results)) / len(query_results)
+    session['recall'] = len(set(query_results).intersection(compare_results)) / len(compare_results)
+    session['f1'] = 2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall'])
 
     return query_results
 
@@ -158,6 +163,12 @@ def query_average_frames_embeddings(query_input):
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
+    compare_results = query_true_expression(query_input)
+
+    session['precision'] = len(set(query_results).intersection(compare_results)) / len(query_results)
+    session['recall'] = len(set(query_results).intersection(compare_results)) / len(compare_results)
+    session['f1'] = 2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall'])
+
     return query_results
 
 
@@ -170,6 +181,12 @@ def query_best_frame_embedding(query_input):
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
+
+    compare_results = query_true_expression(query_input)
+
+    session['precision'] = len(set(query_results).intersection(compare_results)) / len(query_results)
+    session['recall'] = len(set(query_results).intersection(compare_results)) / len(compare_results)
+    session['f1'] = 2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall'])
 
     return query_results
 

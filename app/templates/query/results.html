@@ -7,6 +7,7 @@
 {% block content %}
 {% for result in frames %}
 {% set video, annotation_id = result.split('_') %}
+<p>Precision: {{precision}} ; Recall: {{recall}} ; F1-Score: {{f1score}}</p>
 <div id="expression_block">
     <div id="expression_block_1" style="width: 2000px">
         <form action="{{ url_for('query.results') }}" method="post">

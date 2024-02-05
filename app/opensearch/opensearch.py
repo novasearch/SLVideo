@@ -7,8 +7,8 @@ class LGPOpenSearch:
     def __init__(self):
         host = 'api.novasearch.org'
         port = 443
-        user = 'pt.sign.language'
-        password = '_2@Vu6Z%a#jPv#6'
+        user = 'pt.sign.language'  # Add your user name here.
+        password = '_2@Vu6Z%a#jPv#6'  # Add your user password here. For testing only. Don't store credentials in code.
 
         self.index_name = 'pt.sign.language'
 

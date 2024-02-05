@@ -16,7 +16,7 @@ app.config.from_mapping(
 app.config.from_pyfile("config.py", silent=True)
 
 if __name__ == '__main__':
-    app.run()  # The app is accessible at a public URL provided by ngrok
+    app.run()
 
 # ensure the instance folder exists
 try:
