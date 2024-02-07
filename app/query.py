@@ -21,7 +21,7 @@ opensearch = LGPOpenSearch()
 
 @bp.route("/", methods=("GET", "POST"))
 def query():
-    """Query for a video."""
+    """Query for a video"""
     if request.method == "POST":
         query_input = request.form["query"]
         selected_field = int(request.form.get('field'))
