@@ -73,7 +73,8 @@ def results():
                     frames_info[retrieved_annotation] = annotation
                     converted_start_time = str(datetime.timedelta(seconds=int(annotation["start_time"]) // 1000))
                     frames_info[retrieved_annotation]["converted_start_time"] = converted_start_time
-                    frames_info[retrieved_annotation]["similarity_score"] = session['similarity_scores'][retrieved_annotation]
+                    frames_info[retrieved_annotation]["similarity_score"] = session['similarity_scores'][
+                        retrieved_annotation]
                     break
 
     if search_mode == FACIAL_EXPRESSIONS_ID:
@@ -117,8 +118,9 @@ def results():
             return redirect(url_for("query.play_selected_result", video=video, annotation_id=annotation_id))
 
     return render_template("query/results.html", frames=frames_to_display, frames_info=frames_info,
-                           search_mode=search_mode, precision=session.get('precision', 0), recall=session.get('recall', 0),
-                            f1=session.get('f1', 0))
+                           search_mode=search_mode, precision=session.get('precision', 0),
+                           recall=session.get('recall', 0),
+                           f1=session.get('f1', 0))
 
 
 @bp.route("/results/<video>/<annotation_id>", methods=("GET", "POST"))
@@ -140,15 +142,19 @@ def query_frames_embeddings(query_input):
     search_results = opensearch.knn_query(query_embedding.tolist())
     query_results = []
 
+    compare_results = query_true_expression(query_input)
+
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
-    compare_results = query_true_expression(query_input)
+    session['precision'] = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
+    session['recall'] = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
 
-    session['precision'] = len(set(query_results).intersection(compare_results)) / len(query_results)
-    session['recall'] = len(set(query_results).intersection(compare_results)) / len(compare_results)
-    session['f1'] = 2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall'])
+    if session['precision'] + session['recall'] == 0:
+        session['f1'] = 0.0
+    else:
+        session['f1'] = round(2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
 
     return query_results
 
@@ -159,15 +165,19 @@ def query_average_frames_embeddings(query_input):
     search_results = opensearch.knn_query_average(query_embedding.tolist())
     query_results = []
 
+    compare_results = query_true_expression(query_input)
+
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
-    compare_results = query_true_expression(query_input)
+    session['precision'] = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
+    session['recall'] = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
 
-    session['precision'] = len(set(query_results).intersection(compare_results)) / len(query_results)
-    session['recall'] = len(set(query_results).intersection(compare_results)) / len(compare_results)
-    session['f1'] = 2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall'])
+    if session['precision'] + session['recall'] == 0:
+        session['f1'] = 0.0
+    else:
+        session['f1'] = round(2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
 
     return query_results
 
@@ -178,15 +188,19 @@ def query_best_frame_embedding(query_input):
     search_results = opensearch.knn_query_best(query_embedding.tolist())
     query_results = []
 
+    compare_results = query_true_expression(query_input)
+
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
-    compare_results = query_true_expression(query_input)
+    session['precision'] = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
+    session['recall'] = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
 
-    session['precision'] = len(set(query_results).intersection(compare_results)) / len(query_results)
-    session['recall'] = len(set(query_results).intersection(compare_results)) / len(compare_results)
-    session['f1'] = 2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall'])
+    if session['precision'] + session['recall'] == 0:
+        session['f1'] = 0.0
+    else:
+        session['f1'] = round(2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
 
     return query_results
 

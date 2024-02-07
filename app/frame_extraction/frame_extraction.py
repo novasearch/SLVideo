@@ -4,7 +4,7 @@ import json
 import subprocess
 import re
 
-N_VIDEOS_TO_PROCESS = 5
+N_VIDEOS_TO_PROCESS = 3
 PHRASES_DIR = "LP_P1 transcrição livre"
 FACIAL_EXPRESSIONS_DIR = "GLOSA_P1_EXPRESSAO"
 

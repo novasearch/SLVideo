@@ -1,6 +1,8 @@
 import json
 import os
 import pickle
+
+import requests
 import torch
 import io
 import time
@@ -81,8 +83,9 @@ def preprocess_videos():
         best_frame_embeddings = CPU_Unpickler(f).load()
 
     print("ENTERING INDEXING LOOP")
-    opensearch.delete_index()
-    opensearch.create_index()
+    opensearch.print_index()
+    #opensearch.delete_index()
+    #opensearch.create_index()
     for video_id in os.listdir(facial_expressions_frames_path):
 
         # Read annotations
