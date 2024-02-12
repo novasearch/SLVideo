@@ -1,27 +1,35 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}VideoLGP{% endblock %}</h1>
+<div class="header d-flex justify-content-center">
+    <h1>{% block title %}VideoLGP{% endblock %}</h1>
+</div>
 {% endblock %}
 
 {% block content %}
-    <form action="{{ url_for('query') }}" method="post">
-        <label for="search_field">Field:</label>
-        <select name="field" id="search_field">
-          <option value="1">Frames Embeddings</option>
-          <option value="2">Average Frames Embeddings</option>
-          <option value="3">Best Frame Embedding</option>
-          <option value="4">True Expression</option>
-        </select>
-        <br>
-        <label for="search_mode">Mode:</label>
-        <select name="mode" id="search_mode">
-          <option value="LP_P1 transcrição livre">Phrase</option>
-          <option value="GLOSA_P1_EXPRESSAO">Facial Expression</option>
-        </select>
-        <br>
-        <label for="search">Search:</label>
-        <input type="text" name="query" placeholder="Enter query" id="search">
-        <input type="submit" value="Submit">
-    </form>
+<div class="row justify-content-center">
+    <div class="col-4">
+        <form action="{{ url_for('query') }}" method="post">
+            <label for="search_field" class="form-label">Field:</label>
+            <select id="search_field" class="form-select" aria-label="Search Field" name="field">
+                <option value="1">Frames Embeddings</option>
+                <option value="2">Average Frames Embeddings</option>
+                <option value="3">Best Frame Embedding</option>
+                <option value="4">True Expression</option>
+            </select>
+            <br>
+            <label for="search_mode" class="form-label">Mode:</label>
+            <select class="form-select" aria-label="Search Mode" id="search_mode" name="mode">
+                <option value="GLOSA_P1_EXPRESSAO">Facial Expression</option>
+                <option value="LP_P1 transcrição livre">Phrase</option>
+            </select>
+            <br>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="search_query" name="query" placeholder="query">
+                <label for="search_query">Query</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Submit</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -1,32 +1,40 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>{% block title %}Search Results{% endblock %}</h1>
+<div class="header d-flex justify-content-center">
+    <h1>{% block title %}Search Results{% endblock %}</h1>
+</div>
 {% endblock %}
 
 {% block content %}
-<!--<p>Precision: {{precision}} ; Recall: {{recall}} ; F1-Score: {{f1}}</p>-->
 {% for result in frames %}
 {% set video, annotation_id = result.split('_') %}
-<div id="expression_block">
-    <div id="expression_block_1" style="width: 2000px">
-        <form action="{{ url_for('query.results') }}" method="post">
-            <button type="submit" class="expression">{{ frames_info[result]["value"] }}</button>
-            <input type="hidden" name="selected_result" value="{{ result }}">
-            <p class="expression_description">Video: {{ video }} ; Timestamp: {{
-                frames_info[result]["converted_start_time"]}}</p>
-            <p class="expression_description" style="font-weight: bold;"> Similarity Score: {{
-                frames_info[result]["similarity_score"] }}</p>
-        </form>
-    </div>
-    <div id="expression_block_2">
-        {% for frame in frames[result] %}
-        <img class="frame"
-             src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + annotation_id +'/' + frame) }}"
-             alt="Not Found">
-        {% endfor %}
-    </div>
+<div class="d-flex justify-content-center">
+    <form action="{{ url_for('query.results') }}" method="post">
+        <div class="card mb-2 w-75 border-secondary mx-auto" onclick="this.parentNode.submit();" style="cursor: pointer">
+            <div class="row g-0">
+                <ul class="col-md-4">
+                    <div class="card-body">
+                        <input type="hidden" name="selected_result" value="{{ result }}">
+                        <p class="expression">{{ frames_info[result]["value"] }}</p>
+                        <p class="expression_description">Video: {{ video }} ; Timestamp: {{
+                            frames_info[result]["converted_start_time"]}}</p>
+                        <p class="expression_description" style="font-weight: bold;"> Similarity Score: {{
+                            frames_info[result]["similarity_score"] }}</p>
+                    </div>
+                </ul>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        {% for frame in frames[result] %}
+                        <img class="frame"
+                             src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + annotation_id +'/' + frame) }}"
+                             alt="Not Found">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
-<hr>
 {% endfor %}
 {% endblock %}

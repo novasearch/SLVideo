@@ -1,31 +1,35 @@
+.home_content-block {
+    width: 80%; /* Adjust this value as needed */
+    margin: 0 auto; /* This will center the block if it has a specified width */
+}
+
 .expression {
-    font-size: 18px;
+    font-size: 140%;
     color: #000000;
     margin: 0px;
-    padding: 20px;
+    padding: 0px;
     background: none;
     border: none;
-    cursor: pointer;
     text-decoration: underline;
     outline: none;
+    text-align: center;
 }
 
 .expression_description {
-    font-size: 15px;
+    font-size: 110%;
     color: #646464;
     margin: 0px;
-    padding: 5px;
+    padding: 0px;
     background: none;
     border: none;
     text-decoration: none;
     outline: none;
+    text-align: center;
 }
 
 .frame {
-    width: 11%;
-    height: 11%;
-    margin: 0px;
-    padding: 5px;
+    width: 19%;
+    height: 19%;
 }
 
 .video {
@@ -42,4 +46,13 @@
 
 #expression_block_1, #expression_block_2 {
     display: inline;
+}
+
+.card {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 0 10px rgba(33,33,33,.5); /* Adjust as needed */
+    cursor: pointer;
 }
