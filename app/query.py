@@ -154,7 +154,15 @@ def query_frames_embeddings(query_input):
     if session['precision'] + session['recall'] == 0:
         session['f1'] = 0.0
     else:
-        session['f1'] = round(2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
+        session['f1'] = round(
+            2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
+
+    print("-------------------------------------")
+    print("Frames Embeddings")
+    print("Precision: ", session['precision'])
+    print("Recall: ", session['recall'])
+    print("F1: ", session['f1'])
+    print("-------------------------------------")
 
     return query_results
 
@@ -177,7 +185,15 @@ def query_average_frames_embeddings(query_input):
     if session['precision'] + session['recall'] == 0:
         session['f1'] = 0.0
     else:
-        session['f1'] = round(2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
+        session['f1'] = round(
+            2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
+
+    print("-------------------------------------")
+    print("Average Frames Embeddings")
+    print("Precision: ", session['precision'])
+    print("Recall: ", session['recall'])
+    print("F1: ", session['f1'])
+    print("-------------------------------------")
 
     return query_results
 
@@ -200,7 +216,15 @@ def query_best_frame_embedding(query_input):
     if session['precision'] + session['recall'] == 0:
         session['f1'] = 0.0
     else:
-        session['f1'] = round(2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
+        session['f1'] = round(
+            2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
+
+    print("-------------------------------------")
+    print("Best Frames Embeddings")
+    print("Precision: ", session['precision'])
+    print("Recall: ", session['recall'])
+    print("F1: ", session['f1'])
+    print("-------------------------------------")
 
     return query_results
 
