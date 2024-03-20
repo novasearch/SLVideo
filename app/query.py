@@ -20,6 +20,8 @@ VIDEO_CLIP_PATH = "app/static/videofiles/mp4/videoclip.mp4"
 PHRASES_ID = "LP_P1 transcrição livre"
 FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"
 
+N_RESULTS = 30
+
 bp = Blueprint('query', __name__)
 opensearch = LGPOpenSearch()
 
@@ -122,7 +124,7 @@ def results():
             session['annotation'] = annotation
             return redirect(url_for("query.play_selected_result", video=video, annotation_id=annotation_id))
 
-    return render_template("query/results.html", frames=frames_to_display, frames_info=frames_info,
+    return render_template("query/clips_results.html", frames=frames_to_display, frames_info=frames_info,
                            search_mode=search_mode, precision=session.get('precision', 0),
                            recall=session.get('recall', 0),
                            f1=session.get('f1', 0))
@@ -145,30 +147,14 @@ def play_selected_result(video, annotation_id):
 def query_frames_embeddings(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
 
-    search_results = opensearch.knn_query(query_embedding.tolist())
+    search_results = opensearch.knn_query(query_embedding.tolist(), N_RESULTS)
     query_results = []
-
-    compare_results = query_true_expression(query_input)
 
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
-    session['precision'] = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
-    session['recall'] = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
-
-    if session['precision'] + session['recall'] == 0:
-        session['f1'] = 0.0
-    else:
-        session['f1'] = round(
-            2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
-
-    print("-------------------------------------")
-    print("Frames Embeddings")
-    print("Precision: ", session['precision'])
-    print("Recall: ", session['recall'])
-    print("F1: ", session['f1'])
-    print("-------------------------------------")
+    print_performance_metrics(query_results, query_input)
 
     return query_results
 
@@ -176,30 +162,14 @@ def query_frames_embeddings(query_input):
 def query_average_frames_embeddings(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
 
-    search_results = opensearch.knn_query_average(query_embedding.tolist())
+    search_results = opensearch.knn_query_average(query_embedding.tolist(), N_RESULTS)
     query_results = []
-
-    compare_results = query_true_expression(query_input)
 
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
-    session['precision'] = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
-    session['recall'] = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
-
-    if session['precision'] + session['recall'] == 0:
-        session['f1'] = 0.0
-    else:
-        session['f1'] = round(
-            2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
-
-    print("-------------------------------------")
-    print("Average Frames Embeddings")
-    print("Precision: ", session['precision'])
-    print("Recall: ", session['recall'])
-    print("F1: ", session['f1'])
-    print("-------------------------------------")
+    print_performance_metrics(query_results, query_input)
 
     return query_results
 
@@ -207,30 +177,14 @@ def query_average_frames_embeddings(query_input):
 def query_best_frame_embedding(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
 
-    search_results = opensearch.knn_query_best(query_embedding.tolist())
+    search_results = opensearch.knn_query_best(query_embedding.tolist(), N_RESULTS)
     query_results = []
-
-    compare_results = query_true_expression(query_input)
 
     for hit in search_results['hits']['hits']:
         query_results.append(hit['_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
-    session['precision'] = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
-    session['recall'] = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
-
-    if session['precision'] + session['recall'] == 0:
-        session['f1'] = 0.0
-    else:
-        session['f1'] = round(
-            2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
-
-    print("-------------------------------------")
-    print("Best Frames Embeddings")
-    print("Precision: ", session['precision'])
-    print("Recall: ", session['recall'])
-    print("F1: ", session['f1'])
-    print("-------------------------------------")
+    print_performance_metrics(query_results, query_input)
 
     return query_results
 
@@ -251,3 +205,24 @@ def query_true_expression(query_input):
                         session['similarity_scores'][result_id] = "N/A"
 
     return query_results
+
+
+def print_performance_metrics(query_results, query_input):
+    compare_results = query_true_expression(query_input)
+
+    session['precision'] = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
+    session['recall'] = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
+
+    if session['precision'] + session['recall'] == 0:
+        session['f1'] = 0.0
+    else:
+        session['f1'] = round(
+            2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
+
+    print("-------------------------------------")
+    print("-------------------------------------")
+    print("Precision: ", session['precision'])
+    print("Recall: ", session['recall'])
+    print("F1: ", session['f1'])
+    print("-------------------------------------")
+    print("-------------------------------------")

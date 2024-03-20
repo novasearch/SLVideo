@@ -39,13 +39,6 @@
     padding: 5px;
 }
 
-.vertical-align {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-}
-
 #expression_block {
     display: flex;
     align-items: center;

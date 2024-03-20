@@ -123,7 +123,7 @@ class LGPOpenSearch:
         )
         return True
 
-    def knn_query(self, embedding, k=10):
+    def knn_query(self, embedding, k):
         query_obj = {
             "query": {
                 "knn": {
@@ -139,7 +139,7 @@ class LGPOpenSearch:
             index=self.index_name
         )
 
-    def knn_query_average(self, embedding, k=10):
+    def knn_query_average(self, embedding, k):
         query_obj = {
             "query": {
                 "knn": {
@@ -155,7 +155,7 @@ class LGPOpenSearch:
             index=self.index_name
         )
 
-    def knn_query_best(self, embedding, k=10):
+    def knn_query_best(self, embedding, k):
         query_obj = {
             "query": {
                 "knn": {
