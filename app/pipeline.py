@@ -1,6 +1,7 @@
 import json
 import os
 import pickle
+import numpy as np
 
 import requests
 import torch
@@ -63,29 +64,30 @@ def preprocess_videos():
     print("Frame embeddings generated")
 
     # Generate the average frames embeddings
-    generate_embeddings.generate_average_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+    generate_embeddings.generate_average_frame_embeddings(facial_expressions_frames_path,
+                                                          EMBEDDINGS_PATH)
     print("Average frame embeddings generated")
 
     # Generate the best frame embeddings
     generate_embeddings.generate_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
     print("Best frame embeddings generated")
 
-    print("Reading base frames embeddings")
     with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:
         base_frame_embeddings = CPU_Unpickler(f).load()
 
-    print("Reading average frame embeddings")
-    with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
+    with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"),
+              "rb") as f:
         average_frame_embeddings = CPU_Unpickler(f).load()
 
-    print("Reading best frame embeddings")
-    with open(os.path.join(EMBEDDINGS_PATH, "best_frame_embeddings.json.embeddings"), "rb") as f:
+    with open(os.path.join(EMBEDDINGS_PATH, "best_frame_embeddings.json.embeddings"),
+              "rb") as f:
         best_frame_embeddings = CPU_Unpickler(f).load()
 
+"""
     print("ENTERING INDEXING LOOP")
     opensearch.print_index()
-    #opensearch.delete_index()
-    #opensearch.create_index()
+    # opensearch.delete_index()
+    # opensearch.create_index()
     for video_id in os.listdir(facial_expressions_frames_path):
 
         # Read annotations
@@ -104,7 +106,6 @@ def preprocess_videos():
                 annotation_id = annotation["annotation_id"]
                 annotation_value = annotation["value"]
 
-
                 doc = gen_doc(
                     video_id=video_id,
                     annotation_id=annotation_id,
@@ -115,3 +116,4 @@ def preprocess_videos():
                 )
 
                 opensearch.index_if_not_exists(doc)
+                # opensearch.delete_doc_and_index(doc) """

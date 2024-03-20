@@ -21,25 +21,31 @@ class Embedder():
 
     # Encode text
     def text_encode(self, texts):
-        """ clip-ViT-B-32
-        model_output = self.model.encode(texts, convert_to_tensor=True)
-        """
+        """ clip-ViT-B-32 """
+        #model_output = self.model.encode(texts, convert_to_tensor=True)
 
         """ CAPIVARA """
-        texts = self.tokenizer(texts, return_tensors="pt", padding=True)
+        texts = self.tokenizer(texts)
         model_output = self.model.encode_text(texts)
+
+        # Flatten the tensor if it's more than 1D
+        if model_output.dim() > 1:
+            model_output = model_output.view(-1)
 
         return model_output
 
     # Encode image (frame extraction results)
     def image_encode(self, path):
-        """ clip-ViT-B-32
-        model_output = self.model.encode(Image.open(path),convert_to_tensor=True)
-        """
+        """ clip-ViT-B-32 """
+        #model_output = self.model.encode(Image.open(path),convert_to_tensor=True)
 
         """ CAPIVARA """
         image = Image.open(path)
         image = self.preprocess_val(image).unsqueeze(0)
         model_output = self.model.encode_image(image)
+
+        # Flatten the tensor if it's more than 1D
+        if model_output.dim() > 1:
+            model_output = model_output.view(-1)
 
         return model_output

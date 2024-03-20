@@ -2,16 +2,50 @@
 
 {% block header %}
 <div class="header d-flex justify-content-center">
-    <h1>{% block title %}Play "{{value}}"{% endblock %}</h1>
+    <h1>{% block title %}Playing Searched Clip{% endblock %}</h1>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center">
-        <video width="640" height="320" controls>
-            <source src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t={{ timestamp }}"
-                    type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+
+<div class="d-flex justify-content-center container">
+    <div class="row">
+        <div class="col">
+            <video id="searched_video" width="640" height="320" controls>
+                <source src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t={{ init_time }}"
+                        type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="col vertical-align">
+            <ul>
+                <li>Video: {{ video }}</li>
+                <li>Timestamp: {{ init_time }}</li>
+                <li>Expression: "{{ value }}"</li>
+                <li>Phrase:</li>
+                <li>Glosa:</li>
+                <li>Grammatical Value:</li>
+            </ul>
+        </div>
+    </div>
 </div>
+<div class="d-flex justify-content-center">
+    <button id="clip_button" type="button" class="btn btn-outline-primary mx-1">Play Searched Clip</button>
+</div>
+
+<script>
+    const video = document.getElementById('searched_video');
+    const button = document.getElementById('clip_button');
+
+    button.addEventListener('click', function () {
+        video.currentTime = {{ init_time }};
+        video.play();
+    });
+
+    video.addEventListener('timeupdate', function () {
+        if (video.currentTime >= {{ end_time }}) {
+            video.pause();
+        }
+    });
+</script>
 {% endblock %}

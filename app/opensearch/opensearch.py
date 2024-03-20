@@ -111,6 +111,12 @@ class LGPOpenSearch:
             else:
                 raise
 
+    def delete_doc_and_index(self, doc):
+        if self.client.exists(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"]):
+            self.client.delete(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"])
+        self.client.create(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"], body=doc)
+        return True
+
     def delete_index(self):
         self.client.indices.delete(
             index=self.index_name

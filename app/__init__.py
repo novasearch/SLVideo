@@ -16,7 +16,10 @@ app.config.from_mapping(
 app.config.from_pyfile("config.py", silent=True)
 
 if __name__ == '__main__':
-    app.run()
+    # To run the app, run the command:
+    # flask --app app --debug run -h 0.0.0.0 -p 5432
+    # Use nscluster and access videolgp.novasearch.org
+    app.run(host='0.0.0.0', port=5432)
 
 # ensure the instance folder exists
 try:

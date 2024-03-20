@@ -1,6 +1,10 @@
 import datetime
 import json
 import os
+import subprocess
+import time
+
+import numpy as np
 from .embeddings import generate_embeddings
 
 from flask import (
@@ -11,6 +15,7 @@ from .opensearch.opensearch import LGPOpenSearch
 
 FRAMES_PATH = "app/static/videofiles/frames"
 ANNOTATIONS_PATH = "app/static/videofiles/annotations"
+VIDEO_CLIP_PATH = "app/static/videofiles/mp4/videoclip.mp4"
 
 PHRASES_ID = "LP_P1 transcrição livre"
 FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"
@@ -130,10 +135,11 @@ def play_selected_result(video, annotation_id):
     annotation = session.get('annotation')
 
     # Convert the timestamp to seconds
-    timestamp_seconds = int(annotation["start_time"]) // 1000
+    init_time = int(annotation["start_time"]) // 1000
+    end_time = int(annotation["end_time"]) // 1000
 
     return render_template("query/play_expression.html", value=annotation["value"], video=video,
-                           timestamp=timestamp_seconds)
+                           init_time=init_time, end_time=end_time)
 
 
 def query_frames_embeddings(query_input):

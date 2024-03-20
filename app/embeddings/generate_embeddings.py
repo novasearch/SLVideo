@@ -6,7 +6,6 @@ import torch
 
 from .sentence_embeddings import Embedder as SentenceEmbedder
 import os
-import json
 import pickle
 
 st = SentenceEmbedder()
@@ -21,25 +20,28 @@ class CPU_Unpickler(pickle.Unpickler):
 
 
 def generate_frame_embeddings(frames_dir, result_dir):
-    """Generates frame embeddings for all the frames of a folder of videos"""
     print("Generating frame embeddings")
+
     n_embeddings = 4
+    embeddings = {}
+
+    embeddings_file = os.path.join(result_dir, 'frame_embeddings.json.embeddings')
+    if os.path.exists(embeddings_file):
+        embeddings = pickle.load(open(embeddings_file, 'rb'))
 
     for video in os.listdir(frames_dir):
-        embeddings_file = os.path.join(result_dir, video + '_frame_embeddings.json.embeddings')
 
-        if os.path.exists(embeddings_file):
+        if video in embeddings:
             continue
 
         print(f"Working on {video}")
 
         video_dir = os.path.join(frames_dir, video)
-        embeddings = {}
+        embeddings[video] = {}
 
         for annotation in os.listdir(video_dir):
-            print(f"Processing annotation {annotation}")
             expression_frames_dir = os.path.join(video_dir, annotation)
-            embeddings[annotation] = None
+            annotation_embedding = None
 
             all_frames = os.listdir(expression_frames_dir)
 
@@ -53,6 +55,9 @@ def generate_frame_embeddings(frames_dir, result_dir):
             frames_to_encode = all_frames[::step_size]
             frames_to_encode = frames_to_encode[:n_embeddings]
 
+            if video == "11":
+                print("Video 11 frames:", frames_to_encode)
+
             for frame in frames_to_encode:
                 full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
 
@@ -61,31 +66,39 @@ def generate_frame_embeddings(frames_dir, result_dir):
                     continue
 
                 # Initialize embeddings[video][annotation] as a zero tensor if it's not already initialized
-                if embeddings[annotation] is None:
-                    embeddings[annotation] = torch.zeros_like(st.image_encode(full_path))
+                if annotation_embedding is None:
+                    annotation_embedding = torch.zeros_like(st.image_encode(full_path))
 
                 # generate embedding and sum it to the total embedding
-                embeddings[annotation] += st.image_encode(full_path)
+                annotation_embedding += st.image_encode(full_path)
 
-        pickle.dump(embeddings, open(embeddings_file, 'wb'))
+            embeddings[video][annotation] = annotation_embedding
+
+    with open(embeddings_file, 'wb') as f:
+        pickle.dump(embeddings, f)
 
 
 # Generates the average of each facial expression frames embeddings of a video for a folder of videos
 def generate_average_frame_embeddings(frames_dir, result_dir):
     print("Generating average frame embeddings")
-    for video in os.listdir(frames_dir):
-        embeddings_file = os.path.join(result_dir, video + '_average_frame_embeddings.json.embeddings')
 
-        if os.path.exists(embeddings_file):
+    embeddings_file = os.path.join(result_dir, 'average_frame_embeddings.json.embeddings')
+    embeddings = {}
+
+    if os.path.exists(embeddings_file):
+        embeddings = pickle.load(open(embeddings_file, 'rb'))
+
+    for video in os.listdir(frames_dir):
+
+        if video in embeddings:
             continue
 
         print(f"Working on {video}")
         video_dir = os.path.join(frames_dir, video)
-        embeddings = {}
+        embeddings[video] = {}
 
         for annotation in os.listdir(video_dir):
             expression_frames_dir = os.path.join(video_dir, annotation)
-            embeddings[annotation] = {}
             total_embedding = None
             frame_count = 0
 
@@ -107,32 +120,33 @@ def generate_average_frame_embeddings(frames_dir, result_dir):
             # calculate average embedding
             if frame_count > 0:  # avoid division by zero
                 average_embedding = total_embedding / frame_count
-                embeddings[annotation] = average_embedding
+                embeddings[video][annotation] = average_embedding
 
-        pickle.dump(embeddings, open(embeddings_file, 'wb'))
+    with open(embeddings_file, 'wb') as f:
+        pickle.dump(embeddings, f)
 
 
 # Generates only the best facial expression frame embedding of a video for a folder of videos
 def generate_best_frame_embeddings(frames_dir, result_dir):
     print("Generating best frame embeddings")
 
+    embeddings_file = os.path.join(result_dir, 'best_frame_embeddings.json.embeddings')
+    embeddings = {}
+
+    if os.path.exists(embeddings_file):
+        embeddings = pickle.load(open(embeddings_file, 'rb'))
+
     for video in os.listdir(frames_dir):
-        embeddings_file = os.path.join(result_dir, video + '_best_frame_embeddings.json.embeddings')
 
-        if os.path.exists(embeddings_file):
-            continue
-
-        # Skip video if its embeddings already exist
         if video in embeddings:
             continue
 
         print(f"Working on {video}")
         video_dir = os.path.join(frames_dir, video)
-        embeddings = {}
+        embeddings[video] = {}
 
         for annotation in os.listdir(video_dir):
             expression_frames_dir = os.path.join(video_dir, annotation)
-            embeddings[annotation] = {}
             best_embedding = None
             best_score = -1
 
@@ -148,22 +162,23 @@ def generate_best_frame_embeddings(frames_dir, result_dir):
 
                 # calculate score based on the norm (or length) of the embedding vector
                 # the higher the norm, more intense and disctinct the expression is, the better the embedding
-                current_score = np.linalg.norm(current_embedding)
+                current_score = np.linalg.norm(current_embedding.detach().numpy())
 
                 if current_score > best_score:
                     best_score = current_score
                     best_embedding = current_embedding
 
-            embeddings[annotation] = best_embedding
+                embeddings[video][annotation] = best_embedding
 
-        pickle.dump(embeddings, open(embeddings_file, 'wb'))
+    with open(embeddings_file, 'wb') as f:
+        pickle.dump(embeddings, f)
 
 
 # Generate query embeddings
 def generate_query_embeddings(query_input):
     return st.text_encode(query_input)
 
-
+"""
 def generate_annotation_frames_embeddings(video_dir, annotation_id):
     n_embeddings = 4
 
@@ -250,3 +265,4 @@ def generate_annotation_best_frame_embeddings(video_dir, annotation_id):
             best_embedding = current_embedding
 
     return best_embedding
+"""
