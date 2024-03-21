@@ -1,8 +1,18 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<div class="header d-flex justify-content-center">
-    <h1>{% block title %}Playing Searched Clip{% endblock %}</h1>
+<div class="header container text-center">
+    <div class="row align-items-center">
+        <div class="col">
+            <a class="btn btn-outline-dark" style="width: 25%" href="{{ url_for('query.clips_results', video=video) }}">Back</a>
+        </div>
+        <div class="col">
+            <h1 class="text-center flex-grow-1">{% block title %}Playing Searched Clip{% endblock %}</h1>
+        </div>
+        <div class="col">
+            <!-- Empty column just to center the elements -->
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -36,15 +46,18 @@
 <script>
     const video = document.getElementById('searched_video');
     const button = document.getElementById('clip_button');
+    var isPlayingClip = false;
 
     button.addEventListener('click', function () {
         video.currentTime = {{ init_time }};
         video.play();
+        isPlayingClip = true;
     });
 
     video.addEventListener('timeupdate', function () {
-        if (video.currentTime >= {{ end_time }}) {
+        if (video.currentTime >= {{ end_time }} && isPlayingClip) {
             video.pause();
+            isPlayingClip = false;
         }
     });
 </script>

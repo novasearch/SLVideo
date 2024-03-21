@@ -52,36 +52,70 @@ def query():
             elif selected_field == 4:  # True Expression
                 session['query_results'] = query_true_expression(query_input)
 
-            return redirect(url_for("query.results"))
+            return redirect(url_for("query.videos_results"))
 
     return render_template("query/query.html")
 
 
-@bp.route("/results", methods=("GET", "POST"))
-def results():
+@bp.route("/videos_results", methods=("GET", "POST"))
+def videos_results():
     """Display results of query."""
-    query_results = session.get('query_results', [])
+    query_results = session.get('query_results', {})
+    search_mode = session.get('search_mode', 1)
+
+    frames = {}
+    videos_info = {}
+
+    # Get a frame for each video
+    for video_id in query_results:
+        annotations = query_results[video_id]
+
+        videos_info[video_id] = {}
+        videos_info[video_id]['video_name'] = video_id
+        videos_info[video_id]['n_annotations'] = len(annotations)
+        videos_info[video_id]['first_annotation'] = annotations[0]
+
+        frames_path = os.path.join(FRAMES_PATH, search_mode, video_id, annotations[0])
+        frames[video_id] = os.listdir(frames_path)[0]
+
+    if request.method == "POST":
+        selected_video = request.form.get("selected_video")
+        error = None
+
+        if not selected_video:
+            error = "Selecting a video is required."
+
+        if error is not None:
+            flash(error)
+        else:
+            return redirect(url_for("query.clips_results", video=selected_video))
+
+    return render_template("query/videos_results.html", frames=frames, videos_info=videos_info, search_mode=search_mode)
+
+
+@bp.route("/clips_results/<video>", methods=("GET", "POST"))
+def clips_results(video):
+    """Display results of query."""
+    query_results = session['query_results'][video]
     search_mode = session.get('search_mode', 1)
 
     frames = {}
     frames_info = {}
 
     # Get the searched frames
-    for retrieved_annotation in query_results:
-        video, annotation_id = retrieved_annotation.split('_')
-
+    for annotation_id in query_results:
         annotation_path = os.path.join(ANNOTATIONS_PATH, f"{video}.json")
         with open(annotation_path, "r") as f:
             annotations = json.load(f)
             for annotation in annotations[search_mode]["annotations"]:
                 if annotation["annotation_id"] == annotation_id:
                     frames_path = os.path.join(FRAMES_PATH, search_mode, video, annotation_id)
-                    frames[retrieved_annotation] = os.listdir(frames_path)
-                    frames_info[retrieved_annotation] = annotation
+                    frames[annotation_id] = os.listdir(frames_path)
+                    frames_info[annotation_id] = annotation
                     converted_start_time = str(datetime.timedelta(seconds=int(annotation["start_time"]) // 1000))
-                    frames_info[retrieved_annotation]["converted_start_time"] = converted_start_time
-                    frames_info[retrieved_annotation]["similarity_score"] = session['similarity_scores'][
-                        retrieved_annotation]
+                    frames_info[annotation_id]["converted_start_time"] = converted_start_time
+                    frames_info[annotation_id]["similarity_score"] = session['similarity_scores'][
+                        video + "_" + annotation_id]
                     break
 
     if search_mode == FACIAL_EXPRESSIONS_ID:
@@ -108,26 +142,21 @@ def results():
         frames_to_display = frames
 
     if request.method == "POST":
-        selected_result = request.form.get("selected_result")
-        video, annotation_id = selected_result.split('_')
-        annotation = frames_info[selected_result]
-
+        selected_annotation = request.form.get("selected_annotation")
+        annotation = frames_info[selected_annotation]
         error = None
 
-        if not selected_result:
+        if not selected_annotation:
             error = "Expression is required."
 
         if error is not None:
             flash(error)
         else:
-
             session['annotation'] = annotation
-            return redirect(url_for("query.play_selected_result", video=video, annotation_id=annotation_id))
+            return redirect(url_for("query.play_selected_result", video=video, annotation_id=selected_annotation))
 
-    return render_template("query/videos_results.html", frames=frames_to_display, frames_info=frames_info,
-                           search_mode=search_mode, precision=session.get('precision', 0),
-                           recall=session.get('recall', 0),
-                           f1=session.get('f1', 0))
+    return render_template("query/clips_results.html", frames=frames_to_display, frames_info=frames_info,
+                           search_mode=search_mode, video=video)
 
 
 @bp.route("/results/<video>/<annotation_id>", methods=("GET", "POST"))
@@ -148,13 +177,17 @@ def query_frames_embeddings(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
 
     search_results = opensearch.knn_query(query_embedding.tolist(), N_RESULTS)
-    query_results = []
+    query_results = {}
 
     for hit in search_results['hits']['hits']:
-        query_results.append(hit['_id'])
+        if hit['_source']['video_id'] not in query_results:
+            query_results[hit['_source']['video_id']] = []
+        query_results[hit['_source']['video_id']].append(hit['_source']['annotation_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
     print_performance_metrics(query_results, query_input)
+
+    session['query_results'] = query_results
 
     return query_results
 
@@ -191,7 +224,7 @@ def query_best_frame_embedding(query_input):
 
 def query_true_expression(query_input):
     """ Get the results of the query using the ground truth """
-    query_results = []
+    query_results = {}
     search_mode = session.get('search_mode', 1)
 
     for video in os.listdir(os.path.join(FRAMES_PATH, search_mode)):
@@ -200,29 +233,31 @@ def query_true_expression(query_input):
             if search_mode in video_annotations:
                 for annotation in video_annotations[search_mode]["annotations"]:
                     if annotation["value"] is not None and query_input.lower() in annotation["value"].lower():
-                        result_id = video + "_" + annotation["annotation_id"]
-                        query_results.append(result_id)
-                        session['similarity_scores'][result_id] = "N/A"
+                        if video not in query_results:
+                            query_results[video] = []
+                        query_results[video].append(annotation["annotation_id"])
+                        session['similarity_scores'][annotation["annotation_id"]] = "N/A"
 
+    session['query_results'] = query_results
     return query_results
 
 
 def print_performance_metrics(query_results, query_input):
     compare_results = query_true_expression(query_input)
 
-    session['precision'] = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
-    session['recall'] = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
+    precision = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
+    recall = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
 
-    if session['precision'] + session['recall'] == 0:
-        session['f1'] = 0.0
+    if precision + recall == 0:
+        f1 = 0.0
     else:
-        session['f1'] = round(
-            2 * (session['precision'] * session['recall']) / (session['precision'] + session['recall']), 2)
+        f1 = round(
+            2 * (precision * recall) / (precision + recall), 2)
 
     print("-------------------------------------")
     print("-------------------------------------")
-    print("Precision: ", session['precision'])
-    print("Recall: ", session['recall'])
-    print("F1: ", session['f1'])
+    print("Precision: ", precision)
+    print("Recall: ", recall)
+    print("F1: ", f1)
     print("-------------------------------------")
     print("-------------------------------------")
