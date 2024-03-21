@@ -124,7 +124,7 @@ def results():
             session['annotation'] = annotation
             return redirect(url_for("query.play_selected_result", video=video, annotation_id=annotation_id))
 
-    return render_template("query/clips_results.html", frames=frames_to_display, frames_info=frames_info,
+    return render_template("query/videos_results.html", frames=frames_to_display, frames_info=frames_info,
                            search_mode=search_mode, precision=session.get('precision', 0),
                            recall=session.get('recall', 0),
                            f1=session.get('f1', 0))
