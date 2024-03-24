@@ -196,13 +196,17 @@ def query_average_frames_embeddings(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
 
     search_results = opensearch.knn_query_average(query_embedding.tolist(), N_RESULTS)
-    query_results = []
+    query_results = {}
 
     for hit in search_results['hits']['hits']:
-        query_results.append(hit['_id'])
+        if hit['_source']['video_id'] not in query_results:
+            query_results[hit['_source']['video_id']] = []
+        query_results[hit['_source']['video_id']].append(hit['_source']['annotation_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
     print_performance_metrics(query_results, query_input)
+
+    session['query_results'] = query_results
 
     return query_results
 
@@ -211,13 +215,17 @@ def query_best_frame_embedding(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
 
     search_results = opensearch.knn_query_best(query_embedding.tolist(), N_RESULTS)
-    query_results = []
+    query_results = {}
 
     for hit in search_results['hits']['hits']:
-        query_results.append(hit['_id'])
+        if hit['_source']['video_id'] not in query_results:
+            query_results[hit['_source']['video_id']] = []
+        query_results[hit['_source']['video_id']].append(hit['_source']['annotation_id'])
         session['similarity_scores'][hit['_id']] = hit['_score']
 
     print_performance_metrics(query_results, query_input)
+
+    session['query_results'] = query_results
 
     return query_results
 
