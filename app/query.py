@@ -253,14 +253,34 @@ def query_true_expression(query_input):
 def print_performance_metrics(query_results, query_input):
     compare_results = query_true_expression(query_input)
 
-    precision = round(len(set(query_results).intersection(compare_results)) / len(query_results), 2)
-    recall = round(len(set(query_results).intersection(compare_results)) / len(compare_results), 2)
+    # Initialize counters for true positives, false positives and false negatives
+    tp = 0
+    fp = 0
+    fn = 0
 
-    if precision + recall == 0:
-        f1 = 0.0
-    else:
-        f1 = round(
-            2 * (precision * recall) / (precision + recall), 2)
+    # Iterate over each video in query_results
+    for video, query_annotations in query_results.items():
+        # If the video is also in compare_results
+        if video in compare_results:
+            compare_annotations = compare_results[video]
+
+            # Count the number of true positives, false positives and false negatives
+            tp += len(set(query_annotations).intersection(compare_annotations))
+            fp += len(set(query_annotations).difference(compare_annotations))
+            fn += len(set(compare_annotations).difference(query_annotations))
+        else:
+            # If the video is not in compare_results, all annotations are false positives
+            fp += len(query_annotations)
+
+    # Add the false negatives for videos only in compare_results
+    for video, compare_annotations in compare_results.items():
+        if video not in query_results:
+            fn += len(compare_annotations)
+
+    # Calculate precision, recall and F1 score
+    precision = round(tp / (tp + fp), 2) if tp + fp > 0 else 0.0
+    recall = round(tp / (tp + fn), 2) if tp + fn > 0 else 0.0
+    f1 = round(2 * (precision * recall) / (precision + recall), 2) if precision + recall > 0 else 0.0
 
     print("-------------------------------------")
     print("-------------------------------------")
