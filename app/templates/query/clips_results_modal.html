@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<div class="header container text-center">
+    <div class="row align-items-center">
+        <div class="col">
+            <a class="btn btn-outline-dark" style="width: 25%" href="{{ url_for('query.videos_results') }}">Back</a>
+        </div>
+        <div class="col">
+            <h1 class="text-center flex-grow-1">{% block title %}Search Results{% endblock %}</h1>
+        </div>
+        <div class="col">
+            <!-- Empty column just to center the elements -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+{% for annotation in frames %}
+<div class="d-flex justify-content-center">
+    <form action="{{ url_for('query.clips_results', video=video) }}" method="post">
+        <div class="card mb-2 w-75 border-secondary mx-auto" style="cursor: pointer" data-bs-toggle="modal"
+             data-bs-target="#clipModal" data-bs-whatever="{{ annotation }}"> <!--onclick="this.parentNode.submit();"-->
+            <div class="row g-0">
+                <ul class="col-md-4">
+                    <div class="card-body">
+                        <input type="hidden" name="selected_annotation" value="{{ annotation }}">
+                        <p class="expression">{{ frames_info[annotation]["value"] }}</p>
+                        <p class="expression_description">Video: {{ video }} ; Timestamp: {{
+                            frames_info[annotation]["converted_start_time"]}}</p>
+                        <p class="expression_description" style="font-weight: bold;"> Similarity Score: {{
+                            frames_info[annotation]["similarity_score"] }}</p>
+                    </div>
+                </ul>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        {% for frame in frames[annotation] %}
+                        <img class="frame"
+                             src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + annotation +'/' + frame) }}"
+                             alt="Not Found">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endfor %}
+
+
+<div class="modal fade" id="clipModal" tabindex="-1" aria-labelledby="clipModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="clipModalLabel">*Expression*</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    var frames = {{ frames_info | tojson }};
+    var modal = document.getElementById('clipModal');
+    modal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var annotation = button.getAttribute('data-bs-whatever');
+        var modalTitle = modal.querySelector('.modal-title');
+
+        modalTitle.textContent = frames[annotation]["value"];
+    });
+</script>
+{% endblock %}
