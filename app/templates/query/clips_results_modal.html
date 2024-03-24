@@ -48,34 +48,55 @@
 </div>
 {% endfor %}
 
-
 <div class="modal fade" id="clipModal" tabindex="-1" aria-labelledby="clipModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="clipModalLabel">*Expression*</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="clipModalLabel">*Expression*</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <video id="searched_video" width="100%" height="100%" controls>
+                    <source id="video_source" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="clip_button" type="button" class="btn btn-primary">Play Searched Clip</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
     var frames = {{ frames_info | tojson }};
     var modal = document.getElementById('clipModal');
     modal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var annotation = button.getAttribute('data-bs-whatever');
+        var annotation = event.relatedTarget.getAttribute('data-bs-whatever');
         var modalTitle = modal.querySelector('.modal-title');
+        var video = document.getElementById('searched_video');
+        var clipButton = document.getElementById('clip_button');
+
+        var start_time = Math.round(frames[annotation]["start_time"]) / 1000;
+        var end_time = Math.round(frames[annotation]["end_time"]) / 1000;
+        var isPlayingClip = false;
+
+        clipButton.addEventListener('click', function () {
+            video.currentTime = start_time;
+            video.play();
+            isPlayingClip = true;
+        });
+
+        video.addEventListener('timeupdate', function () {
+            if (video.currentTime >= end_time && isPlayingClip) {
+                video.pause();
+                isPlayingClip = false;
+            }
+        });
 
         modalTitle.textContent = frames[annotation]["value"];
+        video.src = "{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t=" + start_time;
     });
 </script>
 {% endblock %}

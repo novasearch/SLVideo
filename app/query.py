@@ -114,6 +114,8 @@ def clips_results(video):
                     frames_info[annotation_id] = annotation
                     converted_start_time = str(datetime.timedelta(seconds=int(annotation["start_time"]) // 1000))
                     frames_info[annotation_id]["converted_start_time"] = converted_start_time
+                    converted_end_time = str(datetime.timedelta(seconds=int(annotation["end_time"]) // 1000))
+                    frames_info[annotation_id]["converted_end_time"] = converted_end_time
                     frames_info[annotation_id]["similarity_score"] = session['similarity_scores'][
                         video + "_" + annotation_id]
                     break
@@ -155,7 +157,7 @@ def clips_results(video):
             session['annotation'] = annotation
             return redirect(url_for("query.play_selected_result", video=video, annotation_id=selected_annotation))
 
-    return render_template("query/clips_results.html", frames=frames_to_display, frames_info=frames_info,
+    return render_template("query/clips_results_modal.html", frames=frames_to_display, frames_info=frames_info,
                            search_mode=search_mode, video=video)
 
 
