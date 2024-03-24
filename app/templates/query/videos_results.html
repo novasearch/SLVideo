@@ -23,9 +23,10 @@
         <div class="d-flex justify-content-center">
             <form action="{{ url_for('query.videos_results') }}" method="post">
                 <div class="card mb-1 w-10 border-secondary mx-auto" onclick="this.parentNode.submit();"
-                     style="cursor: pointer">
+                     style="cursor: pointer; width: 17rem; height: 16rem;">
                     <img src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + videos_info[video]['first_annotation'] +'/' + frames[video]) }}"
-                         class="card-img-top" alt="No video thumbnail" style="width: 100%; height: 100%; object-fit: contain; background-color: black;">
+                         class="card-img-top" alt="No video thumbnail"
+                         style="height: 9.5rem; ; width: auto; object-fit: contain; background-color: black">
                     <div class="card-body">
                         <h5 class="card-title">{{ video }}</h5>
                         <p class="card-text text-center">Number of matches: {{ videos_info[video]["n_annotations"]
