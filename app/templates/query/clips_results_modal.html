@@ -105,7 +105,7 @@
         clipButton.addEventListener('click', playClip);
         video.addEventListener('timeupdate', checkVideoTime);
 
-        modalTitle.textContent = frames[annotation]["value"];
+        modalTitle.textContent = frames[annotation]["annotation_value"];
         video.src = "{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t=" + start_time;
     });
 </script>
