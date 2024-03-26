@@ -176,7 +176,7 @@ def generate_best_frame_embeddings(frames_dir, result_dir):
 
 # Generate query embeddings
 def generate_query_embeddings(query_input):
-    return st.text_encode(query_input)
+    return st.text_encode(query_input.lower())
 
 """
 def generate_annotation_frames_embeddings(video_dir, annotation_id):

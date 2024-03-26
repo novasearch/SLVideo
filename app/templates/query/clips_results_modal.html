@@ -26,7 +26,7 @@
                 <ul class="col-md-4">
                     <div class="card-body">
                         <input type="hidden" name="selected_annotation" value="{{ annotation }}">
-                        <p class="expression">{{ frames_info[annotation]["value"] }}</p>
+                        <p class="expression">{{ frames_info[annotation]["annotation_value"] }}</p>
                         <p class="expression_description">Video: {{ video }} ; Timestamp: {{
                             frames_info[annotation]["converted_start_time"]}}</p>
                         <p class="expression_description" style="font-weight: bold;"> Similarity Score: {{
@@ -90,6 +90,7 @@
 
         video.addEventListener('timeupdate', function () {
             if (video.currentTime >= end_time && isPlayingClip) {
+                console.log("AAAAAAAAAAAAAAAAAAAAAAA")
                 video.pause();
                 isPlayingClip = false;
             }

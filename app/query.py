@@ -1,8 +1,7 @@
 import datetime
 import json
 import os
-import subprocess
-import time
+import re
 
 import numpy as np
 from .embeddings import generate_embeddings
@@ -69,13 +68,14 @@ def videos_results():
     # Get a frame for each video
     for video_id in query_results:
         annotations = query_results[video_id]
+        first_annotation = list(annotations.keys())[0]
 
         videos_info[video_id] = {}
         videos_info[video_id]['video_name'] = video_id
         videos_info[video_id]['n_annotations'] = len(annotations)
-        videos_info[video_id]['first_annotation'] = annotations[0]
+        videos_info[video_id]['first_annotation'] = first_annotation
 
-        frames_path = os.path.join(FRAMES_PATH, search_mode, video_id, annotations[0])
+        frames_path = os.path.join(FRAMES_PATH, search_mode, video_id, first_annotation)
         frames[video_id] = os.listdir(frames_path)[0]
 
     if request.method == "POST":
@@ -103,22 +103,16 @@ def clips_results(video):
     frames_info = {}
 
     # Get the searched frames
-    for annotation_id in query_results:
-        annotation_path = os.path.join(ANNOTATIONS_PATH, f"{video}.json")
-        with open(annotation_path, "r") as f:
-            annotations = json.load(f)
-            for annotation in annotations[search_mode]["annotations"]:
-                if annotation["annotation_id"] == annotation_id:
-                    frames_path = os.path.join(FRAMES_PATH, search_mode, video, annotation_id)
-                    frames[annotation_id] = os.listdir(frames_path)
-                    frames_info[annotation_id] = annotation
-                    converted_start_time = str(datetime.timedelta(seconds=int(annotation["start_time"]) // 1000))
-                    frames_info[annotation_id]["converted_start_time"] = converted_start_time
-                    converted_end_time = str(datetime.timedelta(seconds=int(annotation["end_time"]) // 1000))
-                    frames_info[annotation_id]["converted_end_time"] = converted_end_time
-                    frames_info[annotation_id]["similarity_score"] = session['similarity_scores'][
-                        video + "_" + annotation_id]
-                    break
+    for annotation_id in query_results.keys():
+        frames_path = os.path.join(FRAMES_PATH, search_mode, video, annotation_id)
+        frames[annotation_id] = os.listdir(frames_path)
+        frames_info[annotation_id] = query_results[annotation_id]
+        converted_start_time = str(datetime.timedelta(seconds=int(query_results[annotation_id]["start_time"]) // 1000))
+        frames_info[annotation_id]["converted_start_time"] = converted_start_time
+        converted_end_time = str(datetime.timedelta(seconds=int(query_results[annotation_id]["end_time"]) // 1000))
+        frames_info[annotation_id]["converted_end_time"] = converted_end_time
+        frames_info[annotation_id]["similarity_score"] = session['similarity_scores'][
+            video + "_" + annotation_id]
 
     if search_mode == FACIAL_EXPRESSIONS_ID:
         # Not all frames of each expression are going to be displayed
@@ -183,8 +177,14 @@ def query_frames_embeddings(query_input):
 
     for hit in search_results['hits']['hits']:
         if hit['_source']['video_id'] not in query_results:
-            query_results[hit['_source']['video_id']] = []
-        query_results[hit['_source']['video_id']].append(hit['_source']['annotation_id'])
+            query_results[hit['_source']['video_id']] = {}
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']] = {}
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['annotation_value'] = hit['_source'][
+            'annotation_value']
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['start_time'] = hit['_source'][
+            'start_time']
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['end_time'] = hit['_source'][
+            'end_time']
         session['similarity_scores'][hit['_id']] = hit['_score']
 
     print_performance_metrics(query_results, query_input)
@@ -202,10 +202,15 @@ def query_average_frames_embeddings(query_input):
 
     for hit in search_results['hits']['hits']:
         if hit['_source']['video_id'] not in query_results:
-            query_results[hit['_source']['video_id']] = []
-        query_results[hit['_source']['video_id']].append(hit['_source']['annotation_id'])
+            query_results[hit['_source']['video_id']] = {}
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']] = {}
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['annotation_value'] = hit['_source'][
+            'annotation_value']
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['start_time'] = hit['_source'][
+            'start_time']
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['end_time'] = hit['_source'][
+            'end_time']
         session['similarity_scores'][hit['_id']] = hit['_score']
-
     print_performance_metrics(query_results, query_input)
 
     session['query_results'] = query_results
@@ -221,8 +226,14 @@ def query_best_frame_embedding(query_input):
 
     for hit in search_results['hits']['hits']:
         if hit['_source']['video_id'] not in query_results:
-            query_results[hit['_source']['video_id']] = []
-        query_results[hit['_source']['video_id']].append(hit['_source']['annotation_id'])
+            query_results[hit['_source']['video_id']] = {}
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']] = {}
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['annotation_value'] = hit['_source'][
+            'annotation_value']
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['start_time'] = hit['_source'][
+            'start_time']
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['end_time'] = hit['_source'][
+            'end_time']
         session['similarity_scores'][hit['_id']] = hit['_score']
 
     print_performance_metrics(query_results, query_input)
@@ -236,16 +247,21 @@ def query_true_expression(query_input):
     """ Get the results of the query using the ground truth """
     query_results = {}
     search_mode = session.get('search_mode', 1)
+    pattern = re.compile(r'(^|\[|_|]){}($|\]|_|)'.format(query_input.lower()), re.IGNORECASE)
 
     for video in os.listdir(os.path.join(FRAMES_PATH, search_mode)):
         with open(os.path.join(ANNOTATIONS_PATH, f"{video}.json"), "r") as f:
             video_annotations = json.load(f)
             if search_mode in video_annotations:
                 for annotation in video_annotations[search_mode]["annotations"]:
-                    if annotation["value"] is not None and query_input.lower() in annotation["value"].lower():
+                    if annotation["value"] is not None and pattern.search(annotation["value"]):
+                        print(annotation["value"])
                         if video not in query_results:
-                            query_results[video] = []
-                        query_results[video].append(annotation["annotation_id"])
+                            query_results[video] = {}
+                        query_results[video][annotation["annotation_id"]] = {}
+                        query_results[video][annotation["annotation_id"]]['annotation_value'] = annotation["value"]
+                        query_results[video][annotation["annotation_id"]]['start_time'] = annotation["start_time"]
+                        query_results[video][annotation["annotation_id"]]['end_time'] = annotation["end_time"]
                         session['similarity_scores'][annotation["annotation_id"]] = "N/A"
 
     session['query_results'] = query_results
@@ -254,6 +270,7 @@ def query_true_expression(query_input):
 
 def print_performance_metrics(query_results, query_input):
     compare_results = query_true_expression(query_input)
+    print(compare_results)
 
     # Initialize counters for true positives, false positives and false negatives
     tp = 0
@@ -261,10 +278,12 @@ def print_performance_metrics(query_results, query_input):
     fn = 0
 
     # Iterate over each video in query_results
-    for video, query_annotations in query_results.items():
+    for video in query_results.keys():
+        query_annotations = query_results[video].keys()
+
         # If the video is also in compare_results
         if video in compare_results:
-            compare_annotations = compare_results[video]
+            compare_annotations = compare_results[video].keys()
 
             # Count the number of true positives, false positives and false negatives
             tp += len(set(query_annotations).intersection(compare_annotations))

@@ -23,6 +23,7 @@ EMBEDDINGS_PATH = "app/embeddings"  # sys.argv[6]
 PHRASES_ID = "LP_P1 transcrição livre"
 FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"
 
+
 opensearch = LGPOpenSearch()
 
 
@@ -35,14 +36,17 @@ class CPU_Unpickler(pickle.Unpickler):
 
 
 def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
-            base_frame_embedding, average_frame_embedding, best_frame_embedding):
+            base_frame_embedding, average_frame_embedding, best_frame_embedding,
+            start_time: int, end_time: int):
     return {
         "video_id": video_id,
         "annotation_id": annotation_id,
         "annotation_value": annotation_value,
         "base_frame_embedding": base_frame_embedding,
         "average_frame_embedding": average_frame_embedding,
-        "best_frame_embedding": best_frame_embedding
+        "best_frame_embedding": best_frame_embedding,
+        "start_time": start_time,
+        "end_time": end_time
     }
 
 
@@ -105,6 +109,10 @@ def preprocess_videos():
             for annotation in annotations:
                 annotation_id = annotation["annotation_id"]
                 annotation_value = annotation["value"]
+                start_time = annotation["start_time"]
+                end_time = annotation["end_time"]
+
+                print(f"Indexing video {video_id} annotation {annotation_id} value {annotation_value} ")
 
                 doc = gen_doc(
                     video_id=video_id,
@@ -112,8 +120,11 @@ def preprocess_videos():
                     annotation_value=annotation_value,
                     base_frame_embedding=base_frame_embeddings[video_id][annotation_id].tolist(),
                     average_frame_embedding=average_frame_embeddings[video_id][annotation_id].tolist(),
-                    best_frame_embedding=best_frame_embeddings[video_id][annotation_id].tolist()
+                    best_frame_embedding=best_frame_embeddings[video_id][annotation_id].tolist(),
+                    start_time=start_time,
+                    end_time=end_time
                 )
 
-                opensearch.index_if_not_exists(doc)
-                # opensearch.delete_doc_and_index(doc) """
+                # opensearch.index_if_not_exists(doc)
+                opensearch.delete_doc_and_index(doc)
+"""

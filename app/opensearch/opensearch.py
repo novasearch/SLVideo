@@ -56,6 +56,15 @@ class LGPOpenSearch:
                         'dimension': 512,
                         'type': 'knn_vector'
                     },
+                    "start_time": {
+                        "type": "integer"
+                    },
+                    "end_time": {
+                        "type": "integer"
+                    },
+                    # "expr_class": {
+                    #    "type": "text"
+                    # }
                 }
             }
         }
