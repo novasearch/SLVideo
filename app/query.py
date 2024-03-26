@@ -255,7 +255,6 @@ def query_true_expression(query_input):
             if search_mode in video_annotations:
                 for annotation in video_annotations[search_mode]["annotations"]:
                     if annotation["value"] is not None and pattern.search(annotation["value"]):
-                        print(annotation["value"])
                         if video not in query_results:
                             query_results[video] = {}
                         query_results[video][annotation["annotation_id"]] = {}
@@ -270,7 +269,6 @@ def query_true_expression(query_input):
 
 def print_performance_metrics(query_results, query_input):
     compare_results = query_true_expression(query_input)
-    print(compare_results)
 
     # Initialize counters for true positives, false positives and false negatives
     tp = 0

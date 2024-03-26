@@ -72,29 +72,38 @@
 <script>
     var frames = {{ frames_info | tojson }};
     var modal = document.getElementById('clipModal');
+    var annotation, start_time, end_time, isPlayingClip;
+    var video = document.getElementById('searched_video');
+    var clipButton = document.getElementById('clip_button');
+
+    function playClip() {
+        video.currentTime = start_time;
+        video.play();
+        isPlayingClip = true;
+    }
+
+    function checkVideoTime() {
+        if (video.currentTime >= end_time && isPlayingClip) {
+            video.pause();
+            isPlayingClip = false;
+        }
+    }
+
     modal.addEventListener('show.bs.modal', function (event) {
-        var annotation = event.relatedTarget.getAttribute('data-bs-whatever');
+        // Remove old event listeners
+        clipButton.removeEventListener('click', playClip);
+        video.removeEventListener('timeupdate', checkVideoTime);
+
+        annotation = event.relatedTarget.getAttribute('data-bs-whatever');
         var modalTitle = modal.querySelector('.modal-title');
-        var video = document.getElementById('searched_video');
-        var clipButton = document.getElementById('clip_button');
 
-        var start_time = Math.round(frames[annotation]["start_time"]) / 1000;
-        var end_time = Math.round(frames[annotation]["end_time"]) / 1000;
-        var isPlayingClip = false;
+        start_time = Math.round(frames[annotation]["start_time"]) / 1000;
+        end_time = Math.round(frames[annotation]["end_time"]) / 1000;
+        isPlayingClip = false;
 
-        clipButton.addEventListener('click', function () {
-            video.currentTime = start_time;
-            video.play();
-            isPlayingClip = true;
-        });
-
-        video.addEventListener('timeupdate', function () {
-            if (video.currentTime >= end_time && isPlayingClip) {
-                console.log("AAAAAAAAAAAAAAAAAAAAAAA")
-                video.pause();
-                isPlayingClip = false;
-            }
-        });
+        // Add new event listeners
+        clipButton.addEventListener('click', playClip);
+        video.addEventListener('timeupdate', checkVideoTime);
 
         modalTitle.textContent = frames[annotation]["value"];
         video.src = "{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t=" + start_time;
