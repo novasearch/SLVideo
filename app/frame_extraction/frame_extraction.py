@@ -2,11 +2,14 @@ import datetime
 import os
 import json
 import subprocess
-import re
+
+from app.frame_extraction.object_detector import ObjectDetector
 
 N_VIDEOS_TO_PROCESS = 3
 PHRASES_DIR = "LP_P1 transcrição livre"
 FACIAL_EXPRESSIONS_DIR = "GLOSA_P1_EXPRESSAO"
+
+od = ObjectDetector()
 
 
 def extract_frames(videos_dir, frames_dir, annotations_dir):
@@ -69,7 +72,19 @@ def extract_facial_expressions_frames(video_path, facial_expressions_dir, annota
                            os.path.join(expression_dir, f"{annotation_id}_%02d.png")  # output file
                            ]
 
-                subprocess.call(command)
+                # subprocess.call(command)
+                try:
+                    subprocess.check_call(command)
+                except subprocess.CalledProcessError as e:
+                    print(f"ffmpeg command failed with error: {e}")
+
+    # Crop the extracted frames to contain only the person
+    for expression_dir in os.listdir(facial_expressions_dir):
+        expression_dir_path = os.path.join(facial_expressions_dir, expression_dir)
+
+        for frame in os.listdir(expression_dir_path):
+            frame_path = os.path.join(expression_dir_path, frame)
+            od.detect_person(frame_path)
 
 
 def extract_phrases_frames(video_path, phrases_dir, annotation_path):
