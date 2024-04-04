@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # To run the app, run the command:
     # flask --app app --debug run -h 0.0.0.0 -p 5432
     # Use nscluster and access videolgp.novasearch.org
-    app.run(host='0.0.0.0', port=5432)
+    app.run(host='0.0.0.0', port=5432, debug=True)
 
 # ensure the instance folder exists
 try:
@@ -35,3 +35,5 @@ app.add_url_rule("/", endpoint="query")
 
 from . import pipeline
 pipeline.preprocess_videos()
+
+
