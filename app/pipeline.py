@@ -1,12 +1,8 @@
 import json
 import os
 import pickle
-import numpy as np
-
-import requests
 import torch
 import io
-import time
 
 from .eaf_parser import eaf_parser
 from .opensearch.opensearch import LGPOpenSearch
@@ -51,30 +47,30 @@ def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
 
 
 def preprocess_videos():
-    """ Preprocess videos, generate embeddings and index them in OpenSearch."""
+    """ Preprocess videos, generate embeddings and index them in OpenSearch """
 
     # Generate json file for videos with annotations and timestamps
     eaf_parser.parse_eaf_files(EAF_PATH)
-    print("Annotations generated")
+    print("Annotations generated", flush=True)
 
     # Extract facial expressions frames
     frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
-    print("Extracted facial expressions frames")
+    print("Extracted facial expressions frames", flush=True)
 
     facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
 
     # Generate the base frames embeddings
     generate_embeddings.generate_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
-    print("Frame embeddings generated")
+    print("Frame embeddings generated", flush=True)
 
     # Generate the average frames embeddings
     generate_embeddings.generate_average_frame_embeddings(facial_expressions_frames_path,
                                                           EMBEDDINGS_PATH)
-    print("Average frame embeddings generated")
+    print("Average frame embeddings generated", flush=True)
 
     # Generate the best frame embeddings
     generate_embeddings.generate_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
-    print("Best frame embeddings generated")
+    print("Best frame embeddings generated", flush=True)
 
     with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:
         base_frame_embeddings = CPU_Unpickler(f).load()
@@ -87,7 +83,6 @@ def preprocess_videos():
               "rb") as f:
         best_frame_embeddings = CPU_Unpickler(f).load()
 
-"""
     print("ENTERING INDEXING LOOP")
     opensearch.print_index()
     # opensearch.delete_index()
@@ -112,8 +107,6 @@ def preprocess_videos():
                 start_time = annotation["start_time"]
                 end_time = annotation["end_time"]
 
-                print(f"Indexing video {video_id} annotation {annotation_id} value {annotation_value} ")
-
                 doc = gen_doc(
                     video_id=video_id,
                     annotation_id=annotation_id,
@@ -127,4 +120,5 @@ def preprocess_videos():
 
                 # opensearch.index_if_not_exists(doc)
                 opensearch.delete_doc_and_index(doc)
-"""
+
+    print("Finished processing videos", flush=True)

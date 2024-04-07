@@ -268,12 +268,16 @@ def query_true_expression(query_input):
 
 
 def print_performance_metrics(query_results, query_input):
+    """ Print the performance metrics of the query
+        Precision tells how many retrieved results were right
+        Recall tells how many right results were retrieved
+        F1 score is the harmonic mean of precision and recall """
     compare_results = query_true_expression(query_input)
 
     # Initialize counters for true positives, false positives and false negatives
-    tp = 0
-    fp = 0
-    fn = 0
+    tp = 0  # True positives - number of annotations that were correctly retrieved
+    fp = 0  # False positives - number of annotations that were retrieved but are not in the ground truth
+    fn = 0  # False negatives - number of annotations that are in the ground truth but were not retrieved
 
     # Iterate over each video in query_results
     for video in query_results.keys():

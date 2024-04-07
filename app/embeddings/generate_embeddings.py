@@ -20,6 +20,7 @@ class CPU_Unpickler(pickle.Unpickler):
 
 
 def generate_frame_embeddings(frames_dir, result_dir):
+    """Generates facial expression frame embeddings for a folder of videos, choosing 4 frames of each video."""
     print("Generating frame embeddings")
 
     n_embeddings = 4
@@ -55,9 +56,6 @@ def generate_frame_embeddings(frames_dir, result_dir):
             frames_to_encode = all_frames[::step_size]
             frames_to_encode = frames_to_encode[:n_embeddings]
 
-            if video == "11":
-                print("Video 11 frames:", frames_to_encode)
-
             for frame in frames_to_encode:
                 full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
 
@@ -78,8 +76,8 @@ def generate_frame_embeddings(frames_dir, result_dir):
         pickle.dump(embeddings, f)
 
 
-# Generates the average of each facial expression frames embeddings of a video for a folder of videos
 def generate_average_frame_embeddings(frames_dir, result_dir):
+    """Generates the average facial expression frame embedding of a video for a folder of videos"""
     print("Generating average frame embeddings")
 
     embeddings_file = os.path.join(result_dir, 'average_frame_embeddings.json.embeddings')
@@ -126,8 +124,10 @@ def generate_average_frame_embeddings(frames_dir, result_dir):
         pickle.dump(embeddings, f)
 
 
-# Generates only the best facial expression frame embedding of a video for a folder of videos
 def generate_best_frame_embeddings(frames_dir, result_dir):
+    """Generates only the best facial expression frame embedding of a video for a folder of videos.
+        The best frame is the one with the highest norm of the embedding vector,
+        which means the most intense and distinct facial expression frame"""
     print("Generating best frame embeddings")
 
     embeddings_file = os.path.join(result_dir, 'best_frame_embeddings.json.embeddings')
@@ -162,7 +162,7 @@ def generate_best_frame_embeddings(frames_dir, result_dir):
 
                 # calculate score based on the norm (or length) of the embedding vector
                 # the higher the norm, more intense and disctinct the expression is, the better the embedding
-                current_score = np.linalg.norm(current_embedding.detach().numpy())
+                current_score = np.linalg.norm(current_embedding.detach().cpu().numpy())
 
                 if current_score > best_score:
                     best_score = current_score
@@ -177,92 +177,3 @@ def generate_best_frame_embeddings(frames_dir, result_dir):
 # Generate query embeddings
 def generate_query_embeddings(query_input):
     return st.text_encode(query_input.lower())
-
-"""
-def generate_annotation_frames_embeddings(video_dir, annotation_id):
-    n_embeddings = 4
-
-    expression_frames_dir = os.path.join(video_dir, annotation_id)
-    total_embeddings = None
-
-    all_frames = os.listdir(expression_frames_dir)
-
-    # Select #n_embeddings frames to generate embeddings
-    if len(all_frames) <= n_embeddings:
-        step_size = 1
-    else:
-        # Calculate the step size
-        step_size = (len(all_frames) - 1) // n_embeddings + 1
-
-    frames_to_encode = all_frames[::step_size]
-    frames_to_encode = frames_to_encode[:n_embeddings]
-
-    for frame in frames_to_encode:
-        full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
-
-        # Skip if the path is not a file
-        if not os.path.isfile(full_path):
-            continue
-
-        # Initialize embeddings[annotation] as a zero tensor if it's not already initialized
-        if total_embeddings is None:
-            total_embeddings = torch.zeros_like(st.image_encode(full_path))
-
-        # generate embedding and sum it to the total embedding
-        total_embeddings += st.image_encode(full_path)
-
-    return total_embeddings
-
-
-def generate_annotation_average_frames_embeddings(video_dir, annotation_id):
-    expression_frames_dir = os.path.join(video_dir, annotation_id)
-    total_embedding = None
-    frame_count = 0
-
-    for frame in os.listdir(expression_frames_dir):
-        full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
-
-        # Skip if the path is not a file
-        if not os.path.isfile(full_path):
-            continue
-
-        # generate embedding
-        current_embedding = st.image_encode(full_path)
-        if total_embedding is None:
-            total_embedding = current_embedding
-        else:
-            total_embedding += current_embedding
-        frame_count += 1
-
-    # calculate average embedding
-    if frame_count > 0:  # avoid division by zero
-        average_embedding = total_embedding / frame_count
-
-    return average_embedding
-
-
-def generate_annotation_best_frame_embeddings(video_dir, annotation_id):
-    expression_frames_dir = os.path.join(video_dir, annotation_id)
-    best_embedding = None
-    best_score = -1
-
-    for frame in os.listdir(expression_frames_dir):
-        full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
-
-        # Skip if the path is not a file
-        if not os.path.isfile(full_path):
-            continue
-
-        # generate embedding
-        current_embedding = st.image_encode(full_path)
-
-        # calculate score based on the norm (or length) of the embedding vector
-        # the higher the norm, more intense and disctinct the expression is, the better the embedding
-        current_score = np.linalg.norm(current_embedding)
-
-        if current_score > best_score:
-            best_score = current_score
-            best_embedding = current_embedding
-
-    return best_embedding
-"""

@@ -2,6 +2,7 @@ import datetime
 import os
 import json
 import subprocess
+import concurrent.futures
 
 from app.frame_extraction.object_detector import ObjectDetector
 
@@ -44,7 +45,6 @@ def extract_facial_expressions_frames(video_path, facial_expressions_dir, annota
     # Cycle through the annotations referring facial expressions
     with open(annotation_path, "r") as f:
         annotations = json.load(f)
-        print(annotation_path)
 
         if FACIAL_EXPRESSIONS_DIR in annotations:
             for facial_expression in annotations[FACIAL_EXPRESSIONS_DIR]["annotations"]:
@@ -72,11 +72,7 @@ def extract_facial_expressions_frames(video_path, facial_expressions_dir, annota
                            os.path.join(expression_dir, f"{annotation_id}_%02d.png")  # output file
                            ]
 
-                # subprocess.call(command)
-                try:
-                    subprocess.check_call(command)
-                except subprocess.CalledProcessError as e:
-                    print(f"ffmpeg command failed with error: {e}")
+                subprocess.call(command)
 
     # Crop the extracted frames to contain only the person
     for expression_dir in os.listdir(facial_expressions_dir):
@@ -93,7 +89,6 @@ def extract_phrases_frames(video_path, phrases_dir, annotation_path):
     # Cycle through the annotations referring facial expressions
     with open(annotation_path, "r") as f:
         annotations = json.load(f)
-        print(annotation_path)
 
         if PHRASES_DIR in annotations:
             for phrase in annotations[PHRASES_DIR]["annotations"]:
