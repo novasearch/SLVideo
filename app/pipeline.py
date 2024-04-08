@@ -84,6 +84,7 @@ def preprocess_videos():
         best_frame_embeddings = CPU_Unpickler(f).load()
 
     print("ENTERING INDEXING LOOP")
+    """
     opensearch.print_index()
     # opensearch.delete_index()
     # opensearch.create_index()
@@ -120,5 +121,5 @@ def preprocess_videos():
 
                 # opensearch.index_if_not_exists(doc)
                 opensearch.delete_doc_and_index(doc)
-
+"""
     print("Finished processing videos", flush=True)

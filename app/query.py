@@ -117,7 +117,7 @@ def clips_results(video):
     if search_mode == FACIAL_EXPRESSIONS_ID:
         # Not all frames of each expression are going to be displayed
         frames_to_display = {}
-        num_frames_to_display = 5
+        num_frames_to_display = 6
 
         # Display only #num_frames_to_display frames of each expression
         for expression, all_frames in frames.items():

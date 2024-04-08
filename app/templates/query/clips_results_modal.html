@@ -19,8 +19,8 @@
 {% block content %}
 {% for annotation in frames %}
 <div class="d-flex justify-content-center">
-    <form action="{{ url_for('query.clips_results', video=video) }}" method="post">
-        <div class="card mb-2 w-75 border-secondary mx-auto" style="cursor: pointer" data-bs-toggle="modal"
+    <form action="{{ url_for('query.clips_results', video=video) }}" method="post" style="width: 75%">
+        <div class="card mb-2 w-100 border-secondary mx-auto" style="cursor: pointer" data-bs-toggle="modal"
              data-bs-target="#clipModal" data-bs-whatever="{{ annotation }}"> <!--onclick="this.parentNode.submit();"-->
             <div class="row g-0">
                 <ul class="col-md-4">
@@ -36,7 +36,7 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         {% for frame in frames[annotation] %}
-                        <img class="frame"
+                        <img style="max-width: 8rem; max-height: 8rem; object-fit: contain;"
                              src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + annotation +'/' + frame) }}"
                              alt="Not Found">
                         {% endfor %}
