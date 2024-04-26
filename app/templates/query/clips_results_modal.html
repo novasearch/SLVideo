@@ -22,26 +22,32 @@
     <form action="{{ url_for('query.clips_results', video=video) }}" method="post" style="width: 75%">
         <div class="card mb-2 w-100 border-secondary mx-auto" style="cursor: pointer" data-bs-toggle="modal"
              data-bs-target="#clipModal" data-bs-whatever="{{ annotation }}"> <!--onclick="this.parentNode.submit();"-->
-            <div class="row g-0">
-                <ul class="col-md-4">
+            <div class="row g-0 border-bottom border-secondary border-opacity-25">
+                <p class="match_score">{{ loop.index }}º Match - Similarity Score {{
+                    frames_info[annotation]["similarity_score"] }}</p>
+            </div>
+            <div class="row g-0" style="display: flex">
+                <div class="col-md-4" style="height: 9rem; display: flex; align-items: center; justify-content: center;">
                     <div class="card-body">
                         <input type="hidden" name="selected_annotation" value="{{ annotation }}">
                         <p class="expression">{{ frames_info[annotation]["annotation_value"] }}</p>
                         <p class="expression_description">Video: {{ video }} ; Timestamp: {{
-                            frames_info[annotation]["converted_start_time"]}}</p>
-                        <p class="expression_description" style="font-weight: bold;"> Similarity Score: {{
-                            frames_info[annotation]["similarity_score"] }}</p>
+                             frames_info[annotation]["converted_start_time"]}}</p>
+                        <p class="expression_description">Grammatical Class: TODO</p>
                     </div>
-                </ul>
-                <div class="col-md-8">
-                    <div class="card-body">
+                </div>
+                <div class="col-md-8" style="height: 9rem;">
+                    <div class="card-body d-flex justify-content-between align-items-center" style="height: 100%;">
                         {% for frame in frames[annotation] %}
-                        <img style="max-width: 8rem; max-height: 8rem; object-fit: contain;"
+                        <img style="object-fit: contain; height: 110%;"
                              src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + annotation +'/' + frame) }}"
                              alt="Not Found">
                         {% endfor %}
                     </div>
                 </div>
+            </div>
+            <div class="row g-0 border-top border-secondary border-opacity-50">
+                <p class="expression_description">Phrase: "Inserir frase aqui quando descobrir como ir buscá-la."</p>
             </div>
         </div>
     </form>
@@ -62,8 +68,9 @@
                 </video>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="phrase_button" type="button" class="btn btn-primary">Play Phrase</button>
                 <button id="clip_button" type="button" class="btn btn-primary">Play Searched Clip</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

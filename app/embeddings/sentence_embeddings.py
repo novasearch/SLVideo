@@ -14,6 +14,9 @@ class Embedder():
             self.device = 'cuda'
         else:
             self.device = 'cpu'
+
+        print("Embedder's Device: ", self.device, flush=True)
+
         self.model = SentenceTransformer('clip-ViT-B-32', device=self.device)
 
         #self.model, preprocess_train, self.preprocess_val = open_clip.create_model_and_transforms('hf-hub:hiaac-nlp/CAPIVARA')

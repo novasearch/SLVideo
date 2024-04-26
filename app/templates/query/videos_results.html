@@ -29,8 +29,7 @@
                          style="height: 9.5rem; ; width: auto; object-fit: contain; background-color: black">
                     <div class="card-body">
                         <h5 class="card-title">{{ video }}</h5>
-                        <p class="card-text text-center">Number of matches: {{ videos_info[video]["n_annotations"]
-                            }}</p>
+                        <p class="card-text text-center">{{ videos_info[video]["n_annotations"] }} Matches</p>
                         <input type="hidden" name="selected_video" value="{{ video }}">
                     </div>
                 </div>

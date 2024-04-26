@@ -43,13 +43,13 @@ def query():
         else:
 
             if selected_field == 1:  # Base Frames Embeddings
-                session['query_results'] = query_frames_embeddings(query_input)
+                query_frames_embeddings(query_input)
             elif selected_field == 2:  # Average Frames Embeddings
-                session['query_results'] = query_average_frames_embeddings(query_input)
+                query_average_frames_embeddings(query_input)
             elif selected_field == 3:  # Best Frame Embedding
-                session['query_results'] = query_best_frame_embedding(query_input)
+                query_best_frame_embedding(query_input)
             elif selected_field == 4:  # True Expression
-                session['query_results'] = query_true_expression(query_input)
+                query_true_expression(query_input)
 
             return redirect(url_for("query.videos_results"))
 
@@ -191,8 +191,6 @@ def query_frames_embeddings(query_input):
 
     session['query_results'] = query_results
 
-    return query_results
-
 
 def query_average_frames_embeddings(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
@@ -214,8 +212,6 @@ def query_average_frames_embeddings(query_input):
     print_performance_metrics(query_results, query_input)
 
     session['query_results'] = query_results
-
-    return query_results
 
 
 def query_best_frame_embedding(query_input):
@@ -240,8 +236,6 @@ def query_best_frame_embedding(query_input):
 
     session['query_results'] = query_results
 
-    return query_results
-
 
 def query_true_expression(query_input):
     """ Get the results of the query using the ground truth """
@@ -261,9 +255,10 @@ def query_true_expression(query_input):
                         query_results[video][annotation["annotation_id"]]['annotation_value'] = annotation["value"]
                         query_results[video][annotation["annotation_id"]]['start_time'] = annotation["start_time"]
                         query_results[video][annotation["annotation_id"]]['end_time'] = annotation["end_time"]
-                        session['similarity_scores'][annotation["annotation_id"]] = "N/A"
+                        session['similarity_scores'][video + "_" + annotation["annotation_id"]] = "N/A"
 
     session['query_results'] = query_results
+
     return query_results
 
 

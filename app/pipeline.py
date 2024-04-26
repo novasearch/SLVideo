@@ -63,14 +63,17 @@ def preprocess_videos():
     generate_embeddings.generate_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
     print("Frame embeddings generated", flush=True)
 
-    # Generate the average frames embeddings
-    generate_embeddings.generate_average_frame_embeddings(facial_expressions_frames_path,
-                                                          EMBEDDINGS_PATH)
-    print("Average frame embeddings generated", flush=True)
+    # Generate the average and the best frames embeddings
+    generate_embeddings.generate_average_and_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
 
-    # Generate the best frame embeddings
-    generate_embeddings.generate_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
-    print("Best frame embeddings generated", flush=True)
+    # # Generate the average frames embeddings
+    # generate_embeddings.generate_average_frame_embeddings(facial_expressions_frames_path,
+    #                                                       EMBEDDINGS_PATH)
+    # print("Average frame embeddings generated", flush=True)
+    #
+    # # Generate the best frame embeddings
+    # generate_embeddings.generate_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+    # print("Best frame embeddings generated", flush=True)
 
     with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:
         base_frame_embeddings = CPU_Unpickler(f).load()
@@ -84,7 +87,6 @@ def preprocess_videos():
         best_frame_embeddings = CPU_Unpickler(f).load()
 
     print("ENTERING INDEXING LOOP")
-    """
     opensearch.print_index()
     # opensearch.delete_index()
     # opensearch.create_index()
@@ -121,5 +123,5 @@ def preprocess_videos():
 
                 # opensearch.index_if_not_exists(doc)
                 opensearch.delete_doc_and_index(doc)
-"""
+
     print("Finished processing videos", flush=True)
