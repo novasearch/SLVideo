@@ -27,12 +27,13 @@
                     frames_info[annotation]["similarity_score"] }}</p>
             </div>
             <div class="row g-0" style="display: flex">
-                <div class="col-md-4" style="height: 9rem; display: flex; align-items: center; justify-content: center;">
+                <div class="col-md-4"
+                     style="height: 9rem; display: flex; align-items: center; justify-content: center;">
                     <div class="card-body">
                         <input type="hidden" name="selected_annotation" value="{{ annotation }}">
                         <p class="expression">{{ frames_info[annotation]["annotation_value"] }}</p>
                         <p class="expression_description">Video: {{ video }} ; Timestamp: {{
-                             frames_info[annotation]["converted_start_time"]}}</p>
+                            frames_info[annotation]["converted_start_time"]}}</p>
                         <p class="expression_description">Grammatical Class: TODO</p>
                     </div>
                 </div>
@@ -54,23 +55,31 @@
 </div>
 {% endfor %}
 
-<div class="modal fade" id="clipModal" tabindex="-1" aria-labelledby="clipModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="clipModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="clipModalLabel" aria-hidden="true">
+    <button id="previous_clip" type="button" class="btn btn-primary change-clips" style="--bs-btn-font-size: 2rem;">
+        <i class="bi bi-chevron-compact-left"></i>
+    </button>
+    <button id="next_clip" type="button" class="btn btn-primary change-clips" style="--bs-btn-font-size: 2rem;">
+        <i class="bi bi-chevron-compact-right"></i>
+    </button>
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="clipModalLabel">*Expression*</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <video id="searched_video" width="100%" height="100%" controls>
+            <div class="modal-body" style="padding: 0">
+                <video id="searched_video" controls>
                     <source id="video_source" src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <div class="modal-footer">
-                <button id="phrase_button" type="button" class="btn btn-primary">Play Phrase</button>
-                <button id="clip_button" type="button" class="btn btn-primary">Play Searched Clip</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-primary">Info</button>
+                <div>
+                    <button id="phrase_button" type="button" class="btn btn-primary">Play Phrase</button>
+                    <button id="clip_button" type="button" class="btn btn-primary">Play Expression</button>
+                </div>
             </div>
         </div>
     </div>
@@ -78,10 +87,14 @@
 
 <script>
     var frames = {{ frames_info | tojson }};
+    var annotations = Object.keys(frames);
+    var current_annotation, next_annotation, previous_annotation, current_index, start_time, end_time, isPlayingClip;
+
     var modal = document.getElementById('clipModal');
-    var annotation, start_time, end_time, isPlayingClip;
     var video = document.getElementById('searched_video');
     var clipButton = document.getElementById('clip_button');
+    var nextClipButton = document.getElementById('next_clip');
+    var previousClipButton = document.getElementById('previous_clip');
 
     function playClip() {
         video.currentTime = start_time;
@@ -96,24 +109,65 @@
         }
     }
 
-    modal.addEventListener('show.bs.modal', function (event) {
+    modal.addEventListener('shown.bs.modal', function (event) {
+        current_annotation = event.relatedTarget.getAttribute('data-bs-whatever');
+        current_index = annotations.indexOf(current_annotation);
+        setModalData(current_index);
+        positionButtons()
+    });
+
+    function setModalData() {
+        current_annotation = annotations[current_index];
+
         // Remove old event listeners
         clipButton.removeEventListener('click', playClip);
         video.removeEventListener('timeupdate', checkVideoTime);
+        nextClipButton.removeEventListener('click', nextClip);
+        previousClipButton.removeEventListener('click', previousClip);
 
-        annotation = event.relatedTarget.getAttribute('data-bs-whatever');
-        var modalTitle = modal.querySelector('.modal-title');
+        let modalTitle = modal.querySelector('.modal-title');
 
-        start_time = Math.round(frames[annotation]["start_time"]) / 1000;
-        end_time = Math.round(frames[annotation]["end_time"]) / 1000;
+        start_time = Math.round(frames[current_annotation]["start_time"]) / 1000;
+        end_time = Math.round(frames[current_annotation]["end_time"]) / 1000;
         isPlayingClip = false;
+
+        modalTitle.textContent = frames[current_annotation]["annotation_value"];
+        video.src = "{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t=" + start_time;
+
+        next_annotation = current_index + 1 < annotations.length ? frames[annotations[current_index + 1]] : null;
+        previous_annotation = current_index - 1 >= 0 ? frames[annotations[current_index - 1]] : null;
+
+        nextClipButton.disabled = next_annotation === null;
+        previousClipButton.disabled = previous_annotation === null;
 
         // Add new event listeners
         clipButton.addEventListener('click', playClip);
         video.addEventListener('timeupdate', checkVideoTime);
+        nextClipButton.addEventListener('click', nextClip);
+        previousClipButton.addEventListener('click', previousClip);
+    }
 
-        modalTitle.textContent = frames[annotation]["annotation_value"];
-        video.src = "{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t=" + start_time;
-    });
+    function nextClip() {
+        current_index += 1;
+        setModalData(current_index);
+    }
+
+    function previousClip() {
+        current_index -= 1;
+        setModalData(current_index);
+    }
+
+    window.addEventListener('resize', positionButtons);
+    document.addEventListener('DOMContentLoaded', positionButtons);
+
+    function positionButtons() {
+        let modalWidth = document.querySelector('.modal-dialog').offsetWidth;
+        let buttonWidth = document.querySelector('#previous_clip').offsetWidth;
+        let offset = (modalWidth / 2); // half the width of the modal
+        console.log(modalWidth, buttonWidth, offset)
+
+        document.querySelector('#previous_clip').style.transform = `translateX(-${offset + buttonWidth + 10}px)`;
+        document.querySelector('#next_clip').style.transform = `translateX(${offset + 10}px)`;
+    }
 </script>
 {% endblock %}

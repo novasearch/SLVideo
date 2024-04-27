@@ -10,7 +10,6 @@
     padding: 0px;
     background: none;
     border: none;
-    text-decoration: underline;
     outline: none;
     text-align: center;
 }
@@ -40,11 +39,10 @@
     text-align: left;
 }
 
-.video {
+#searched_video {
     width: 100%;
     height: 100%;
-    margin: 0px;
-    padding: 5px;
+    object-fit: cover;
 }
 
 #expression_block {
@@ -63,4 +61,11 @@
 .card:hover {
     box-shadow: 0 0 10px rgba(33, 33, 33, .5); /* Adjust as needed */
     cursor: pointer;
+}
+
+.change-clips {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }

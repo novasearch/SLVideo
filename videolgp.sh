@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=process_videos
+#SBATCH --job-name=videolgp
 # The line below writes to a logs dir inside the one where sbatch was called
 # %x will be replaced by the job name, and %j by the job id
 #SBATCH --output=logs/%x-%j.out
@@ -16,4 +16,5 @@ conda activate base
 #cd app
 
 # Run your code
-python -m app.pipeline
+# python -m app.pipeline
+flask --app app --debug run -h 0.0.0.0 -p 5432
