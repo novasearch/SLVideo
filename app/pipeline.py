@@ -55,26 +55,17 @@ def preprocess_videos():
     print("Annotations generated", flush=True)
 
     # Extract facial expressions frames
-    frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
+    #frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
     print("Extracted facial expressions frames", flush=True)
 
     facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
 
     # Generate the base frames embeddings
-    generate_embeddings.generate_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+    #generate_embeddings.generate_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
     print("Frame embeddings generated", flush=True)
 
     # Generate the average and the best frames embeddings
-    generate_embeddings.generate_average_and_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
-
-    # # Generate the average frames embeddings
-    # generate_embeddings.generate_average_frame_embeddings(facial_expressions_frames_path,
-    #                                                       EMBEDDINGS_PATH)
-    # print("Average frame embeddings generated", flush=True)
-    #
-    # # Generate the best frame embeddings
-    # generate_embeddings.generate_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
-    # print("Best frame embeddings generated", flush=True)
+    #generate_embeddings.generate_average_and_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
 
     with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:
         base_frame_embeddings = CPU_Unpickler(f).load()

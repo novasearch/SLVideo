@@ -198,8 +198,8 @@ def set_query_results(search_results, query_input):
             'start_time']
         query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['end_time'] = hit['_source'][
             'end_time']
-        query_results[hit['source']['video_id']][hit['_source']['annotation_id']]['phrase'] = hit['_source']['phrase']
-        query_results[hit['source']['video_id']][hit['_source']['annotation_id']]['similarity_score'] = hit['_score']
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['phrase'] = hit['_source']['phrase']
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['similarity_score'] = hit['_score']
 
     print_performance_metrics(query_results, query_input)
 

@@ -1,10 +1,12 @@
 # Description: This file is used to parse the eaf files and extract the data from it.
 
-import xml.etree.ElementTree as ET
 import json
 import os
+import webvtt
+import xml.etree.ElementTree as ET
 
 ANNOTATIONS_PATH = "app/static/videofiles/annotations"
+CAPTIONS_PATH = "app/static/videofiles/captions"
 
 
 def parse_eaf_files(eaf_dir):
@@ -92,3 +94,34 @@ def parse_eaf_files(eaf_dir):
             # Save the data dict as a json file
             with open(video_annotations_path, 'w') as f:
                 json.dump(data_dict, f)
+
+            generate_captions(data_dict['LP_P1 transcrição livre']['annotations'], videoname)
+
+
+def generate_captions(phrases, videoname):
+    vtt = webvtt.WebVTT()
+
+    # Loop through the captions in the JSON data
+    for caption in phrases:
+        if caption['value'] == '' or caption['value'] == None:
+            continue
+
+        c = webvtt.Caption()
+
+        c.start = convert_milliseconds_to_time_format(int(caption['start_time']))
+        c.end = convert_milliseconds_to_time_format(int(caption['end_time']))
+
+        c.text = caption['value']
+
+        vtt.captions.append(c)
+
+    captions_path = os.path.join(CAPTIONS_PATH, videoname + '.vtt')
+    vtt.save(captions_path)
+
+
+def convert_milliseconds_to_time_format(milliseconds):
+    """ Converts milliseconds to the WebVTT time format (HH:MM:SS.mmm) """
+    seconds, milliseconds = divmod(milliseconds, 1000)
+    minutes, seconds = divmod(seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+    return f"{hours:02d}:{minutes:02d}:{seconds:02d}.{milliseconds:03d}"

@@ -70,14 +70,15 @@
             </div>
             <div class="modal-body" style="padding: 0">
                 <video id="searched_video" controls>
-                    <source id="video_source" src="" type="video/mp4">
-                    Your browser does not support the video tag.
+                    <source id="video_source" src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}" type="video/mp4">
+                    <track id="video_captions" kind="captions" src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
+                           srclang="pt" label="Portuguese" default>
                 </video>
             </div>
             <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-outline-primary">Info</button>
                 <div>
-                    <button id="phrase_button" type="button" class="btn btn-primary">Play Phrase</button>
+                    <!-- <button id="phrase_button" type="button" class="btn btn-primary">Play Phrase</button> -->
                     <button id="clip_button" type="button" class="btn btn-primary">Play Expression</button>
                 </div>
             </div>
@@ -132,7 +133,7 @@
         isPlayingClip = false;
 
         modalTitle.textContent = frames[current_annotation]["annotation_value"];
-        video.src = "{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t=" + start_time;
+        video.currentTime = start_time;
 
         next_annotation = current_index + 1 < annotations.length ? frames[annotations[current_index + 1]] : null;
         previous_annotation = current_index - 1 >= 0 ? frames[annotations[current_index - 1]] : null;
@@ -164,7 +165,6 @@
         let modalWidth = document.querySelector('.modal-dialog').offsetWidth;
         let buttonWidth = document.querySelector('#previous_clip').offsetWidth;
         let offset = (modalWidth / 2); // half the width of the modal
-        console.log(modalWidth, buttonWidth, offset)
 
         document.querySelector('#previous_clip').style.transform = `translateX(-${offset + buttonWidth + 10}px)`;
         document.querySelector('#next_clip').style.transform = `translateX(${offset + 10}px)`;

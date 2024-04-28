@@ -12,12 +12,12 @@ class ObjectDetector:
         self.model = DetrForObjectDetection.from_pretrained("facebook/detr-resnet-50", revision="no_timm")
 
         # Check if a GPU is available and if so, move the model to the GPU
-        if torch.backends.mps.is_available():
+        """if torch.backends.mps.is_available():
             self.device = 'mps'
         elif torch.cuda.is_available():
             self.device = 'cuda'
         else:
-            self.device = 'cpu'
+            self.device = 'cpu'"""
 
         self.device = 'cpu'
 

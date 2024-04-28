@@ -8,12 +8,12 @@ import torch
 class Embedder():
 
     def __init__(self):
-        if torch.backends.mps.is_available():
+        """if torch.backends.mps.is_available():
             self.device = 'mps'
         elif torch.cuda.is_available():
             self.device = 'cuda'
         else:
-            self.device = 'cpu'
+            self.device = 'cpu'"""
 
         self.device = 'cpu'
 
