@@ -32,7 +32,6 @@ def query():
         query_input = request.form["query"]
         selected_field = int(request.form.get('field'))
         session['search_mode'] = request.form.get('mode')
-        session['similarity_scores'] = {}
         error = None
 
         if not query_input:
@@ -111,8 +110,7 @@ def clips_results(video):
         frames_info[annotation_id]["converted_start_time"] = converted_start_time
         converted_end_time = str(datetime.timedelta(seconds=int(query_results[annotation_id]["end_time"]) // 1000))
         frames_info[annotation_id]["converted_end_time"] = converted_end_time
-        frames_info[annotation_id]["similarity_score"] = session['similarity_scores'][
-            video + "_" + annotation_id]
+        frames_info[annotation_id]["similarity_score"] = query_results[annotation_id]["similarity_score"]
 
     if search_mode == FACIAL_EXPRESSIONS_ID:
         # Not all frames of each expression are going to be displayed
@@ -171,53 +169,23 @@ def play_selected_result(video, annotation_id):
 
 def query_frames_embeddings(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
-
     search_results = opensearch.knn_query(query_embedding.tolist(), N_RESULTS)
-    query_results = {}
-
-    for hit in search_results['hits']['hits']:
-        if hit['_source']['video_id'] not in query_results:
-            query_results[hit['_source']['video_id']] = {}
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']] = {}
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['annotation_value'] = hit['_source'][
-            'annotation_value']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['start_time'] = hit['_source'][
-            'start_time']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['end_time'] = hit['_source'][
-            'end_time']
-        session['similarity_scores'][hit['_id']] = hit['_score']
-
-    print_performance_metrics(query_results, query_input)
-
-    session['query_results'] = query_results
+    set_query_results(search_results, query_input)
 
 
 def query_average_frames_embeddings(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
-
     search_results = opensearch.knn_query_average(query_embedding.tolist(), N_RESULTS)
-    query_results = {}
-
-    for hit in search_results['hits']['hits']:
-        if hit['_source']['video_id'] not in query_results:
-            query_results[hit['_source']['video_id']] = {}
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']] = {}
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['annotation_value'] = hit['_source'][
-            'annotation_value']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['start_time'] = hit['_source'][
-            'start_time']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['end_time'] = hit['_source'][
-            'end_time']
-        session['similarity_scores'][hit['_id']] = hit['_score']
-    print_performance_metrics(query_results, query_input)
-
-    session['query_results'] = query_results
+    set_query_results(search_results, query_input)
 
 
 def query_best_frame_embedding(query_input):
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
-
     search_results = opensearch.knn_query_best(query_embedding.tolist(), N_RESULTS)
+    set_query_results(search_results, query_input)
+
+
+def set_query_results(search_results, query_input):
     query_results = {}
 
     for hit in search_results['hits']['hits']:
@@ -230,7 +198,8 @@ def query_best_frame_embedding(query_input):
             'start_time']
         query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['end_time'] = hit['_source'][
             'end_time']
-        session['similarity_scores'][hit['_id']] = hit['_score']
+        query_results[hit['source']['video_id']][hit['_source']['annotation_id']]['phrase'] = hit['_source']['phrase']
+        query_results[hit['source']['video_id']][hit['_source']['annotation_id']]['similarity_score'] = hit['_score']
 
     print_performance_metrics(query_results, query_input)
 
@@ -255,7 +224,8 @@ def query_true_expression(query_input):
                         query_results[video][annotation["annotation_id"]]['annotation_value'] = annotation["value"]
                         query_results[video][annotation["annotation_id"]]['start_time'] = annotation["start_time"]
                         query_results[video][annotation["annotation_id"]]['end_time'] = annotation["end_time"]
-                        session['similarity_scores'][video + "_" + annotation["annotation_id"]] = "N/A"
+                        query_results[video][annotation["annotation_id"]]['phrase'] = annotation["phrase"]
+                        query_results[video][annotation["annotation_id"]]['similarity_score'] = "N/A"
 
     session['query_results'] = query_results
 

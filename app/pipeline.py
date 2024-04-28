@@ -33,7 +33,7 @@ class CPU_Unpickler(pickle.Unpickler):
 
 def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
             base_frame_embedding, average_frame_embedding, best_frame_embedding,
-            start_time: int, end_time: int):
+            start_time: int, end_time: int, phrase: str):
     return {
         "video_id": video_id,
         "annotation_id": annotation_id,
@@ -42,7 +42,8 @@ def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
         "average_frame_embedding": average_frame_embedding,
         "best_frame_embedding": best_frame_embedding,
         "start_time": start_time,
-        "end_time": end_time
+        "end_time": end_time,
+        "phrase": phrase
     }
 
 
@@ -109,6 +110,7 @@ def preprocess_videos():
                 annotation_value = annotation["value"]
                 start_time = annotation["start_time"]
                 end_time = annotation["end_time"]
+                phrase = annotation["phrase"]
 
                 doc = gen_doc(
                     video_id=video_id,
@@ -118,7 +120,8 @@ def preprocess_videos():
                     average_frame_embedding=average_frame_embeddings[video_id][annotation_id].tolist(),
                     best_frame_embedding=best_frame_embeddings[video_id][annotation_id].tolist(),
                     start_time=start_time,
-                    end_time=end_time
+                    end_time=end_time,
+                    phrase=phrase
                 )
 
                 # opensearch.index_if_not_exists(doc)

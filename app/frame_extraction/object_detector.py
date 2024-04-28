@@ -19,6 +19,8 @@ class ObjectDetector:
         else:
             self.device = 'cpu'
 
+        self.device = 'cpu'
+
         print("Person Detector's Device: ", self.device, flush=True)
 
         self.model = self.model.to(self.device)

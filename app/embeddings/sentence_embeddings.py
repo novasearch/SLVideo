@@ -15,6 +15,8 @@ class Embedder():
         else:
             self.device = 'cpu'
 
+        self.device = 'cpu'
+
         print("Embedder's Device: ", self.device, flush=True)
 
         self.model = SentenceTransformer('clip-ViT-B-32', device=self.device)

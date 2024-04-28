@@ -62,12 +62,9 @@ class LGPOpenSearch:
                     "end_time": {
                         "type": "integer"
                     },
-                    # "vid_path": {
-                    #    "type": "keyword"
-                    # }
-                    # "expr_class": {
-                    #    "type": "text"
-                    # }
+                    "phrase": {
+                        'type': 'text'
+                    }
                 }
             }
         }
