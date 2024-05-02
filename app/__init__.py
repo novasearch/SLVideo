@@ -33,7 +33,7 @@ app.register_blueprint(query.bp)
 
 app.add_url_rule("/", endpoint="query")
 
-from . import pipeline
-pipeline.preprocess_videos()
+# from . import preprocess
+# preprocess.preprocess_videos()
 
 

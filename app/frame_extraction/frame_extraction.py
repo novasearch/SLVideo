@@ -2,7 +2,7 @@ import datetime
 import os
 import json
 import subprocess
-import concurrent.futures
+from concurrent.futures import ThreadPoolExecutor
 
 from app.frame_extraction.object_detector import ObjectDetector
 
@@ -35,7 +35,7 @@ def extract_frames(videos_dir, frames_dir, annotations_dir):
 
         extract_facial_expressions_frames(video_path, video_facial_expressions_dir, annotation_path)
 
-        extract_phrases_frames(video_path, video_phrases_dir, annotation_path)
+        # extract_phrases_frames(video_path, video_phrases_dir, annotation_path)
 
 
 def extract_facial_expressions_frames(video_path, facial_expressions_dir, annotation_path):
@@ -63,8 +63,11 @@ def extract_facial_expressions_frames(video_path, facial_expressions_dir, annota
                 expression_dir = os.path.join(facial_expressions_dir, f"{annotation_id}")
                 os.makedirs(expression_dir, exist_ok=True)
 
+                video_name, _ = os.path.splitext(os.path.basename(video_path))
+
                 # Extract the facial expressions frames from the video
                 command = ["ffmpeg",
+                           "-loglevel", "error",  # suppress the output
                            "-i", video_path,  # input file
                            "-ss", start_time_str,  # start time
                            "-to", end_time_str,  # end time
@@ -72,15 +75,18 @@ def extract_facial_expressions_frames(video_path, facial_expressions_dir, annota
                            os.path.join(expression_dir, f"{annotation_id}_%02d.png")  # output file
                            ]
 
+                print(video_name, "-", facial_expression["annotation_id"], "|| Extraction Started", flush=True)
                 subprocess.call(command)
+                print(video_name, "-", facial_expression["annotation_id"], "|| Extraction Finished", flush=True)
 
-    # Crop the extracted frames to contain only the person
-    for expression_dir in os.listdir(facial_expressions_dir):
-        expression_dir_path = os.path.join(facial_expressions_dir, expression_dir)
+                # Crop the extracted frames to contain only the person
 
-        for frame in os.listdir(expression_dir_path):
-            frame_path = os.path.join(expression_dir_path, frame)
-            od.detect_person(frame_path)
+                # Prepend the directory path to each filename in expression_dir
+                image_paths = [os.path.join(expression_dir, image_path) for image_path in os.listdir(expression_dir)]
+
+                od.detect_person(image_paths)
+                # with ThreadPoolExecutor() as executor:
+                #    executor.submit(od.detect_person, os.listdir(expression_dir))
 
 
 def extract_phrases_frames(video_path, phrases_dir, annotation_path):
@@ -106,8 +112,12 @@ def extract_phrases_frames(video_path, phrases_dir, annotation_path):
                 annotation_dir = os.path.join(phrases_dir, f"{annotation_id}")
                 os.makedirs(annotation_dir, exist_ok=True)
 
+                print("Extracting phrases frames from video", video_path, "of annotation", phrase["annotation_id"],
+                      flush=True)
+
                 # Extract the phrase middle frame from the video
                 command = ["ffmpeg",
+                           "-loglevel", "error",  # suppress the output
                            "-i", video_path,  # input file
                            "-ss", middle_time_str,  # start time
                            "-vframes", "1",  # output one frame
