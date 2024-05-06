@@ -53,10 +53,17 @@ def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
 eaf_parser.parse_eaf_files(EAF_PATH)
 print("Annotations generated", flush=True)
 
+import time
+start = time.time()
+
 # Extract facial expressions frames
 frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
 print("Extracted facial expressions frames", flush=True)
 
+end = time.time()
+print(f"Total time taken: {end - start} seconds", flush=True)
+
+"""
 facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
 
 # Generate the base frames embeddings
@@ -117,4 +124,6 @@ for video_id in os.listdir(facial_expressions_frames_path):
             # opensearch.index_if_not_exists(doc)
             opensearch.delete_doc_and_index(doc)
 
-print("Finished processing videos", flush=True)
+print("Finished processing videos", flush=True) """
+
+print("Finished extracting and cropping frames", flush=True)
