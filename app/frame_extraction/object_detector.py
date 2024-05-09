@@ -1,10 +1,9 @@
 import math
 
-import numpy as np
+from PIL import Image
 from transformers import pipeline
 from transformers import DetrImageProcessor, DetrForObjectDetection, YolosImageProcessor, YolosForObjectDetection
 import torch
-from PIL import Image
 import os
 
 
@@ -35,7 +34,7 @@ class ObjectDetector:
         self.segmentation_model = pipeline("image-segmentation", model="briaai/RMBG-1.4", trust_remote_code=True,
                                            device=self.device)
 
-    def detect_person(self, images, images_paths):
+    def detect_person(self, images_paths):
         """ Detect a person in an image, crop the person box, detect the person in the
             cropped image using segmentation and save the cropped image """
 
@@ -49,30 +48,35 @@ class ObjectDetector:
         start = time.time()
 
         # If the images length is larger than 64, split the images into same sizes batches smaller than 64
-        if len(images) > 64:
-            n_batches = math.ceil(len(images) / 64)
-            batch_size = math.ceil(len(images) / n_batches)
-            images = [images[i:i + batch_size] for i in range(0, len(images), batch_size)]
+        if len(images_paths) > 64:
+            n_batches = math.ceil(len(images_paths) / 64)
+            batch_size = math.ceil(len(images_paths) / n_batches)
             images_paths = [images_paths[i:i + batch_size] for i in range(0, len(images_paths), batch_size)]
 
-            for images, images_paths in zip(images, images_paths):
-                cropped_images = self.detect_person_box(images)
+            for images_paths in images_paths:
+                cropped_images = self.detect_person_box(images_paths)
                 masked_images = self.detect_person_segmentation(cropped_images)
 
                 for image, image_path in zip(masked_images, images_paths):
                     image.save(image_path)
+                    image.close()
         else:
-            cropped_images = self.detect_person_box(images)
+            cropped_images = self.detect_person_box(images_paths)
             masked_images = self.detect_person_segmentation(cropped_images)
 
             for image, image_path in zip(masked_images, images_paths):
                 image.save(image_path)
+                image.close()
+
 
         end = time.time()
         print(f"{parent_name} - {base_name} || Cropping Finished in {end - start} seconds", flush=True)
 
-    def detect_person_box(self, images):
+    def detect_person_box(self, images_paths):
         """ Detect a person in an image, crop the person box and save the cropped image """
+
+        # Load the images
+        images = [Image.open(image_path) for image_path in images_paths]
 
         inputs = self.crop_processor(images=images, return_tensors="pt")
 
@@ -93,14 +97,15 @@ class ObjectDetector:
                 box = [round(i.item()) for i in box]
                 cropped_image = image.crop(box)
                 cropped_images.append(cropped_image)
-                # cropped_image.save(image_path)
+
+            image.close()
 
         return cropped_images
 
-    def detect_person_segmentation(self, images):
+    def detect_person_segmentation(self, cropped_images):
         """ Detect the person in an image using segmentation, crop the person mask and save the cropped image """
 
         # pillow_mask = self.segmentation_model(image_paths, return_mask=True)  # outputs a pillow mask
-        pillow_images = self.segmentation_model(images)  # applies mask on input and returns a pillow image
+        pillow_images = self.segmentation_model(cropped_images)  # applies mask on input and returns a pillow image
 
         return pillow_images
