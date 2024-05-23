@@ -53,15 +53,9 @@ def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
 eaf_parser.parse_eaf_files(EAF_PATH)
 print("Annotations generated", flush=True)
 
-import time
-start = time.time()
-
 # Extract facial expressions frames
-# frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
+frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
 print("Extracted facial expressions frames", flush=True)
-
-end = time.time()
-print(f"Total time taken: {end - start} seconds", flush=True)
 
 facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
 
