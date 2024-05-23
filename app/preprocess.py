@@ -57,13 +57,12 @@ import time
 start = time.time()
 
 # Extract facial expressions frames
-frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
+# frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
 print("Extracted facial expressions frames", flush=True)
 
 end = time.time()
 print(f"Total time taken: {end - start} seconds", flush=True)
 
-"""
 facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
 
 # Generate the base frames embeddings
@@ -72,6 +71,8 @@ print("Frame embeddings generated", flush=True)
 
 # Generate the average and the best frames embeddings
 generate_embeddings.generate_average_and_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+# generate_embeddings.generate_average_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+# generate_embeddings.generate_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
 
 with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:
     base_frame_embeddings = CPU_Unpickler(f).load()
@@ -85,7 +86,7 @@ with open(os.path.join(EMBEDDINGS_PATH, "best_frame_embeddings.json.embeddings")
     best_frame_embeddings = CPU_Unpickler(f).load()
 
 print("ENTERING INDEXING LOOP")
-opensearch.print_index()
+# opensearch.print_index()
 # opensearch.delete_index()
 # opensearch.create_index()
 for video_id in os.listdir(facial_expressions_frames_path):
@@ -124,6 +125,4 @@ for video_id in os.listdir(facial_expressions_frames_path):
             # opensearch.index_if_not_exists(doc)
             opensearch.delete_doc_and_index(doc)
 
-print("Finished processing videos", flush=True) """
-
-print("Finished extracting and cropping frames", flush=True)
+print("Finished processing videos", flush=True)

@@ -7,6 +7,7 @@ import torch
 from .sentence_embeddings import Embedder as SentenceEmbedder
 import os
 import pickle
+import gc
 
 st = SentenceEmbedder()
 
@@ -25,6 +26,7 @@ def generate_frame_embeddings(frames_dir, result_dir):
 
     n_embeddings = 4
     embeddings = {}
+    annotations_batch_size = 32
 
     embeddings_file = os.path.join(result_dir, 'frame_embeddings.json.embeddings')
     if os.path.exists(embeddings_file):
@@ -40,40 +42,50 @@ def generate_frame_embeddings(frames_dir, result_dir):
         video_dir = os.path.join(frames_dir, video)
         embeddings[video] = {}
 
-        for annotation in os.listdir(video_dir):
-            expression_frames_dir = os.path.join(video_dir, annotation)
-            annotation_embedding = None
+        annotations_dir = os.listdir(video_dir)
+        for i in range(0, len(annotations_dir), annotations_batch_size):
+            annotations_batch = annotations_dir[i:i + annotations_batch_size]
+            print(f"Working on annotations: {annotations_batch}", flush=True)
 
-            all_frames = os.listdir(expression_frames_dir)
+            for annotation in annotations_batch:
+                expression_frames_dir = os.path.join(video_dir, annotation)
+                annotation_embedding = None
 
-            # Select #n_embeddings frames to generate embeddings
-            if len(all_frames) <= n_embeddings:
-                step_size = 1
-            else:
-                # Calculate the step size
-                step_size = (len(all_frames) - 1) // n_embeddings + 1
+                all_frames = os.listdir(expression_frames_dir)
 
-            frames_to_encode = all_frames[::step_size]
-            frames_to_encode = frames_to_encode[:n_embeddings]
+                # Select #n_embeddings frames to generate embeddings
+                if len(all_frames) <= n_embeddings:
+                    step_size = 1
+                else:
+                    # Calculate the step size
+                    step_size = (len(all_frames) - 1) // n_embeddings + 1
 
-            for frame in frames_to_encode:
-                full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
+                frames_to_encode = all_frames[::step_size]
+                frames_to_encode = frames_to_encode[:n_embeddings]
 
-                # Skip if the path is not a file
-                if not os.path.isfile(full_path):
-                    continue
+                for frame in frames_to_encode:
+                    full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
 
-                # Initialize embeddings[video][annotation] as a zero tensor if it's not already initialized
-                if annotation_embedding is None:
-                    annotation_embedding = torch.zeros_like(st.image_encode(full_path))
+                    # Skip if the path is not a file
+                    if not os.path.isfile(full_path):
+                        continue
 
-                # generate embedding and sum it to the total embedding
-                annotation_embedding += st.image_encode(full_path)
+                    # Initialize embeddings[video][annotation] as a zero tensor if it's not already initialized
+                    if annotation_embedding is None:
+                        annotation_embedding = torch.zeros_like(st.image_encode(full_path))
 
-            embeddings[video][annotation] = annotation_embedding
+                    # generate embedding and sum it to the total embedding
+                    annotation_embedding += st.image_encode(full_path)
 
-    with open(embeddings_file, 'wb') as f:
-        pickle.dump(embeddings, f)
+                embeddings[video][annotation] = annotation_embedding
+
+                del annotation_embedding  # Delete the variable
+                torch.cuda.empty_cache()  # Free up GPU memory
+
+            with open(embeddings_file, 'wb') as f:
+                pickle.dump(embeddings, f)
+
+            gc.collect()
 
 
 def generate_average_and_best_frame_embeddings(frames_dir, result_dir):
@@ -82,6 +94,7 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir):
 
     average_embeddings_file = os.path.join(result_dir, 'average_frame_embeddings.json.embeddings')
     best_embeddings_file = os.path.join(result_dir, 'best_frame_embeddings.json.embeddings')
+    annotations_batch_size = 8
     average_embeddings = {}
     best_embeddings = {}
 
@@ -101,49 +114,59 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir):
         average_embeddings[video] = {}
         best_embeddings[video] = {}
 
-        for annotation in os.listdir(video_dir):
-            expression_frames_dir = os.path.join(video_dir, annotation)
-            total_embedding = None
-            best_embedding = None
-            best_score = -1
-            frame_count = 0
+        annotations_dir = os.listdir(video_dir)
+        for i in range(0, len(annotations_dir), annotations_batch_size):
+            annotations_batch = annotations_dir[i:i + annotations_batch_size]
+            print(f"Working on annotations: {annotations_batch}", flush=True)
 
-            for frame in os.listdir(expression_frames_dir):
-                full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
+            for annotation in annotations_batch:
+                expression_frames_dir = os.path.join(video_dir, annotation)
+                total_embedding = None
+                best_embedding = None
+                best_score = -1
+                frame_count = 0
 
-                # Skip if the path is not a file
-                if not os.path.isfile(full_path):
-                    continue
+                for frame in os.listdir(expression_frames_dir):
+                    full_path = os.path.abspath(os.path.join(expression_frames_dir, frame))
 
-                # generate embedding
-                current_embedding = st.image_encode(full_path)
+                    # Skip if the path is not a file
+                    if not os.path.isfile(full_path):
+                        continue
 
-                # calculate score based on the norm (or length) of the embedding vector
-                # the higher the norm, more intense and disctinct the expression is, the better the embedding
-                current_score = np.linalg.norm(current_embedding.detach().cpu().numpy())
+                    with torch.no_grad():  # Avoid storing computations for gradient calculation
+                        current_embedding = st.image_encode(full_path)
 
-                if current_score > best_score:
-                    best_score = current_score
-                    best_embedding = current_embedding
+                    # calculate score based on the norm (or length) of the embedding vector
+                    # the higher the norm, more intense and disctinct the expression is, the better the embedding
+                    current_score = np.linalg.norm(current_embedding.detach().cpu().numpy())
 
-                if total_embedding is None:
-                    total_embedding = current_embedding
-                else:
-                    total_embedding += current_embedding
-                frame_count += 1
+                    if current_score > best_score:
+                        best_score = current_score
+                        best_embedding = current_embedding
 
-            # calculate average embedding
-            if frame_count > 0:  # avoid division by zero
-                average_embedding = total_embedding / frame_count
-                average_embeddings[video][annotation] = average_embedding
+                    if total_embedding is None:
+                        total_embedding = current_embedding
+                    else:
+                        total_embedding += current_embedding
+                    frame_count += 1
 
-            best_embeddings[video][annotation] = best_embedding
+                # calculate average embedding
+                if frame_count > 0:  # avoid division by zero
+                    average_embedding = total_embedding / frame_count
+                    average_embeddings[video][annotation] = average_embedding
 
-    with open(average_embeddings_file, 'wb') as f:
-        pickle.dump(average_embeddings, f)
+                best_embeddings[video][annotation] = best_embedding
 
-    with open(best_embeddings_file, 'wb') as f:
-        pickle.dump(best_embeddings, f)
+                del total_embedding, best_embedding
+                torch.cuda.empty_cache()  # Free up GPU memory
+
+            with open(average_embeddings_file, 'wb') as f:
+                pickle.dump(average_embeddings, f)
+
+            with open(best_embeddings_file, 'wb') as f:
+                pickle.dump(best_embeddings, f)
+
+            gc.collect()
 
 
 # def generate_average_frame_embeddings(frames_dir, result_dir):
@@ -190,14 +213,16 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir):
 #                 average_embedding = total_embedding / frame_count
 #                 embeddings[video][annotation] = average_embedding
 #
+#             print("Done Annotation: ", annotation, flush=True)
+#
 #     with open(embeddings_file, 'wb') as f:
 #         pickle.dump(embeddings, f)
 #
 #
 # def generate_best_frame_embeddings(frames_dir, result_dir):
 #     """Generates only the best facial expression frame embedding of a video for a folder of videos.
-#         The best frame is the one with the highest norm of the embedding vector,
-#         which means the most intense and distinct facial expression frame"""
+#      The best frame is the one with the highest norm of the embedding vector,
+#      which means the most intense and distinct facial expression frame"""
 #     print("Generating best frame embeddings", flush=True)
 #
 #     embeddings_file = os.path.join(result_dir, 'best_frame_embeddings.json.embeddings')
