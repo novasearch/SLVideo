@@ -91,18 +91,21 @@
     var annotations = Object.keys(frames);
     var current_annotation, next_annotation, previous_annotation, current_index, start_time, end_time, isPlayingClip;
 
+    // Get HTML elements by their IDs
     var modal = document.getElementById('clipModal');
     var video = document.getElementById('searched_video');
     var clipButton = document.getElementById('clip_button');
     var nextClipButton = document.getElementById('next_clip');
     var previousClipButton = document.getElementById('previous_clip');
 
+    // Function to play the video clip with the retrieved facial expression
     function playClip() {
         video.currentTime = start_time;
         video.play();
         isPlayingClip = true;
     }
 
+    // Function to check the video time and pause it if it reaches the end time when the clip is playing
     function checkVideoTime() {
         if (video.currentTime >= end_time && isPlayingClip) {
             video.pause();
@@ -117,6 +120,7 @@
         positionButtons()
     });
 
+    // Function to set modal data based on the current annotation
     function setModalData() {
         current_annotation = annotations[current_index];
 
@@ -161,6 +165,7 @@
     window.addEventListener('resize', positionButtons);
     document.addEventListener('DOMContentLoaded', positionButtons);
 
+    // Function to position the next and previous buttons
     function positionButtons() {
         let modalWidth = document.querySelector('.modal-dialog').offsetWidth;
         let buttonWidth = document.querySelector('#previous_clip').offsetWidth;
