@@ -1,5 +1,3 @@
-# Description: This file is used to parse the eaf files and extract the data from it.
-
 import json
 import os
 import webvtt
@@ -10,6 +8,8 @@ CAPTIONS_PATH = "app/static/videofiles/captions"
 
 
 def parse_eaf_files(eaf_dir):
+    """ Parses the eaf files and extracts the data from it """
+
     for eaf in os.listdir(eaf_dir):
         videoname, extension = os.path.splitext(eaf)
         video_annotations_path = os.path.join(ANNOTATIONS_PATH, videoname + '.json')
@@ -22,7 +22,6 @@ def parse_eaf_files(eaf_dir):
         with open(os.path.join(eaf_dir, eaf), "r", encoding='utf-8') as file:
             file_content = file.read()
 
-            # Get the root element
             root = ET.fromstring(file_content)
 
             # Get the time slots info, cycle through them and save each time slot
@@ -99,9 +98,9 @@ def parse_eaf_files(eaf_dir):
 
 
 def generate_captions(phrases, videoname):
+    """ Generates the captions in WebVTT format from the 'LP_P1 transcrição livre' annotations """
     vtt = webvtt.WebVTT()
 
-    # Loop through the captions in the JSON data
     for caption in phrases:
         if caption['value'] == '' or caption['value'] == None:
             continue

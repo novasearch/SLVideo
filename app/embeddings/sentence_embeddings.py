@@ -6,6 +6,11 @@ import torch
 
 
 class Embedder:
+    """
+    Embedder class to encode text and image and generate its embeddings using one of two CLIP models:
+    - clip-ViT-B-32: the image and text model CLIP from OpenAI
+    - CAPIVARA: optimized for texts written in Portuguese
+    """
 
     def __init__(self):
         # Check if a GPU is available and if so, move the model to the GPU
@@ -25,10 +30,12 @@ class Embedder:
         # self.model, _, self.preprocess_val = open_clip.create_model_and_transforms('hf-hub:hiaac-nlp/CAPIVARA')
         # self.tokenizer = open_clip.get_tokenizer('hf-hub:hiaac-nlp/CAPIVARA')
 
+        # Move the model to the device
         self.model = self.model.to(self.device)
 
-    # Encode text
     def text_encode(self, text):
+        """ Encode text and generate its embeddings  using the selected model """
+
         """ clip-ViT-B-32 """
         model_output = self.model.encode(text, convert_to_tensor=True)
 
@@ -42,8 +49,9 @@ class Embedder:
 
         return model_output
 
-    # Encode image (frame extraction results)
     def image_encode(self, path):
+        """ Encode image and generate its embeddings using the selected model """
+
         image = Image.open(path)
 
         """ clip-ViT-B-32 """

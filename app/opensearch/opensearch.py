@@ -3,6 +3,7 @@ from opensearchpy import OpenSearch, OpenSearchException
 
 
 class LGPOpenSearch:
+    """ Class for managing the OpenSearch index for the Portuguese Sign Language project """
 
     def __init__(self):
         host = 'api.novasearch.org'
@@ -24,6 +25,9 @@ class LGPOpenSearch:
         )
 
     def create_index(self):
+        """
+        Create the OpenSearch index if it doesn't exist.
+        """
         index_body = {
             "settings": {
                 "index": {
@@ -85,9 +89,11 @@ class LGPOpenSearch:
             print("Index", self.index_name, "already created.")
 
     def index_exists(self):
+        """ Check if the index exists """
         return self.client.indices.exists(self.index_name)
 
     def print_index(self):
+        """ Print the index settings, mappings and number of documents """
         if self.client.indices.exists(index=self.index_name):
             print('\n----------------------------------------------------------------------------------- INDEX EXISTS')
             resp = self.client.indices.open(index=self.index_name)
@@ -106,11 +112,10 @@ class LGPOpenSearch:
             print('\n----------------------------------------------------------------------------------- INDEX #DOCs')
             print(self.client.count(index=self.index_name))
         else:
-            print('\nCreating index:')
-            response = self.create_index()
-            print(response)
+            print('\n INDEX DOES NOT EXIST')
 
     def index_if_not_exists(self, doc):
+        """ Index a document if it doesn't exist """
         try:
             self.client.create(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"], body=doc)
             return True
@@ -121,18 +126,21 @@ class LGPOpenSearch:
                 raise
 
     def delete_doc_and_index(self, doc):
+        """ Delete a document and index it again """
         if self.client.exists(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"]):
             self.client.delete(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"])
         self.client.create(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"], body=doc)
         return True
 
     def delete_index(self):
+        """ Delete the index """
         self.client.indices.delete(
             index=self.index_name
         )
         return True
 
     def knn_query(self, embedding, k):
+        """ Performs a k-nearest neighbors (k-NN) search on the base_frame_embedding field of the OpenSearch index """
         query_obj = {
             "query": {
                 "knn": {
@@ -149,6 +157,7 @@ class LGPOpenSearch:
         )
 
     def knn_query_average(self, embedding, k):
+        """ Performs a k-nearest neighbors (k-NN) search on the average_frame_embedding field of the OpenSearch index """
         query_obj = {
             "query": {
                 "knn": {
@@ -165,6 +174,7 @@ class LGPOpenSearch:
         )
 
     def knn_query_best(self, embedding, k):
+        """ Performs a k-nearest neighbors (k-NN) search on the best_frame_embedding field of the OpenSearch index """
         query_obj = {
             "query": {
                 "knn": {

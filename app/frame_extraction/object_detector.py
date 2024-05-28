@@ -8,6 +8,11 @@ import os
 
 
 class ObjectDetector:
+    """ Class for detecting a person in an image, cropping the person box, detecting the person in the
+        cropped image, removing the background and saving the cropped image. The models used are:
+        - DETR-ResNet-50 for object detection
+        - RMBG-1.4 for background removal
+    """
 
     def __init__(self):
         # Check if a GPU is available and if so, move the model to the GPU
@@ -26,12 +31,12 @@ class ObjectDetector:
         self.crop_model = self.crop_model.to(self.device)
 
         # Initialize the RMBG-1.4 model for image segmentation
-        self.segmentation_model = None  # pipeline("image-segmentation", model="briaai/RMBG-1.4", trust_remote_code=True,
-        #    device=self.device)
+        self.segmentation_model = pipeline("image-segmentation", model="briaai/RMBG-1.4", trust_remote_code=True,
+                                           device=self.device)
 
     def detect_person(self, images_paths):
         """ Detect a person in an image, crop the person box, detect the person in the
-            cropped image using segmentation and save the cropped image """
+            cropped image, remove the background and save the final image """
 
         # Extract the required parts from the image_paths for the print statements
         base_name = os.path.basename(os.path.dirname(images_paths[0]))
@@ -39,22 +44,22 @@ class ObjectDetector:
 
         print(f"{parent_name} - {base_name} || Cropping Started", flush=True)
 
-        # If the images length is larger than 64, split the images into same sizes batches smaller than 64
-        if len(images_paths) > 64:
-            n_batches = math.ceil(len(images_paths) / 64)
+        # If the images length is larger than 32, split the images into same sizes batches smaller than 32
+        if len(images_paths) > 32:
+            n_batches = math.ceil(len(images_paths) / 32)
             batch_size = math.ceil(len(images_paths) / n_batches)
             images_paths = [images_paths[i:i + batch_size] for i in range(0, len(images_paths), batch_size)]
 
             for images_paths in images_paths:
                 cropped_images = self.detect_person_box(images_paths)
-                masked_images = self.detect_person_segmentation(cropped_images)
+                masked_images = self.detect_person_remove_background(cropped_images)
 
                 for image, image_path in zip(masked_images, images_paths):
                     image.save(image_path)
                     image.close()
         else:
             cropped_images = self.detect_person_box(images_paths)
-            masked_images = self.detect_person_segmentation(cropped_images)
+            masked_images = self.detect_person_remove_background(cropped_images)
 
             for image, image_path in zip(masked_images, images_paths):
                 image.save(image_path)
@@ -78,6 +83,7 @@ class ObjectDetector:
 
         cropped_images = []
 
+        # Extract the person boxes from the results and crop the images
         for result, image in zip(results, images):
             person_boxes = [box for box, label in zip(result["boxes"], result["labels"]) if label == 1]
 
@@ -90,8 +96,8 @@ class ObjectDetector:
 
         return cropped_images
 
-    def detect_person_segmentation(self, cropped_images):
-        """ Detect the person in an image using segmentation, crop the person mask and save the cropped image """
+    def detect_person_remove_background(self, cropped_images):
+        """ Detect a person in a cropped image, remove the background and save the final image """
 
         # pillow_mask = self.segmentation_model(image_paths, return_mask=True)  # outputs a pillow mask
         pillow_images = self.segmentation_model(cropped_images)  # applies mask on input and returns a pillow image

@@ -3,9 +3,6 @@ import os
 import json
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
-
-from PIL import Image
-
 from app.frame_extraction.object_detector import ObjectDetector
 
 N_VIDEOS_TO_PROCESS = 3
@@ -19,9 +16,11 @@ def extract_frames(videos_dir, frames_dir, annotations_dir):
     """ Extract the frames from the videos and save them in the static/videofiles/frames folder. """
 
     for i, video in enumerate(os.listdir(videos_dir)):
-        if i >= N_VIDEOS_TO_PROCESS:  # Stop the loop after processing #N_VIDEOS_TO_PROCESS videos
+        # Stop the loop after processing #N_VIDEOS_TO_PROCESS videos
+        if i >= N_VIDEOS_TO_PROCESS:
             break
 
+        # Define the paths for the video, phrases frames and facial expressions frames
         video_path = os.path.join(videos_dir, video)
         videoname, extension = os.path.splitext(video)
         video_phrases_dir = os.path.join(frames_dir, PHRASES_DIR, videoname)
@@ -32,17 +31,18 @@ def extract_frames(videos_dir, frames_dir, annotations_dir):
             continue
 
         # Create the directories for the video if it doesn't exist
-        # os.makedirs(video_phrases_dir, exist_ok=True)
+        os.makedirs(video_phrases_dir, exist_ok=True)
         os.makedirs(video_facial_expressions_dir, exist_ok=True)
 
         extract_facial_expressions_frames(video_path, video_facial_expressions_dir, annotation_path)
-
-        # extract_phrases_frames(video_path, video_phrases_dir, annotation_path)
+        extract_phrases_frames(video_path, video_phrases_dir, annotation_path)
 
 
 def extract_facial_expressions_frames(video_path, facial_expressions_dir, annotation_path):
     """ Extract the facial expressions frames from the videos
-    and save them in the static/videofiles/frames folder. """
+    and save them in the static/videofiles/frames folder, using
+    threading to speed up the process.
+    """
 
     # Cycle through the annotations referring facial expressions
     with open(annotation_path, "r") as f:
@@ -52,7 +52,6 @@ def extract_facial_expressions_frames(video_path, facial_expressions_dir, annota
             with ThreadPoolExecutor(max_workers=4) as executor:
                 futures = []
                 for facial_expression in annotations[FACIAL_EXPRESSIONS_DIR]["annotations"]:
-                    # Submit the function to the executor
                     future = executor.submit(process_facial_expression, video_path, facial_expressions_dir,
                                              facial_expression)
                     futures.append(future)
@@ -63,6 +62,8 @@ def extract_facial_expressions_frames(video_path, facial_expressions_dir, annota
 
 
 def process_facial_expression(video_path, facial_expressions_dir, facial_expression):
+    """ Extract the frames of a facial expression from the video. """
+
     # Convert start and end time from milliseconds to hh:mm:ss format
     start_time_milliseconds = facial_expression["start_time"]
     start_time_seconds = int(start_time_milliseconds) / 1000  # convert milliseconds to seconds

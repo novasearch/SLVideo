@@ -3,7 +3,6 @@ import json
 import os
 import re
 
-import numpy as np
 from .embeddings import generate_embeddings
 
 from flask import (
@@ -12,12 +11,13 @@ from flask import (
 
 from .opensearch.opensearch import LGPOpenSearch
 
+# Define the paths for the frames and annotations
 FRAMES_PATH = "app/static/videofiles/frames"
 ANNOTATIONS_PATH = "app/static/videofiles/annotations"
 VIDEO_CLIP_PATH = "app/static/videofiles/mp4/videoclip.mp4"
 
-PHRASES_ID = "LP_P1 transcrição livre"
-FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"
+PHRASES_ID = "LP_P1 transcrição livre" # Annotation field for the phrases
+FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO" # Annotation field for the facial expressions
 
 N_RESULTS = 30
 
@@ -47,7 +47,7 @@ def query():
                 query_average_frames_embeddings(query_input)
             elif selected_field == 3:  # Best Frame Embedding
                 query_best_frame_embedding(query_input)
-            elif selected_field == 4:  # True Expression
+            elif selected_field == 4:  # True Expression / Ground Truth
                 query_true_expression(query_input)
 
             return redirect(url_for("query.videos_results"))
@@ -57,14 +57,14 @@ def query():
 
 @bp.route("/videos_results", methods=("GET", "POST"))
 def videos_results():
-    """Display results of query."""
+    """ Display the videos that contain the query results """
     query_results = session.get('query_results', {})
     search_mode = session.get('search_mode', 1)
 
     frames = {}
     videos_info = {}
 
-    # Get a frame for each video
+    # Collect information about the retrieved videos
     for video_id in query_results:
         annotations = query_results[video_id]
         first_annotation = list(annotations.keys())[0]
@@ -74,6 +74,7 @@ def videos_results():
         videos_info[video_id]['n_annotations'] = len(annotations)
         videos_info[video_id]['first_annotation'] = first_annotation
 
+        # Get the first frame of the first annotation to display in the results page
         frames_path = os.path.join(FRAMES_PATH, search_mode, video_id, first_annotation)
         frames[video_id] = os.listdir(frames_path)[0]
 
@@ -94,14 +95,14 @@ def videos_results():
 
 @bp.route("/clips_results/<video>", methods=("GET", "POST"))
 def clips_results(video):
-    """Display results of query."""
+    """ Display the video segments of one video that contain the query results """
     query_results = session['query_results'][video]
     search_mode = session.get('search_mode', 1)
 
     frames = {}
     frames_info = {}
 
-    # Get the searched frames
+    # Collect information about the retrieved video segments
     for annotation_id in query_results.keys():
         frames_path = os.path.join(FRAMES_PATH, search_mode, video, annotation_id)
         frames[annotation_id] = os.listdir(frames_path)
@@ -155,7 +156,10 @@ def clips_results(video):
 
 @bp.route("/results/<video>/<annotation_id>", methods=("GET", "POST"))
 def play_selected_result(video, annotation_id):
-    """ Display the video clip of the selected expression. """
+    """
+    @deprecated
+    Display the video clip of the selected expression
+    """
 
     annotation = session.get('annotation')
 
@@ -168,24 +172,28 @@ def play_selected_result(video, annotation_id):
 
 
 def query_frames_embeddings(query_input):
+    """ Get the results of the query using the frames embeddings """
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
     search_results = opensearch.knn_query(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
 
 def query_average_frames_embeddings(query_input):
+    """ Get the results of the query using the average of the frames embeddings """
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
     search_results = opensearch.knn_query_average(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
 
 def query_best_frame_embedding(query_input):
+    """ Get the results of the query using the best frame embedding """
     query_embedding = generate_embeddings.generate_query_embeddings(query_input)
     search_results = opensearch.knn_query_best(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
 
 def set_query_results(search_results, query_input):
+    """ Set the info of the query from the search results """
     query_results = {}
 
     for hit in search_results['hits']['hits']:
