@@ -15,7 +15,7 @@ This system also includes a web application developed in Flask that allows the u
 
 You just need to access this link: https://videolgp.novasearch.org/
 
-In this deployed version, the model that is being used to generate embeddings is the `clip-ViT-B-32`.
+In this deployed version, the model that is being used to generate the embeddings is `clip-ViT-B-32`.
 ### Locally
 
 To run VideoLGP in your system, first, you need to clone this repository:
