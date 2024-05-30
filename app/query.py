@@ -3,7 +3,7 @@ import json
 import os
 import re
 
-from .embeddings import generate_embeddings
+from .embeddings import embeddings_processing
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for

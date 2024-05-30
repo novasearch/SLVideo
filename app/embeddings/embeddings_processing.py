@@ -2,7 +2,7 @@ import io
 import numpy as np
 import torch
 
-from .sentence_embeddings import Embedder as SentenceEmbedder
+from .embeddings_generator import Embedder as SentenceEmbedder
 import os
 import pickle
 import gc
