@@ -1,4 +1,5 @@
 import pprint as pp
+import os
 from opensearchpy import OpenSearch, OpenSearchException
 
 
@@ -6,12 +7,12 @@ class LGPOpenSearch:
     """ Class for managing the OpenSearch index for the Portuguese Sign Language project """
 
     def __init__(self):
-        host = 'api.novasearch.org'
-        port = 443
-        user = 'pt.sign.language'  # Add your username here.
-        password = '_2@Vu6Z%a#jPv#6'  # Add your user password here. For testing only. Don't store credentials in code.
+        host = os.getenv('OPENSEARCH_HOST', 'localhost')
+        port = os.getenv('OPENSEARCH_PORT', 9200)
+        user = os.getenv('OPENSEARCH_USER', 'admin')
+        password = os.getenv('OPENSEARCH_PASSWORD', 'admin')
 
-        self.index_name = 'pt.sign.language'
+        self.index_name = user
 
         self.client = OpenSearch(
             hosts=[{'host': host, 'port': port}],
