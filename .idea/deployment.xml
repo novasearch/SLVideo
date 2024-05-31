@@ -9,6 +9,9 @@
           <mappings>
             <mapping deploy="/videolgp" local="$PROJECT_DIR$" web="/" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/python_environments/object_detectors_env" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>

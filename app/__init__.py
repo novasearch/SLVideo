@@ -27,6 +27,3 @@ from . import query
 app.register_blueprint(query.bp)
 
 app.add_url_rule("/", endpoint="query")
-
-# from . import preprocess
-# preprocess.preprocess_videos()

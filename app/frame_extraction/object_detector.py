@@ -1,8 +1,6 @@
 import math
-
 from PIL import Image
-from transformers import pipeline
-from transformers import DetrImageProcessor, DetrForObjectDetection, YolosImageProcessor, YolosForObjectDetection
+from transformers import DetrImageProcessor, DetrForObjectDetection, pipeline
 import torch
 import os
 

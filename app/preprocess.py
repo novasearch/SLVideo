@@ -1,12 +1,13 @@
 import json
 import os
 import pickle
+import subprocess
+
 import torch
 import io
 
 from .eaf_parser import eaf_parser
 from .opensearch.opensearch import LGPOpenSearch
-from .frame_extraction import frame_extraction
 from .embeddings import embeddings_processing
 
 # Define the paths for the results, videos, eaf files, annotations, frames, and embeddings
@@ -30,6 +31,18 @@ class CPU_Unpickler(pickle.Unpickler):
             return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
         else:
             return super().find_class(module, name)
+
+
+def run_in_env(script_path, env_path):
+    """ Run a script in a virtual environment """
+    activate_script = f'{env_path}\\Scripts\\activate' if os.name == 'nt' else f'source {env_path}/bin/activate'
+    print(f"Activating environment: {activate_script}", flush=True)
+    command = f"{activate_script} && python {script_path} && deactivate"
+    process = subprocess.Popen(command, shell=True, executable="/bin/bash", stderr=subprocess.PIPE)
+    _, err = process.communicate()
+    if process.returncode != 0:
+        print(f"Error occurred: {err.decode()}")
+    process.wait()
 
 
 def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
@@ -56,7 +69,9 @@ eaf_parser.parse_eaf_files(EAF_PATH)
 print("Annotations generated", flush=True)
 
 # Extract facial expressions frames
-frame_extraction.extract_frames(VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH)
+# Due to dependencies incompatibilities, this step is done in a separate environment
+run_in_env(f"app/frame_extraction/run_frame_extraction.py {VIDEO_PATH} {FRAMES_PATH} {ANNOTATIONS_PATH}",
+           "python_environments/object_detectors_env")
 print("Extracted facial expressions frames", flush=True)
 
 facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
