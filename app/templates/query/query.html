@@ -21,7 +21,7 @@
             <label for="search_mode" class="form-label">Mode:</label>
             <select class="form-select" aria-label="Search Mode" id="search_mode" name="mode">
                 <option value="GLOSA_P1_EXPRESSAO">Facial Expression</option>
-                <option value="LP_P1 transcrição livre" disabled>Phrase</option>
+                <option value="LP_P1 transcrição livre">Phrase</option>
             </select>
             <br>
             <div class="form-floating mb-3">
@@ -32,4 +32,27 @@
         </form>
     </div>
 </div>
+
+<script>
+    var search_field = document.getElementById('search_field');
+    var search_mode = document.getElementById('search_mode');
+
+    search_mode.addEventListener('change', function() {
+        if (search_mode.value === 'LP_P1 transcrição livre') {
+            search_field.innerHTML = `
+                <option value="1" disabled>Frames Embeddings</option>
+                <option value="2" disabled>Average Frames Embeddings</option>
+                <option value="3" disabled>Best Frame Embedding</option>
+                <option value="4">True Expression</option>
+            `;
+        } else {
+            search_field.innerHTML = `
+                <option value="1">Frames Embeddings</option>
+                <option value="2">Average Frames Embeddings</option>
+                <option value="3">Best Frame Embedding</option>
+                <option value="4">True Expression</option>
+            `;
+        }
+    });
+</script>
 {% endblock %}

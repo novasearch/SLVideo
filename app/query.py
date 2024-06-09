@@ -150,7 +150,7 @@ def clips_results(video):
             session['annotation'] = annotation
             return redirect(url_for("query.play_selected_result", video=video, annotation_id=selected_annotation))
 
-    return render_template("query/clips_results_modal.html", frames=frames_to_display, frames_info=frames_info,
+    return render_template("query/expressions_clips_results.html", frames=frames_to_display, frames_info=frames_info,
                            search_mode=search_mode, video=video)
 
 
@@ -173,21 +173,21 @@ def play_selected_result(video, annotation_id):
 
 def query_frames_embeddings(query_input):
     """ Get the results of the query using the frames embeddings """
-    query_embedding = generate_embeddings.generate_query_embeddings(query_input)
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input)
     search_results = opensearch.knn_query(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
 
 def query_average_frames_embeddings(query_input):
     """ Get the results of the query using the average of the frames embeddings """
-    query_embedding = generate_embeddings.generate_query_embeddings(query_input)
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input)
     search_results = opensearch.knn_query_average(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
 
 def query_best_frame_embedding(query_input):
     """ Get the results of the query using the best frame embedding """
-    query_embedding = generate_embeddings.generate_query_embeddings(query_input)
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input)
     search_results = opensearch.knn_query_best(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
