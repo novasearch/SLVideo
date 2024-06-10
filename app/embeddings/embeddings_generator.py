@@ -12,23 +12,24 @@ class Embedder:
     - CAPIVARA: optimized for texts written in Portuguese
     """
 
-    def __init__(self):
+    def __init__(self, check_gpu=True):
         # Check if a GPU is available and if so, move the model to the GPU
-        if torch.backends.mps.is_available():
-            self.device = 'mps'
-        elif torch.cuda.is_available():
-            self.device = 'cuda'
+        if check_gpu:
+            if torch.backends.mps.is_available():
+                self.device = 'mps'
+            elif torch.cuda.is_available():
+                self.device = 'cuda'
+            else:
+                self.device = 'cpu'
         else:
             self.device = 'cpu'
-
-        # self.device = 'cpu'
 
         print("Embedder's Device: ", self.device, flush=True)
 
         # self.model = SentenceTransformer('clip-ViT-B-32', device=self.device)
 
-        self.model, _, self.preprocess_val = open_clip.create_model_and_transforms('hf-hub:hiaac-nlp/CAPIVARA')
-        self.tokenizer = open_clip.get_tokenizer('hf-hub:hiaac-nlp/CAPIVARA')
+        # self.model, _, self.preprocess_val = open_clip.create_model_and_transforms('hf-hub:hiaac-nlp/CAPIVARA')
+        # self.tokenizer = open_clip.get_tokenizer('hf-hub:hiaac-nlp/CAPIVARA')
 
         # Move the model to the device
         self.model = self.model.to(self.device)

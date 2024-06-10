@@ -2,15 +2,13 @@ import io
 import numpy as np
 import torch
 
-from .embeddings_generator import Embedder as SentenceEmbedder
+from .embeddings_generator import Embedder
 import os
 import pickle
 import gc
 
-st = SentenceEmbedder()
 
-
-def generate_frame_embeddings(frames_dir, result_dir):
+def generate_frame_embeddings(frames_dir, result_dir, eb: Embedder):
     """ Generates facial expression frame embeddings for a folder of videos, choosing 4 frames
     equally spaced for each video. """
     print("Generating frame embeddings", flush=True)
@@ -63,10 +61,10 @@ def generate_frame_embeddings(frames_dir, result_dir):
 
                     # Initialize embeddings[video][annotation] as a zero tensor if it's not already initialized
                     if annotation_embedding is None:
-                        annotation_embedding = torch.zeros_like(st.image_encode(full_path))
+                        annotation_embedding = torch.zeros_like(eb.image_encode(full_path))
 
                     # generate embedding and sum it to the total embedding
-                    annotation_embedding += st.image_encode(full_path)
+                    annotation_embedding += eb.image_encode(full_path)
 
                 embeddings[video][annotation] = annotation_embedding
 
@@ -79,7 +77,7 @@ def generate_frame_embeddings(frames_dir, result_dir):
             gc.collect()
 
 
-def generate_average_and_best_frame_embeddings(frames_dir, result_dir):
+def generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb: Embedder):
     """ Generates the average and best facial expression frame embeddings of a video for a folder of videos """
     print("Generating average and best frame embeddings", flush=True)
 
@@ -125,7 +123,7 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir):
                         continue
 
                     with torch.no_grad():  # Avoid storing computations for gradient calculation
-                        current_embedding = st.image_encode(full_path)
+                        current_embedding = eb.image_encode(full_path)
 
                     # calculate score based on the norm (or length) of the embedding vector
                     # the higher the norm, more intense and distinct the expression is, the better the embedding
@@ -160,6 +158,6 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir):
             gc.collect()
 
 
-def generate_query_embeddings(query_input):
+def generate_query_embeddings(query_input, eb: Embedder):
     """ Generate the user queries embeddings """
-    return st.text_encode(query_input.lower())
+    return eb.text_encode(query_input.lower())

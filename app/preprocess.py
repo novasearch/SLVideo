@@ -24,6 +24,9 @@ FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"
 # Initialize the OpenSearch client
 opensearch = LGPOpenSearch()
 
+# Initialize the Embeddings Generator
+embedder = embeddings_processing.Embedder(check_gpu=True)
+
 
 class CPU_Unpickler(pickle.Unpickler):
     def find_class(self, module, name):
@@ -77,11 +80,11 @@ print("Extracted facial expressions frames", flush=True)
 facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
 
 # Generate the base frames embeddings
-embeddings_processing.generate_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+embeddings_processing.generate_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH, embedder)
 print("Frame embeddings generated", flush=True)
 
 # Generate the average and the best frames embeddings
-embeddings_processing.generate_average_and_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH)
+embeddings_processing.generate_average_and_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH, embedder)
 
 # Load the base, average, and best frame embeddings
 with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:

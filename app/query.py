@@ -16,13 +16,14 @@ FRAMES_PATH = "app/static/videofiles/frames"
 ANNOTATIONS_PATH = "app/static/videofiles/annotations"
 VIDEO_CLIP_PATH = "app/static/videofiles/mp4/videoclip.mp4"
 
-PHRASES_ID = "LP_P1 transcrição livre" # Annotation field for the phrases
-FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO" # Annotation field for the facial expressions
+PHRASES_ID = "LP_P1 transcrição livre"  # Annotation field for the phrases
+FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"  # Annotation field for the facial expressions
 
 N_RESULTS = 30
 
 bp = Blueprint('query', __name__)
 opensearch = LGPOpenSearch()
+embedder = embeddings_processing.Embedder(check_gpu=False)
 
 
 @bp.route("/", methods=("GET", "POST"))
@@ -154,40 +155,23 @@ def clips_results(video):
                            search_mode=search_mode, video=video)
 
 
-@bp.route("/results/<video>/<annotation_id>", methods=("GET", "POST"))
-def play_selected_result(video, annotation_id):
-    """
-    @deprecated
-    Display the video clip of the selected expression
-    """
-
-    annotation = session.get('annotation')
-
-    # Convert the timestamp to seconds
-    init_time = int(annotation["start_time"]) // 1000
-    end_time = int(annotation["end_time"]) // 1000
-
-    return render_template("query/play_expression.html", value=annotation["value"], video=video,
-                           init_time=init_time, end_time=end_time)
-
-
 def query_frames_embeddings(query_input):
     """ Get the results of the query using the frames embeddings """
-    query_embedding = embeddings_processing.generate_query_embeddings(query_input)
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
     search_results = opensearch.knn_query(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
 
 def query_average_frames_embeddings(query_input):
     """ Get the results of the query using the average of the frames embeddings """
-    query_embedding = embeddings_processing.generate_query_embeddings(query_input)
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
     search_results = opensearch.knn_query_average(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
 
 def query_best_frame_embedding(query_input):
     """ Get the results of the query using the best frame embedding """
-    query_embedding = embeddings_processing.generate_query_embeddings(query_input)
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
     search_results = opensearch.knn_query_best(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
@@ -224,6 +208,7 @@ def query_true_expression(query_input):
         with open(os.path.join(ANNOTATIONS_PATH, f"{video}.json"), "r") as f:
             video_annotations = json.load(f)
             if search_mode in video_annotations:
+                print("AAAAAAAAAAAAAAAAAAAAAAAAAAA")
                 for annotation in video_annotations[search_mode]["annotations"]:
                     if annotation["value"] is not None and pattern.search(annotation["value"]):
                         if video not in query_results:
