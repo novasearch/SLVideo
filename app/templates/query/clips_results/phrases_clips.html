@@ -1,0 +1,37 @@
+{% extends 'query/clips_results.html' %}
+
+{% block annotations_loop %}
+{% for annotation in frames %}
+<div class="d-flex justify-content-center">
+    <form action="{{ url_for('query.clips_results', video=video) }}" method="post" style="width: 75%">
+        <div class="card mb-2 w-100 border-secondary mx-auto" style="cursor: pointer" data-bs-toggle="modal"
+             data-bs-target="#clipModal" data-bs-whatever="{{ annotation }}">
+            <div class="row g-0 border-bottom border-secondary border-opacity-25">
+                <p class="match_score">{{ loop.index }}º Match - Similarity Score {{
+                    frames_info[annotation]["similarity_score"] }}</p>
+            </div>
+            <div class="row g-0" style="display: flex">
+                <div class="col-md-4"
+                     style="height: 9rem; display: flex; align-items: center; justify-content: center;">
+                    <div class="card-body">
+                        <input type="hidden" name="selected_annotation" value="{{ annotation }}">
+                        <p class="expression">{{ frames_info[annotation]["annotation_value"] }}</p>
+                        <p class="expression_description">Video: {{ video }} ; Timestamp: {{
+                            frames_info[annotation]["converted_start_time"]}}</p>
+                    </div>
+                </div>
+                <div class="col-md-8" style="height: 9rem;">
+                    <div class="card-body d-flex justify-content-between align-items-center" style="height: 100%;">
+                        {% for frame in frames[annotation] %}
+                        <img style="object-fit: contain; height: 110%;"
+                             src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + annotation +'/' + frame) }}"
+                             alt="Not Found">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endfor %}
+{% endblock %}

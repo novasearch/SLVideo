@@ -133,27 +133,17 @@ def clips_results(video):
 
             # Ensure that only num_frames_to_display frames are selected
             frames_to_display[expression] = frames_to_display[expression][:num_frames_to_display]
+
+        return render_template("query/clips_results/expressions_clips.html", frames=frames_to_display,
+                               frames_info=frames_info,
+                               search_mode=search_mode, video=video)
     else:
         # If the frames are not the facial expression's ones then it just has one frame per result
         frames_to_display = frames
 
-    if request.method == "POST":
-        selected_annotation = request.form.get("selected_annotation")
-        annotation = frames_info[selected_annotation]
-        error = None
-
-        if not selected_annotation:
-            error = "Expression is required."
-
-        if error is not None:
-            flash(error)
-        else:
-            session['annotation'] = annotation
-            return redirect(url_for("query.play_selected_result", video=video, annotation_id=selected_annotation))
-
-    return render_template("query/expressions_clips_results.html", frames=frames_to_display, frames_info=frames_info,
-                           search_mode=search_mode, video=video)
-
+        return render_template("query/clips_results/phrases_clips.html", frames=frames_to_display,
+                               frames_info=frames_info,
+                               search_mode=search_mode, video=video)
 
 def query_frames_embeddings(query_input):
     """ Get the results of the query using the frames embeddings """
