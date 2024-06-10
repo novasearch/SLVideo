@@ -50,6 +50,11 @@ And choose the address and port to run on:
 flask --app app run -h X.X.X.X -p XXXX
 ```
 ## Folder Structure
+
+The `object_detectors_env` folder is the conda environment that contains the necessary libraries to run the object detection models.
+
+The `app` folder contains all the scripts and files needed to run the VideoLGP web application. Here is a brief description of each folder and script:
+
 #### `eaf_parser`
 This folder contains the script responsible for parsing the **EAF** files
 - `eaf_parser.py`: Iterates through the available EAF files (one for each annotated video), parses the relevant info into JSON files and creates the video captions files
@@ -61,8 +66,9 @@ This folder contains the scripts responsible for generating embeddings for text 
 
 #### `frame_extraction`
 This folder contains the scripts responsible for extracting and cropping the video frames
-- `frame_extraction.py`: Iterates through the videos and respective annotations and extracts the frames where is being performed a sign in which the facial expression has a big role and one frame for each phrase
+- `frame_extractor.py`: Iterates through the videos and respective annotations and extracts the frames where is being performed a sign in which the facial expression has a big role and one frame for each phrase
 - `object_detector.py`: Has the functions responsible for cropping and removing the background of the extracted frames to only have the person. This is where the cropping and background removal models are defined
+- `run_frame_extraction.py`: Script used to run the frame extraction process in the object_detectors_env environment
 
 #### `opensearch`
 This folder contains the script responsible for the OpenSearch index

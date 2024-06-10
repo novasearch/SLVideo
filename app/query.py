@@ -202,13 +202,12 @@ def query_true_expression(query_input):
     """ Get the results of the query using the ground truth """
     query_results = {}
     search_mode = session.get('search_mode', 1)
-    pattern = re.compile(r'(^|\[|_|]){}($|\]|_|)'.format(query_input.lower()), re.IGNORECASE)
+    pattern = re.compile(r'(^|\b|\[|_|]){}($|\b|\]|_|)'.format(query_input.lower()), re.IGNORECASE)
 
     for video in os.listdir(os.path.join(FRAMES_PATH, search_mode)):
         with open(os.path.join(ANNOTATIONS_PATH, f"{video}.json"), "r") as f:
             video_annotations = json.load(f)
             if search_mode in video_annotations:
-                print("AAAAAAAAAAAAAAAAAAAAAAAAAAA")
                 for annotation in video_annotations[search_mode]["annotations"]:
                     if annotation["value"] is not None and pattern.search(annotation["value"]):
                         if video not in query_results:
@@ -217,7 +216,8 @@ def query_true_expression(query_input):
                         query_results[video][annotation["annotation_id"]]['annotation_value'] = annotation["value"]
                         query_results[video][annotation["annotation_id"]]['start_time'] = annotation["start_time"]
                         query_results[video][annotation["annotation_id"]]['end_time'] = annotation["end_time"]
-                        query_results[video][annotation["annotation_id"]]['phrase'] = annotation["phrase"]
+                        if search_mode == FACIAL_EXPRESSIONS_ID:
+                            query_results[video][annotation["annotation_id"]]['phrase'] = annotation["phrase"]
                         query_results[video][annotation["annotation_id"]]['similarity_score'] = "N/A"
 
     session['query_results'] = query_results
