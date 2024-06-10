@@ -12,9 +12,10 @@ class Embedder:
     - CAPIVARA: optimized for texts written in Portuguese
     """
 
-    def __init__(self, check_gpu=True):
-        # Check if a GPU is available and if so, move the model to the GPU
+    def __init__(self, check_gpu):
+
         if check_gpu:
+            # Check if a GPU is available and if so, move the model to the GPU
             if torch.backends.mps.is_available():
                 self.device = 'mps'
             elif torch.cuda.is_available():
@@ -26,7 +27,7 @@ class Embedder:
 
         print("Embedder's Device: ", self.device, flush=True)
 
-        # self.model = SentenceTransformer('clip-ViT-B-32', device=self.device)
+        self.model = SentenceTransformer('clip-ViT-B-32', device=self.device)
 
         # self.model, _, self.preprocess_val = open_clip.create_model_and_transforms('hf-hub:hiaac-nlp/CAPIVARA')
         # self.tokenizer = open_clip.get_tokenizer('hf-hub:hiaac-nlp/CAPIVARA')
@@ -38,11 +39,11 @@ class Embedder:
         """ Encode text and generate its embeddings  using the selected model """
 
         """ clip-ViT-B-32 """
-        # model_output = self.model.encode(text, convert_to_tensor=True)
+        model_output = self.model.encode(text, convert_to_tensor=True)
 
         """ CAPIVARA """
-        text = self.tokenizer(text)
-        model_output = self.model.encode_text(text)
+        # text = self.tokenizer(text)
+        # model_output = self.model.encode_text(text)
 
         # Flatten the tensor if it's more than 1D
         if model_output.dim() > 1:
@@ -56,12 +57,12 @@ class Embedder:
         image = Image.open(path)
 
         """ clip-ViT-B-32 """
-        # model_output = self.model.encode(image, convert_to_tensor=True)
+        model_output = self.model.encode(image, convert_to_tensor=True)
 
         """ CAPIVARA """
-        image = self.preprocess_val(image).unsqueeze(0)
-        image = image.to(self.device)  # Move the inputs to the GPU
-        model_output = self.model.encode_image(image)
+        # image = self.preprocess_val(image).unsqueeze(0)
+        # image = image.to(self.device)  # Move the inputs to the GPU
+        # model_output = self.model.encode_image(image)
 
         # Flatten the tensor if it's more than 1D
         if model_output.dim() > 1:
