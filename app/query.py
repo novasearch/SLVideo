@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import datetime
 import json
 import os
@@ -19,7 +20,7 @@ VIDEO_CLIP_PATH = "app/static/videofiles/mp4/videoclip.mp4"
 PHRASES_ID = "LP_P1 transcrição livre"  # Annotation field for the phrases
 FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"  # Annotation field for the facial expressions
 
-N_RESULTS = 30
+N_RESULTS = 10
 
 bp = Blueprint('query', __name__)
 opensearch = LGPOpenSearch()
@@ -59,8 +60,11 @@ def query():
 @bp.route("/videos_results", methods=("GET", "POST"))
 def videos_results():
     """ Display the videos that contain the query results """
-    query_results = session.get('query_results', {})
+    query_results = session.get('query_results')
     search_mode = session.get('search_mode', 1)
+
+    # Sort the query results by the number of annotations
+    query_results = OrderedDict(sorted(query_results.items(), key=lambda x: len(x[1]), reverse=True))
 
     frames = {}
     videos_info = {}
@@ -97,14 +101,17 @@ def videos_results():
 @bp.route("/clips_results/<video>", methods=("GET", "POST"))
 def clips_results(video):
     """ Display the video segments of one video that contain the query results """
-    query_results = session['query_results'][video]
+    query_results = session.get('query_results')[video]
     search_mode = session.get('search_mode', 1)
+
+    # Sort the query results by similarity score
+    query_results = OrderedDict(sorted(query_results.items(), key=lambda x: x[1]['similarity_score'], reverse=True))
 
     frames = {}
     frames_info = {}
 
     # Collect information about the retrieved video segments
-    for annotation_id in query_results.keys():
+    for annotation_id in query_results:
         frames_path = os.path.join(FRAMES_PATH, search_mode, video, annotation_id)
         frames[annotation_id] = os.listdir(frames_path)
         frames_info[annotation_id] = query_results[annotation_id]
@@ -137,13 +144,15 @@ def clips_results(video):
         return render_template("query/clips_results/expressions_clips.html", frames=frames_to_display,
                                frames_info=frames_info,
                                search_mode=search_mode, video=video)
-    else:
-        # If the frames are not the facial expression's ones then it just has one frame per result
+    elif search_mode == PHRASES_ID:
+
+        # Display all frames of each phrase
         frames_to_display = frames
 
         return render_template("query/clips_results/phrases_clips.html", frames=frames_to_display,
                                frames_info=frames_info,
                                search_mode=search_mode, video=video)
+
 
 def query_frames_embeddings(query_input):
     """ Get the results of the query using the frames embeddings """
@@ -185,7 +194,9 @@ def set_query_results(search_results, query_input):
 
     print_performance_metrics(query_results, query_input)
 
+    # Convert the dictionary to a list of tuples and store it in the session
     session['query_results'] = query_results
+    print(session['query_results'])
 
 
 def query_true_expression(query_input):
