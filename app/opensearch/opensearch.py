@@ -33,7 +33,10 @@ class LGPOpenSearch:
             "settings": {
                 "index": {
                     "knn": "true",
-                    "knn.space_type": "cosinesimil"
+                    "knn.space_type": "cosinesimil",
+                    "knn.algo_param.ef_search": 100,
+                    "number_of_shards": 1,
+                    "number_of_replicas": 0
                 }
             },
             "mappings": {
@@ -51,15 +54,42 @@ class LGPOpenSearch:
                     },
                     "base_frame_embedding": {
                         'dimension': 512,
-                        'type': 'knn_vector'
+                        'type': 'knn_vector',
+                        "method": {
+                            "name": "hnsw",
+                            "space_type": "l2",
+                            "engine": "lucene",
+                            "parameters": {
+                                "ef_construction": 100,
+                                "m": 16
+                            }
+                        }
                     },
                     "average_frame_embedding": {
                         'dimension': 512,
-                        'type': 'knn_vector'
+                        'type': 'knn_vector',
+                        "method": {
+                            "name": "hnsw",
+                            "space_type": "l2",
+                            "engine": "lucene",
+                            "parameters": {
+                                "ef_construction": 100,
+                                "m": 16
+                            }
+                        }
                     },
                     "best_frame_embedding": {
                         'dimension': 512,
-                        'type': 'knn_vector'
+                        'type': 'knn_vector',
+                        "method": {
+                            "name": "hnsw",
+                            "space_type": "l2",
+                            "engine": "lucene",
+                            "parameters": {
+                                "ef_construction": 100,
+                                "m": 16
+                            }
+                        }
                     },
                     "start_time": {
                         "type": "integer"
@@ -144,10 +174,15 @@ class LGPOpenSearch:
         """ Performs a k-nearest neighbors (k-NN) search on the base_frame_embedding field of the OpenSearch index """
         query_obj = {
             "query": {
-                "knn": {
-                    "base_frame_embedding": {
-                        "vector": embedding,
-                        "k": k
+                "bool": {
+                    "should": {
+                        "knn": {
+                            "base_frame_embedding": {
+                                "vector": embedding,
+                                "k": k
+                            }
+                        }
+
                     }
                 }
             }
@@ -158,13 +193,18 @@ class LGPOpenSearch:
         )
 
     def knn_query_average(self, embedding, k):
-        """ Performs a k-nearest neighbors (k-NN) search on the average_frame_embedding field of the OpenSearch index """
+        """ Performs a k-nearest neighbors (k-NN) search on the average_frame_embedding field of the OpenSearch index"""
         query_obj = {
             "query": {
-                "knn": {
-                    "average_frame_embedding": {
-                        "vector": embedding,
-                        "k": k
+                "bool": {
+                    "should": {
+                        "knn": {
+                            "average_frame_embedding": {
+                                "vector": embedding,
+                                "k": k
+                            }
+                        }
+
                     }
                 }
             }
@@ -178,10 +218,15 @@ class LGPOpenSearch:
         """ Performs a k-nearest neighbors (k-NN) search on the best_frame_embedding field of the OpenSearch index """
         query_obj = {
             "query": {
-                "knn": {
-                    "best_frame_embedding": {
-                        "vector": embedding,
-                        "k": k
+                "bool": {
+                    "should": {
+                        "knn": {
+                            "best_frame_embedding": {
+                                "vector": embedding,
+                                "k": k
+                            }
+                        }
+
                     }
                 }
             }

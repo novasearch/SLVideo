@@ -35,7 +35,6 @@ def generate_frame_embeddings(frames_dir, result_dir, eb: Embedder):
         annotations_dir = os.listdir(video_dir)
         for i in range(0, len(annotations_dir), annotations_batch_size):
             annotations_batch = annotations_dir[i:i + annotations_batch_size]
-            print(f"Working on annotations: {annotations_batch}", flush=True)
 
             for annotation in annotations_batch:
                 expression_frames_dir = os.path.join(video_dir, annotation)
