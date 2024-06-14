@@ -44,7 +44,7 @@ You can also run in debug mode:
 flask --app app --debug run
 ```
 
-And choose the address and port to run on:
+And choose the host's address and port to run on:
 
 ```sh
 flask --app app run -h X.X.X.X -p XXXX

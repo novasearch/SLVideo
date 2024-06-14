@@ -1,4 +1,6 @@
 import io
+import json
+
 import numpy as np
 import torch
 
@@ -6,6 +8,19 @@ from .embeddings_generator import Embedder
 import os
 import pickle
 import gc
+
+
+def generate_video_embeddings(frames_dir, annotations_dir, facial_expressions_id, result_dir, eb: Embedder):
+    """ Generates all the embeddings for a folder of video frames """
+
+    generate_frame_embeddings(frames_dir, result_dir, eb)
+    print("Frame embeddings generated", flush=True)
+
+    generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb)
+    print("Average and best frame embeddings generated", flush=True)
+
+    generate_expressions_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb)
+    print("Annotations embeddings generated", flush=True)
 
 
 def generate_frame_embeddings(frames_dir, result_dir, eb: Embedder):
@@ -155,6 +170,48 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb: Embed
                 pickle.dump(best_embeddings, f)
 
             gc.collect()
+
+
+def generate_expressions_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb: Embedder):
+    """ Generate the embeddings for all the facial expressions annotations' values """
+    print("Generating annotations embeddings", flush=True)
+
+    embeddings = {}
+
+    embeddings_file = os.path.join(result_dir, 'annotations_embeddings.json.embeddings')
+    if os.path.exists(embeddings_file):
+        with open(embeddings_file, 'rb') as f:
+            embeddings = pickle.load(f)
+
+    for video_annotations in os.listdir(annotations_dir):
+
+        video_name = video_annotations.split(".")[0]
+
+        if video_name in embeddings:
+            continue
+
+        print(f"Working on {video_annotations}", flush=True)
+
+        annotation_json = os.path.join(annotations_dir, video_annotations)
+
+        embeddings[video_name] = {}
+
+        with open(annotation_json, 'r') as f:
+            annotations = json.load(f)
+
+            if facial_expressions_id not in annotations:
+                continue
+
+            expressions = annotations[facial_expressions_id]["annotations"]
+
+            for expression in expressions:
+                annotation_id = expression["annotation_id"]
+                annotation_value = expression["value"]
+
+                embeddings[video_name][annotation_id] = eb.text_encode(annotation_value.lower())
+
+    with open(embeddings_file, 'wb') as f:
+        pickle.dump(embeddings, f)
 
 
 def generate_query_embeddings(query_input, eb: Embedder):

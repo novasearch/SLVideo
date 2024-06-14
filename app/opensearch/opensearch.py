@@ -33,10 +33,7 @@ class LGPOpenSearch:
             "settings": {
                 "index": {
                     "knn": "true",
-                    "knn.space_type": "cosinesimil",
-                    "knn.algo_param.ef_search": 100,
-                    "number_of_shards": 1,
-                    "number_of_replicas": 0
+                    "knn.space_type": "cosinesimil"
                 }
             },
             "mappings": {
@@ -58,11 +55,7 @@ class LGPOpenSearch:
                         "method": {
                             "name": "hnsw",
                             "space_type": "l2",
-                            "engine": "lucene",
-                            "parameters": {
-                                "ef_construction": 100,
-                                "m": 16
-                            }
+                            "engine": "faiss"
                         }
                     },
                     "average_frame_embedding": {
@@ -71,11 +64,7 @@ class LGPOpenSearch:
                         "method": {
                             "name": "hnsw",
                             "space_type": "l2",
-                            "engine": "lucene",
-                            "parameters": {
-                                "ef_construction": 100,
-                                "m": 16
-                            }
+                            "engine": "faiss"
                         }
                     },
                     "best_frame_embedding": {
@@ -84,11 +73,7 @@ class LGPOpenSearch:
                         "method": {
                             "name": "hnsw",
                             "space_type": "l2",
-                            "engine": "lucene",
-                            "parameters": {
-                                "ef_construction": 100,
-                                "m": 16
-                            }
+                            "engine": "faiss"
                         }
                     },
                     "start_time": {
