@@ -97,7 +97,9 @@ with open(os.path.join(EMBEDDINGS_PATH, "best_frame_embeddings.json.embeddings")
 with open(os.path.join(EMBEDDINGS_PATH, "annotations_embeddings.json.embeddings"), "rb") as f:
     annotations_embeddings = CPU_Unpickler(f).load()
 
-print("ENTERING INDEXING LOOP")
+print("ENTERING INDEXING LOOP", flush=True)
+# opensearch.delete_index()
+# opensearch.create_index()
 for video_id in os.listdir(facial_expressions_frames_path):
 
     # Read annotations
