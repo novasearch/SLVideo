@@ -1,6 +1,6 @@
 # VideoLGP
 
-<img src="videolgp_overview.png">
+<img src="static/images/system_overview.png">
 
 This is the official GitHub repo for the paper "VideoLGP: A Sign Language Video Moment Retrieval Open Framework".
 
