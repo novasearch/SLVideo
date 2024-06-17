@@ -229,3 +229,25 @@ class LGPOpenSearch:
             body=query_obj,
             index=self.index_name
         )
+
+    def knn_query_annotations(self, embedding, k):
+        """ Performs a k-nearest neighbors (k-NN) search on the annotation_embedding field of the OpenSearch index """
+        query_obj = {
+            "query": {
+                "bool": {
+                    "should": {
+                        "knn": {
+                            "annotation_embedding": {
+                                "vector": embedding,
+                                "k": k
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return self.client.search(
+            body=query_obj,
+            index=self.index_name
+        )
