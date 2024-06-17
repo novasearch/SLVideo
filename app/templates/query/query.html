@@ -15,7 +15,8 @@
                 <option value="1">Frames Embeddings</option>
                 <option value="2">Average Frames Embeddings</option>
                 <option value="3">Best Frame Embedding</option>
-                <option value="4">True Expression</option>
+                <option value="4">Annotation's Embeddings</option>
+                <option value="5">True Expression</option>
             </select>
             <br>
             <label for="search_mode" class="form-label">Mode:</label>
@@ -43,14 +44,16 @@
                 <option value="1" disabled>Frames Embeddings</option>
                 <option value="2" disabled>Average Frames Embeddings</option>
                 <option value="3" disabled>Best Frame Embedding</option>
-                <option value="4">True Expression</option>
+                <option value="4" disabled>Annotation's Embeddings</option>
+                <option value="5">True Expression</option>
             `;
         } else {
             search_field.innerHTML = `
                 <option value="1">Frames Embeddings</option>
                 <option value="2">Average Frames Embeddings</option>
                 <option value="3">Best Frame Embedding</option>
-                <option value="4">True Expression</option>
+                <option value="4">Annotations Embeddings</option>
+                <option value="5">True Expression</option>
             `;
         }
     });

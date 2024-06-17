@@ -47,9 +47,11 @@ def query():
                 query_frames_embeddings(query_input)
             elif selected_field == 2:  # Average Frames Embeddings
                 query_average_frames_embeddings(query_input)
-            elif selected_field == 3:  # Best Frame Embedding
+            elif selected_field == 3:  # Best Frame Embeddings
                 query_best_frame_embedding(query_input)
-            elif selected_field == 4:  # True Expression / Ground Truth
+            elif selected_field == 4:  # Annotations Embeddings
+                query_annotations_embeddings(query_input)
+            elif selected_field == 5:  # True Expression / Ground Truth
                 query_true_expression(query_input)
 
             return redirect(url_for("query.videos_results"))
@@ -172,6 +174,13 @@ def query_best_frame_embedding(query_input):
     """ Get the results of the query using the best frame embedding """
     query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
     search_results = opensearch.knn_query_best(query_embedding.tolist(), N_RESULTS)
+    set_query_results(search_results, query_input)
+
+
+def query_annotations_embeddings(query_input):
+    """ Get the results of the query using the annotations embeddings """
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
+    search_results = opensearch.knn_query_annotations(query_embedding.tolist(), N_RESULTS)
     set_query_results(search_results, query_input)
 
 
