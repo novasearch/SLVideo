@@ -19,7 +19,7 @@ def generate_video_embeddings(frames_dir, annotations_dir, facial_expressions_id
     generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb)
     print("Average and best frame embeddings generated", flush=True)
 
-    generate_expressions_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb)
+    generate_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb)
     print("Annotations embeddings generated", flush=True)
 
 
@@ -172,7 +172,7 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb: Embed
             gc.collect()
 
 
-def generate_expressions_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb: Embedder):
+def generate_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb: Embedder):
     """ Generate the embeddings for all the facial expressions annotations' values """
     print("Generating annotations embeddings", flush=True)
 

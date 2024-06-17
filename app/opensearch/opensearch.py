@@ -76,6 +76,15 @@ class LGPOpenSearch:
                             "engine": "faiss"
                         }
                     },
+                    "annotation_embedding": {
+                        'dimension': 512,
+                        'type': 'knn_vector',
+                        "method": {
+                            "name": "hnsw",
+                            "space_type": "l2",
+                            "engine": "faiss"
+                        }
+                    },
                     "start_time": {
                         "type": "integer"
                     },
