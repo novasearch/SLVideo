@@ -33,10 +33,7 @@ class LGPOpenSearch:
             "settings": {
                 "index": {
                     "knn": "true",
-                    "knn.space_type": "cosinesimil",
-                    "knn.algo_param.ef_search": 100,
-                    "number_of_shards": 1,
-                    "number_of_replicas": 0
+                    "knn.space_type": "cosinesimil"
                 }
             },
             "mappings": {
@@ -58,11 +55,7 @@ class LGPOpenSearch:
                         "method": {
                             "name": "hnsw",
                             "space_type": "l2",
-                            "engine": "lucene",
-                            "parameters": {
-                                "ef_construction": 100,
-                                "m": 16
-                            }
+                            "engine": "faiss"
                         }
                     },
                     "average_frame_embedding": {
@@ -71,11 +64,7 @@ class LGPOpenSearch:
                         "method": {
                             "name": "hnsw",
                             "space_type": "l2",
-                            "engine": "lucene",
-                            "parameters": {
-                                "ef_construction": 100,
-                                "m": 16
-                            }
+                            "engine": "faiss"
                         }
                     },
                     "best_frame_embedding": {
@@ -84,11 +73,16 @@ class LGPOpenSearch:
                         "method": {
                             "name": "hnsw",
                             "space_type": "l2",
-                            "engine": "lucene",
-                            "parameters": {
-                                "ef_construction": 100,
-                                "m": 16
-                            }
+                            "engine": "faiss"
+                        }
+                    },
+                    "annotation_embedding": {
+                        'dimension': 512,
+                        'type': 'knn_vector',
+                        "method": {
+                            "name": "hnsw",
+                            "space_type": "l2",
+                            "engine": "faiss"
                         }
                     },
                     "start_time": {
@@ -222,6 +216,28 @@ class LGPOpenSearch:
                     "should": {
                         "knn": {
                             "best_frame_embedding": {
+                                "vector": embedding,
+                                "k": k
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return self.client.search(
+            body=query_obj,
+            index=self.index_name
+        )
+
+    def knn_query_annotations(self, embedding, k):
+        """ Performs a k-nearest neighbors (k-NN) search on the annotation_embedding field of the OpenSearch index """
+        query_obj = {
+            "query": {
+                "bool": {
+                    "should": {
+                        "knn": {
+                            "annotation_embedding": {
                                 "vector": embedding,
                                 "k": k
                             }

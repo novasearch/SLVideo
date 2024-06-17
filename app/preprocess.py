@@ -49,7 +49,7 @@ def run_in_env(script_path, env_path):
 
 
 def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
-            base_frame_embedding, average_frame_embedding, best_frame_embedding,
+            base_frame_embedding, average_frame_embedding, best_frame_embedding, annotation_embedding,
             start_time: int, end_time: int, phrase: str):
     """ Generate a document for indexing in OpenSearch """
     return {
@@ -59,6 +59,7 @@ def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
         "base_frame_embedding": base_frame_embedding,
         "average_frame_embedding": average_frame_embedding,
         "best_frame_embedding": best_frame_embedding,
+        "annotation_embedding": annotation_embedding,
         "start_time": start_time,
         "end_time": end_time,
         "phrase": phrase
@@ -79,26 +80,26 @@ print("Extracted facial expressions frames", flush=True)
 
 facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
 
-# Generate the base frames embeddings
-embeddings_processing.generate_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH, embedder)
-print("Frame embeddings generated", flush=True)
-
-# Generate the average and the best frames embeddings
-embeddings_processing.generate_average_and_best_frame_embeddings(facial_expressions_frames_path, EMBEDDINGS_PATH, embedder)
+# Generate embeddings
+embeddings_processing.generate_video_embeddings(facial_expressions_frames_path, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID,
+                                                EMBEDDINGS_PATH, embedder)
 
 # Load the base, average, and best frame embeddings
 with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:
     base_frame_embeddings = CPU_Unpickler(f).load()
 
-with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"),
-          "rb") as f:
+with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
     average_frame_embeddings = CPU_Unpickler(f).load()
 
-with open(os.path.join(EMBEDDINGS_PATH, "best_frame_embeddings.json.embeddings"),
-          "rb") as f:
+with open(os.path.join(EMBEDDINGS_PATH, "best_frame_embeddings.json.embeddings"), "rb") as f:
     best_frame_embeddings = CPU_Unpickler(f).load()
 
-print("ENTERING INDEXING LOOP")
+with open(os.path.join(EMBEDDINGS_PATH, "annotations_embeddings.json.embeddings"), "rb") as f:
+    annotations_embeddings = CPU_Unpickler(f).load()
+
+print("ENTERING INDEXING LOOP", flush=True)
+# opensearch.delete_index()
+# opensearch.create_index()
 for video_id in os.listdir(facial_expressions_frames_path):
 
     # Read annotations
@@ -128,6 +129,7 @@ for video_id in os.listdir(facial_expressions_frames_path):
                 base_frame_embedding=base_frame_embeddings[video_id][annotation_id].tolist(),
                 average_frame_embedding=average_frame_embeddings[video_id][annotation_id].tolist(),
                 best_frame_embedding=best_frame_embeddings[video_id][annotation_id].tolist(),
+                annotation_embedding=annotations_embeddings[video_id][annotation_id].tolist(),
                 start_time=start_time,
                 end_time=end_time,
                 phrase=phrase
