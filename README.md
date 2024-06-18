@@ -1,16 +1,16 @@
-# VideoLGP
+# SLVideo
 
 <img src="static/images/system_overview.png">
 
-This is the official GitHub repo for the paper "VideoLGP: A Sign Language Video Moment Retrieval Open Framework".
+This is the official GitHub repo for the paper "SLVideo: A Sign Language Video Moment Retrieval Open Framework".
 
-## What is VideoLGP
+## What is SLVideo
 
-VideoLGP is a video moment retrieval software for Portuguese Sign Language videos focusing on signs where facial expressions have a big role. A collection of five hours of annotated Portuguese Sign Language videos is used as the dataset, where it generates a series of embeddings from the extracted video frames to allow the user to use a text query to search for a specific video segment. In this repository, there are only three videos taken into account. 
+SLVideo is a video moment retrieval software for Portuguese Sign Language videos focusing on signs where facial expressions have a big role. A collection of five hours of annotated Portuguese Sign Language videos is used as the dataset, where it generates a series of embeddings from the extracted video frames to allow the user to use a text query to search for a specific video segment. In this repository, there are only three videos taken into account. 
 
-This system also includes a web application developed in Flask that allows the users to try VideoLGP.
+This system also includes a web application developed in Flask that allows the users to try SLVideo.
 
-## How to use VideoLGP
+## How to use SLVideo
 ### In the deployed web application
 
 You just need to access this link: https://videolgp.novasearch.org/
@@ -18,7 +18,7 @@ You just need to access this link: https://videolgp.novasearch.org/
 In this deployed version, the model that is being used to generate the embeddings is `clip-ViT-B-32`.
 ### Locally
 
-To run VideoLGP in your system, first, you need to clone this repository:
+To run SLVideo in your system, first, you need to clone this repository:
 
 ```sh
 git clone TODO
@@ -53,7 +53,7 @@ flask --app app run -h X.X.X.X -p XXXX
 
 The `object_detectors_env` folder is the conda environment that contains the necessary libraries to run the object detection models.
 
-The `app` folder contains all the scripts and files needed to run the VideoLGP web application. Here is a brief description of each folder and script:
+The `app` folder contains all the scripts and files needed to run the SLVideo web application. Here is a brief description of each folder and script:
 
 #### `eaf_parser`
 This folder contains the script responsible for parsing the **EAF** files
@@ -95,11 +95,11 @@ This script handles the user queries and displays its results in the web applica
 If you use our code in your scientific work, please cite us!
 
 ```bibtex
-@inproceedings{VideoLGP,
+@inproceedings{SLVideo,
   author       = {Gonçalo Martins and
                   Afonso Quinaz and
                   João Magalhães},
-  title        = {VideoLGP: A Sign Language Video Moment Retrieval Open Framework},
+  title        = {SLVideo: A Sign Language Video Moment Retrieval Open Framework},
   booktitle    = {TODO},
   doi          = {TODO}
   publisher    = {TODO},
