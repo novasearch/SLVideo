@@ -5,7 +5,6 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 import object_detector
 
-
 N_VIDEOS_TO_PROCESS = 3
 PHRASES_DIR = "LP_P1 transcrição livre"
 FACIAL_EXPRESSIONS_DIR = "GLOSA_P1_EXPRESSAO"
