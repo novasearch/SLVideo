@@ -1,9 +1,10 @@
 {% extends 'query/clips_results.html' %}
 
-{% block results_desc %}"{{ query_input }}"{% endblock %}
+{% block title %} Thesaurus Results {% endblock %}
 
 {% block annotations_loop %}
-{% for annotation in frames %}
+{% for annotation in frames_info %}
+    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 <div class="d-flex justify-content-center">
     <form action="{{ url_for('query.clips_results', video=video) }}" method="post" style="width: 75%">
         <div class="card mb-2 w-100 border-secondary mx-auto" style="cursor: pointer" data-bs-toggle="modal"
@@ -32,6 +33,9 @@
                     </div>
                 </div>
             </div>
+            <div class="row g-0 border-top border-secondary border-opacity-50">
+                <p class="expression_description">Phrase: "{{ frames_info[annotation]["phrase"] }}"</p>
+            </div>
         </div>
     </form>
 </div>
@@ -39,6 +43,5 @@
 {% endblock %}
 
 {% block modal_buttons %}
-    <button id="clip_button" type="button" class="btn btn-primary">Play Phrase</button>
-    <!-- <form id="thesaurus_button" type="button" class="btn btn-outline-primary">Search Thesaurus</form> -->
+    <button id="clip_button" type="button" class="btn btn-primary">Play Expression</button>
 {% endblock %}

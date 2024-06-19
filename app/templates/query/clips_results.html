@@ -3,141 +3,145 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<div class="header container text-center">
-    <div class="row align-items-center">
-        <div class="col">
-            <a class="btn btn-outline-dark" style="width: 25%" href="{{ url_for('query.videos_results') }}">Back</a>
-        </div>
-        <div class="col">
-            <h1 class="text-center flex-grow-1">{% block title %}Search Results{% endblock %}</h1>
-        </div>
-        <div class="col">
-            <!-- Empty column just to center the elements -->
+    <div class="header container text-center">
+        <div class="row align-items-center">
+            <div class="col">
+                <a class="btn btn-outline-dark" style="width: 25%"
+                   href="{{ request.referrer or url_for('query.videos_results') }}">Back</a></div>
+            <div class="col">
+                <h1 class="text-center flex-grow-1">{% block title %}Search Results{% endblock %}</h1>
+            </div>
+            <div class="col">
+                <!-- Empty column just to center the elements -->
+            </div>
         </div>
     </div>
-</div>
+    <h4 class="text-center">{% block results_desc %}{% endblock %}</h4>
 {% endblock %}
 
 {% block content %}
-{% block annotations_loop %} {% endblock %}
 
-<div class="modal fade" id="clipModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="clipModalLabel" aria-hidden="true">
-    <button id="previous_clip" type="button" class="btn btn-primary change-clips" style="--bs-btn-font-size: 2rem;">
-        <i class="bi bi-chevron-compact-left"></i>
-    </button>
-    <button id="next_clip" type="button" class="btn btn-primary change-clips" style="--bs-btn-font-size: 2rem;">
-        <i class="bi bi-chevron-compact-right"></i>
-    </button>
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="clipModalLabel">*Expression*</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="padding: 0">
-                <video id="searched_video" controls>
-                    <source id="video_source" src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}" type="video/mp4">
-                    <track id="video_captions" kind="captions" src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
-                           srclang="pt" label="Portuguese" default>
-                </video>
-            </div>
-            <div class="modal-footer d-flex justify-content-between">
-                <div>
-                    <!-- <button id="phrase_button" type="button" class="btn btn-primary">Play Phrase</button> -->
-                    <button id="clip_button" type="button" class="btn btn-primary">Play Expression</button>
+    {% block annotations_loop %} {% endblock %}
+
+    <div class="modal fade" id="clipModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="clipModalLabel" aria-hidden="true">
+        <button id="previous_clip" type="button" class="btn btn-primary change-clips" style="--bs-btn-font-size: 2rem;">
+            <i class="bi bi-chevron-compact-left"></i>
+        </button>
+        <button id="next_clip" type="button" class="btn btn-primary change-clips" style="--bs-btn-font-size: 2rem;">
+            <i class="bi bi-chevron-compact-right"></i>
+        </button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="clipModalLabel">*Expression*</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 0">
+                    <video id="searched_video" controls>
+                        <source id="video_source"
+                                src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}"
+                                type="video/mp4">
+                        <track id="video_captions" kind="captions"
+                               src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
+                               srclang="pt" label="Portuguese" default>
+                    </video>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    {% block modal_buttons %}{% endblock %}
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    var frames = {{ frames_info | tojson }};
-    var annotations = Object.keys(frames);
-    var current_annotation, next_annotation, previous_annotation, current_index, start_time, end_time, isPlayingClip;
+    <script>
+        var frames = {{ frames_info | tojson }};
+        var annotations = Object.keys(frames);
+        var current_annotation, next_annotation, previous_annotation, current_index, start_time, end_time,
+            isPlayingClip;
 
-    // Get HTML elements by their IDs
-    var modal = document.getElementById('clipModal');
-    var video = document.getElementById('searched_video');
-    var clipButton = document.getElementById('clip_button');
-    var nextClipButton = document.getElementById('next_clip');
-    var previousClipButton = document.getElementById('previous_clip');
+        // Get HTML elements by their IDs
+        var modal = document.getElementById('clipModal');
+        var video = document.getElementById('searched_video');
+        var clipButton = document.getElementById('clip_button');
+        var nextClipButton = document.getElementById('next_clip');
+        var previousClipButton = document.getElementById('previous_clip');
 
-    // Function to play the video clip with the retrieved facial expression
-    function playClip() {
-        video.currentTime = start_time;
-        video.play();
-        isPlayingClip = true;
-    }
-
-    // Function to check the video time and pause it if it reaches the end time when the clip is playing
-    function checkVideoTime() {
-        if (video.currentTime >= end_time && isPlayingClip) {
-            video.pause();
-            isPlayingClip = false;
+        // Function to play the video clip with the retrieved facial expression
+        function playClip() {
+            video.currentTime = start_time;
+            video.play();
+            isPlayingClip = true;
         }
-    }
 
-    modal.addEventListener('shown.bs.modal', function (event) {
-        current_annotation = event.relatedTarget.getAttribute('data-bs-whatever');
-        current_index = annotations.indexOf(current_annotation);
-        setModalData(current_index);
-        positionButtons()
-    });
+        // Function to check the video time and pause it if it reaches the end time when the clip is playing
+        function checkVideoTime() {
+            if (video.currentTime >= end_time && isPlayingClip) {
+                video.pause();
+                isPlayingClip = false;
+            }
+        }
 
-    // Function to set modal data based on the current annotation
-    function setModalData() {
-        current_annotation = annotations[current_index];
+        modal.addEventListener('shown.bs.modal', function (event) {
+            current_annotation = event.relatedTarget.getAttribute('data-bs-whatever');
+            current_index = annotations.indexOf(current_annotation);
+            setModalData(current_index);
+            positionButtons()
+        });
 
-        // Remove old event listeners
-        clipButton.removeEventListener('click', playClip);
-        video.removeEventListener('timeupdate', checkVideoTime);
-        nextClipButton.removeEventListener('click', nextClip);
-        previousClipButton.removeEventListener('click', previousClip);
+        // Function to set modal data based on the current annotation
+        function setModalData() {
+            current_annotation = annotations[current_index];
 
-        let modalTitle = modal.querySelector('.modal-title');
+            // Remove old event listeners
+            clipButton.removeEventListener('click', playClip);
+            video.removeEventListener('timeupdate', checkVideoTime);
+            nextClipButton.removeEventListener('click', nextClip);
+            previousClipButton.removeEventListener('click', previousClip);
 
-        start_time = Math.round(frames[current_annotation]["start_time"]) / 1000;
-        end_time = Math.round(frames[current_annotation]["end_time"]) / 1000;
-        isPlayingClip = false;
+            let modalTitle = modal.querySelector('.modal-title');
 
-        modalTitle.textContent = frames[current_annotation]["annotation_value"];
-        video.currentTime = start_time;
+            start_time = Math.round(frames[current_annotation]["start_time"]) / 1000;
+            end_time = Math.round(frames[current_annotation]["end_time"]) / 1000;
+            isPlayingClip = false;
 
-        next_annotation = current_index + 1 < annotations.length ? frames[annotations[current_index + 1]] : null;
-        previous_annotation = current_index - 1 >= 0 ? frames[annotations[current_index - 1]] : null;
+            modalTitle.textContent = frames[current_annotation]["annotation_value"];
+            video.currentTime = start_time;
 
-        nextClipButton.disabled = next_annotation === null;
-        previousClipButton.disabled = previous_annotation === null;
+            next_annotation = current_index + 1 < annotations.length ? frames[annotations[current_index + 1]] : null;
+            previous_annotation = current_index - 1 >= 0 ? frames[annotations[current_index - 1]] : null;
 
-        // Add new event listeners
-        clipButton.addEventListener('click', playClip);
-        video.addEventListener('timeupdate', checkVideoTime);
-        nextClipButton.addEventListener('click', nextClip);
-        previousClipButton.addEventListener('click', previousClip);
-    }
+            nextClipButton.disabled = next_annotation === null;
+            previousClipButton.disabled = previous_annotation === null;
 
-    function nextClip() {
-        current_index += 1;
-        setModalData(current_index);
-    }
+            // Add new event listeners
+            clipButton.addEventListener('click', playClip);
+            video.addEventListener('timeupdate', checkVideoTime);
+            nextClipButton.addEventListener('click', nextClip);
+            previousClipButton.addEventListener('click', previousClip);
+        }
 
-    function previousClip() {
-        current_index -= 1;
-        setModalData(current_index);
-    }
+        function nextClip() {
+            current_index += 1;
+            setModalData(current_index);
+        }
 
-    window.addEventListener('resize', positionButtons);
-    document.addEventListener('DOMContentLoaded', positionButtons);
+        function previousClip() {
+            current_index -= 1;
+            setModalData(current_index);
+        }
 
-    // Function to position the next and previous buttons
-    function positionButtons() {
-        let modalWidth = document.querySelector('.modal-dialog').offsetWidth;
-        let buttonWidth = document.querySelector('#previous_clip').offsetWidth;
-        let offset = (modalWidth / 2); // half the width of the modal
+        window.addEventListener('resize', positionButtons);
+        document.addEventListener('DOMContentLoaded', positionButtons);
 
-        document.querySelector('#previous_clip').style.transform = `translateX(-${offset + buttonWidth + 10}px)`;
-        document.querySelector('#next_clip').style.transform = `translateX(${offset + 10}px)`;
-    }
-</script>
+        // Function to position the next and previous buttons
+        function positionButtons() {
+            let modalWidth = document.querySelector('.modal-dialog').offsetWidth;
+            let buttonWidth = document.querySelector('#previous_clip').offsetWidth;
+            let offset = (modalWidth / 2); // half the width of the modal
+
+            document.querySelector('#previous_clip').style.transform = `translateX(-${offset + buttonWidth + 10}px)`;
+            document.querySelector('#next_clip').style.transform = `translateX(${offset + 10}px)`;
+        }
+    </script>
 {% endblock %}
