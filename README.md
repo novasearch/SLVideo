@@ -6,9 +6,13 @@ This is the official GitHub repo for the paper "SLVideo: A Sign Language Video M
 
 ## What is SLVideo
 
-SLVideo is a video moment retrieval software for Portuguese Sign Language videos focusing on signs where facial expressions have a big role. A collection of five hours of annotated Portuguese Sign Language videos is used as the dataset, where it generates a series of embeddings from the extracted video frames to allow the user to use a text query to search for a specific video segment. In this repository, there are only three videos taken into account. 
+SLVideo is a video moment retrieval software for Portuguese Sign Language videos focusing on signs where facial expressions have a big role. A collection of five hours of annotated Portuguese Sign Language videos is used as the dataset, where it generates a series of embeddings from the extracted video frames and the videos' annotations to allow the user to use a text query to search for a specific video segment.
 
-This system also includes a web application developed in Flask that allows the users to try SLVideo.
+Besides the video moment retrieval task, SLVideo also includes a thesaurus, where the users can see similar signs to the ones that were retrieved.
+
+To improve the dataset and train a future model to be used in this system, the users can also rate the retrieved video segments and add annotations or edit the existing ones.
+
+This system includes a web application developed in Flask that allows the users to try SLVideo.
 
 ## How to use SLVideo
 ### In the deployed web application
@@ -49,6 +53,9 @@ And choose the host's address and port to run on:
 ```sh
 flask --app app run -h X.X.X.X -p XXXX
 ```
+## Change the encoders
+
+For now, two encoders are available in this repository: the `clip-ViT-B-32` and the `capivara`. If you wish to change the used encoder, you can add one by creating a file in the `app/embeddings/encoders` folder where you will implement the image and text encoding methods by extending the **Encoder**  abstract class. This approach follows the strategy design pattern.
 ## Folder Structure
 
 The `object_detectors_env` folder is the conda environment that contains the necessary libraries to run the object detection models.
@@ -59,11 +66,10 @@ The `app` folder contains all the scripts and files needed to run the SLVideo we
 This folder contains the script responsible for parsing the **EAF** files
 - `eaf_parser.py`: Iterates through the available EAF files (one for each annotated video), parses the relevant info into JSON files and creates the video captions files
 
-#### `embeddings`
-This folder contains the scripts responsible for generating embeddings for text and image
-- `embeddings_generator.py`: Has the functions responsible for generating embeddings for text and images. This is where the embedding generator model is defined
-- `embeddings_processing.py`: Iterates through the extracted video frames and generates its embeddings. Also contains the function to generate the user's query embeddings
-
+This folder contains the scripts responsible for generating embeddings for text and image 
+- `encoders`: This folder has one file for each of the implemented encoders and one with the abstract class that is extended by the other files.
+- `embeddings_generator.py`: Has the functions responsible for generating embeddings for text and images. This is where the embedding generator model is defined  
+- `embeddings_processing.py`: Iterates through the extracted video frames and generates its embeddings. Also contains the function to generate the user's query embeddings  
 #### `frame_extraction`
 This folder contains the scripts responsible for extracting and cropping the video frames
 - `frame_extractor.py`: Iterates through the videos and respective annotations and extracts the frames where is being performed a sign in which the facial expression has a big role and one frame for each phrase
