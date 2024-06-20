@@ -1,6 +1,10 @@
 {% extends 'query/clips_results.html' %}
 
-{% block results_desc %}"{{ query_input }}"{% endblock %}
+{% block title %} Thesaurus Results {% endblock %}
+
+{% block back_button %}
+    <a class="btn btn-outline-dark" style="width: 25%" href="{{ url_for('query.clips_results', video=video) }}">Back</a>
+{% endblock %}
 
 {% block annotations_loop %}
     {% for annotation in frames_info %}
@@ -22,11 +26,10 @@
                         </div>
                     </div>
                     <div class="col-md-8" style="height: 9rem;">
-                        <div class="card-body d-flex justify-content-between align-items-center"
-                             style="height: 100%;">
+                        <div class="card-body d-flex justify-content-between align-items-center" style="height: 100%;">
                             {% for frame in frames[annotation] %}
                                 <img style="object-fit: contain; height: 110%;"
-                                     src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + annotation +'/' + frame) }}"
+                                     src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + frames_info[annotation]["video_id"] + '/' + frames_info[annotation]["annotation_id"] +'/' + frame) }}"
                                      alt="Not Found">
                             {% endfor %}
                         </div>
@@ -42,30 +45,4 @@
 
 {% block modal_buttons %}
     <button id="clip_button" type="button" class="btn btn-primary">Play Expression</button>
-    <form id="thesaurus_form"
-          action="{{ url_for('query.clips_results', video=video) }}"
-          method="post">
-        <div onclick="this.parentNode.submit();">
-            <button type="button" id="thesaurus_button" class="btn btn-outline-primary">Search Thesaurus</button>
-            <input type="hidden" name="selected_annotation" value="">
-        </div>
-    </form>
-{% endblock %}
-
-{% block scripts %}
-    {{ super() }} <!-- This will include the scripts from the parent template -->
-
-    <script>
-        let thesaurus_form = document.getElementById('thesaurus_form');
-
-        // Extend the setModalData function
-        let originalSetModalData = setModalData;
-        setModalData = function () {
-            // Call the original function
-            originalSetModalData();
-
-            // Set the value of the hidden input to the current annotation
-            thesaurus_form.querySelector('input[name="selected_annotation"]').value = current_annotation;
-        };
-    </script>
 {% endblock %}

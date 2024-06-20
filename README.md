@@ -8,7 +8,7 @@ This is the official GitHub repo for the paper "SLVideo: A Sign Language Video M
 
 SLVideo is a video moment retrieval software for Portuguese Sign Language videos focusing on signs where facial expressions have a big role. A collection of five hours of annotated Portuguese Sign Language videos is used as the dataset, where it generates a series of embeddings from the extracted video frames and the videos' annotations to allow the user to use a text query to search for a specific video segment.
 
-Besides the video moment retrieval task, SLVideo also includes a thesaurus, where the users can see similar signs to the ones that were retrieved.
+Besides the video moment retrieval task, SLVideo also includes a thesaurus, where the users can see similar signs to the ones that were retrieved. That thesaurus is available by searching for a facial expression and pressing the "Search Thesaurus" button on the opened modal when selecting a clip.
 
 To improve the dataset and train a future model to be used in this system, the users can also rate the retrieved video segments and add annotations or edit the existing ones.
 
@@ -101,14 +101,12 @@ This script handles the user queries and displays its results in the web applica
 If you use our code in your scientific work, please cite us!
 
 ```bibtex
-@inproceedings{SLVideo,
-  author       = {Gonçalo Martins and
-                  Afonso Quinaz and
-                  João Magalhães},
-  title        = {SLVideo: A Sign Language Video Moment Retrieval Open Framework},
-  booktitle    = {TODO},
-  doi          = {TODO}
-  publisher    = {TODO},
-  year         = {2024}
+@inproceedings{SLVideo2024,
+               title={SLVideo: A Sign Language Video Moment Retrieval Open Framework},
+               author={Gonçalo Martins and Afonso Quinaz and João Magalhães and Sofia Cavaco and Carla Viegas},
+               year={2024},
+               booktitle={TODO},
+               doi={TODO},
+               publisher={TODO}
 }
 ```
