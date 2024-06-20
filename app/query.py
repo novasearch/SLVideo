@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+import pickle
 import re
 from collections import OrderedDict
 
@@ -10,16 +11,10 @@ from flask import (
 
 from .embeddings import embeddings_processing
 from .opensearch.opensearch import LGPOpenSearch
-
-# Define the paths for the frames and annotations
-FRAMES_PATH = "app/static/videofiles/frames"
-ANNOTATIONS_PATH = "app/static/videofiles/annotations"
-VIDEO_CLIP_PATH = "app/static/videofiles/mp4/videoclip.mp4"
-
-PHRASES_ID = "LP_P1 transcrição livre"  # Annotation field for the phrases
-FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"  # Annotation field for the facial expressions
+from .constants import EMBEDDINGS_PATH, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, ANNOTATIONS_PATH
 
 N_RESULTS = 10
+N_FRAMES_TO_DISPLAY = 6
 
 bp = Blueprint('query', __name__)
 opensearch = LGPOpenSearch()
@@ -109,7 +104,7 @@ def clips_results(video):
     search_mode = session.get('search_mode', 1)
 
     # Sort the query results by similarity score
-    # query_results = OrderedDict(sorted(query_results.items(), key=lambda x: x[1]['similarity_score'], reverse=True))
+    query_results = OrderedDict(sorted(query_results.items(), key=lambda x: x[1]['similarity_score'], reverse=True))
 
     frames = {}
     # frames_info = {}
@@ -125,32 +120,14 @@ def clips_results(video):
         query_results[annotation_id]["converted_start_time"] = converted_start_time
         query_results[annotation_id]["converted_end_time"] = converted_end_time
 
-        """
-        frames_info[annotation_id] = query_results[annotation_id]
-        frames_info[annotation_id]["converted_start_time"] = converted_start_time
-        frames_info[annotation_id]["converted_end_time"] = converted_end_time
-        frames_info[annotation_id]["similarity_score"] = query_results[annotation_id]["similarity_score"]
-        frames_info[annotation_id]["avg_embedding"] = query_results[annotation_id]["avg_embedding"]"""
-
     if search_mode == FACIAL_EXPRESSIONS_ID:
         # Not all frames of each expression are going to be displayed
-        frames_to_display = {}
-        num_frames_to_display = 6
+        frames_to_display = get_frames_to_display(frames)
 
-        # Display only #num_frames_to_display frames of each expression
-        for expression, all_frames in frames.items():
+        if request.method == "POST":
+            selected_annotation = request.form.get("selected_annotation")
 
-            # Calculate the step size
-            if len(all_frames) <= num_frames_to_display:
-                step_size = 1
-            else:
-                step_size = (len(all_frames) - 1) // num_frames_to_display + 1
-
-            # Select frames to display
-            frames_to_display[expression] = all_frames[::step_size]
-
-            # Ensure that only num_frames_to_display frames are selected
-            frames_to_display[expression] = frames_to_display[expression][:num_frames_to_display]
+            return redirect(url_for("query.thesaurus_results", video_id=video, annotation_id=selected_annotation))
 
         return render_template("query/clips_results/expressions_clips.html", frames=frames_to_display,
                                frames_info=query_results, query_input=query_input,
@@ -165,9 +142,10 @@ def clips_results(video):
                                search_mode=search_mode, video=video)
 
 
-def thesaurus_results(clip_avg_embedding):
+@bp.route("/thesaurus/<video_id>/<annotation_id>", methods=("GET", "POST"))
+def thesaurus_results(video_id, annotation_id):
     """ Display the thesaurus results for a similar sign """
-    search_results = query_thesaurus(clip_avg_embedding)
+    search_results = query_thesaurus(video_id, annotation_id)
     search_mode = session.get('search_mode', 1)
 
     frames = {}
@@ -176,37 +154,30 @@ def thesaurus_results(clip_avg_embedding):
     for video_id in search_results:
         for annotation_id in search_results[video_id]:
             frames_path = os.path.join(FRAMES_PATH, search_mode, video_id, annotation_id)
-            frames[video_id][annotation_id] = os.listdir(frames_path)
+
+            frames[video_id + "_" + annotation_id] = os.listdir(frames_path)
 
             converted_start_time = str(
-                datetime.timedelta(seconds=int(search_results[annotation_id]["start_time"]) // 1000))
-            converted_end_time = str(datetime.timedelta(seconds=int(search_results[annotation_id]["end_time"]) // 1000))
+                datetime.timedelta(seconds=int(search_results[video_id][annotation_id]["start_time"]) // 1000))
+            converted_end_time = str(
+                datetime.timedelta(seconds=int(search_results[video_id][annotation_id]["end_time"]) // 1000))
 
-            search_results[annotation_id]["converted_start_time"] = converted_start_time
-            search_results[annotation_id]["converted_end_time"] = converted_end_time
+            search_results[video_id][annotation_id]["converted_start_time"] = converted_start_time
+            search_results[video_id][annotation_id]["converted_end_time"] = converted_end_time
 
     # Not all frames of each expression are going to be displayed
-    frames_to_display = {}
-    num_frames_to_display = 6
+    frames_to_display = get_frames_to_display(frames)
 
-    # Display only #num_frames_to_display frames of each expression
-    for video_id in frames:
-        for expression, all_frames in frames[video_id].items():
+    # Initialize a dictionary to store the frames information so that the keys
+    # are a composition of the video_id and the annotation_id
+    frames_info = {}
+    for video_id in search_results:
+        for annotation_id in search_results[video_id]:
+            frames_info[video_id + "_" + annotation_id] = search_results[video_id][annotation_id]
+            frames_info[video_id + "_" + annotation_id]["annotation_id"] = annotation_id
 
-            # Calculate the step size
-            if len(all_frames) <= num_frames_to_display:
-                step_size = 1
-            else:
-                step_size = (len(all_frames) - 1) // num_frames_to_display + 1
-
-            # Select frames to display
-            frames_to_display[expression] = all_frames[::step_size]
-
-            # Ensure that only num_frames_to_display frames are selected
-            frames_to_display[expression] = frames_to_display[expression][:num_frames_to_display]
-
-    return render_template("query/clips_results/thesaurus_clips.html", frames=frames,
-                           frames_info=search_results, search_mode=search_mode)
+    return render_template("query/clips_results/thesaurus_clips.html", frames=frames_to_display,
+                           frames_info=frames_info, search_mode=search_mode, video=video_id)
 
 
 def query_frames_embeddings(query_input):
@@ -237,9 +208,12 @@ def query_annotations_embeddings(query_input):
     return set_query_results(search_results, query_input)
 
 
-def query_thesaurus(clip_avg_embedding):
+def query_thesaurus(video_id, annotation_id):
     """ Get the results of querying for a similar sign """
-    search_results = opensearch.knn_query_average(clip_avg_embedding, N_RESULTS)
+    with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
+        average_frame_embeddings = pickle.load(f)
+    embedding = average_frame_embeddings[video_id][annotation_id].tolist()
+    search_results = opensearch.knn_query_average(embedding, N_RESULTS)
     return set_query_results(search_results)
 
 
@@ -259,8 +233,8 @@ def set_query_results(search_results, query_input=None):
             'end_time']
         query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['phrase'] = hit['_source']['phrase']
         query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['similarity_score'] = hit['_score']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['avg_embedding'] = hit['_source'][
-            'average_frame_embedding']
+        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['video_id'] = hit['_source'][
+            'video_id']
 
     if query_input:
         print_performance_metrics(query_results, query_input)
@@ -273,6 +247,9 @@ def query_true_expression(query_input):
     query_results = {}
     search_mode = session.get('search_mode', 1)
     pattern = re.compile(r'(^|\b|\[|_|]){}($|\b|\]|_|)'.format(query_input.lower()), re.IGNORECASE)
+
+    with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
+        average_frame_embeddings = pickle.load(f)
 
     for video in os.listdir(os.path.join(FRAMES_PATH, search_mode)):
         with open(os.path.join(ANNOTATIONS_PATH, f"{video}.json"), "r") as f:
@@ -338,3 +315,25 @@ def print_performance_metrics(query_results, query_input):
     print("F1: ", f1)
     print("-------------------------------------")
     print("-------------------------------------")
+
+
+def get_frames_to_display(frames):
+    """ Get the frames to display """
+    frames_to_display = {}
+
+    # Display only #num_frames_to_display frames of each expression
+    for expression, all_frames in frames.items():
+
+        # Calculate the step size
+        if len(all_frames) <= N_FRAMES_TO_DISPLAY:
+            step_size = 1
+        else:
+            step_size = (len(all_frames) - 1) // N_FRAMES_TO_DISPLAY + 1
+
+        # Select frames to display
+        frames_to_display[expression] = all_frames[::step_size]
+
+        # Ensure that only num_frames_to_display frames are selected
+        frames_to_display[expression] = frames_to_display[expression][:N_FRAMES_TO_DISPLAY]
+
+    return frames_to_display

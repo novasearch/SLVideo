@@ -5,8 +5,7 @@
 {% block annotations_loop %}
 {% for annotation in frames %}
 <div class="d-flex justify-content-center">
-    <form action="{{ url_for('query.clips_results', video=video) }}" method="post" style="width: 75%">
-        <div class="card mb-2 w-100 border-secondary mx-auto" style="cursor: pointer" data-bs-toggle="modal"
+        <div class="card mb-2 w-100 border-secondary mx-auto" style="cursor: pointer; max-width: 75%;" data-bs-toggle="modal"
              data-bs-target="#clipModal" data-bs-whatever="{{ annotation }}">
             <div class="row g-0 border-bottom border-secondary border-opacity-25">
                 <p class="match_score">{{ loop.index }}º Match - Similarity Score {{
@@ -16,7 +15,6 @@
                 <div class="col-md-4"
                      style="height: 9rem; display: flex; align-items: center; justify-content: center;">
                     <div class="card-body">
-                        <input type="hidden" name="selected_annotation" value="{{ annotation }}">
                         <p class="expression">{{ frames_info[annotation]["annotation_value"] }}</p>
                         <p class="expression_description">Video: {{ video }} ; Timestamp: {{
                             frames_info[annotation]["converted_start_time"]}}</p>
@@ -33,7 +31,6 @@
                 </div>
             </div>
         </div>
-    </form>
 </div>
 {% endfor %}
 {% endblock %}

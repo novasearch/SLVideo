@@ -5,44 +5,67 @@
 {% block annotations_loop %}
     {% for annotation in frames_info %}
         <div class="d-flex justify-content-center">
-            <form action="{{ url_for('query.clips_results', video=video) }}" method="post" style="width: 75%">
-                <div class="card mb-2 w-100 border-secondary mx-auto" style="cursor: pointer" data-bs-toggle="modal"
-                     data-bs-target="#clipModal" data-bs-whatever="{{ annotation }}">
-                    <div class="row g-0 border-bottom border-secondary border-opacity-25">
-                        <p class="match_score">{{ loop.index }}º Match - Similarity
-                            Score {{ frames_info[annotation]["similarity_score"] }}</p>
-                    </div>
-                    <div class="row g-0" style="display: flex">
-                        <div class="col-md-4"
-                             style="height: 9rem; display: flex; align-items: center; justify-content: center;">
-                            <div class="card-body">
-                                <input type="hidden" name="selected_annotation" value="{{ annotation }}">
-                                <p class="expression">{{ frames_info[annotation]["annotation_value"] }}</p>
-                                <p class="expression_description">Video: {{ video }} ;
-                                    Timestamp: {{ frames_info[annotation]["converted_start_time"] }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-8" style="height: 9rem;">
-                            <div class="card-body d-flex justify-content-between align-items-center"
-                                 style="height: 100%;">
-                                {% for frame in frames[annotation] %}
-                                    <img style="object-fit: contain; height: 110%;"
-                                         src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + annotation +'/' + frame) }}"
-                                         alt="Not Found">
-                                {% endfor %}
-                            </div>
+            <div class="card mb-2 w-100 border-secondary mx-auto" style="cursor: pointer; max-width: 75%;"
+                 data-bs-toggle="modal"
+                 data-bs-target="#clipModal" data-bs-whatever="{{ annotation }}">
+                <div class="row g-0 border-bottom border-secondary border-opacity-25">
+                    <p class="match_score">{{ loop.index }}º Match - Similarity
+                        Score {{ frames_info[annotation]["similarity_score"] }}</p>
+                </div>
+                <div class="row g-0" style="display: flex">
+                    <div class="col-md-4"
+                         style="height: 9rem; display: flex; align-items: center; justify-content: center;">
+                        <div class="card-body">
+                            <p class="expression">{{ frames_info[annotation]["annotation_value"] }}</p>
+                            <p class="expression_description">Video: {{ video }} ;
+                                Timestamp: {{ frames_info[annotation]["converted_start_time"] }}</p>
                         </div>
                     </div>
-                    <div class="row g-0 border-top border-secondary border-opacity-50">
-                        <p class="expression_description">Phrase: "{{ frames_info[annotation]["phrase"] }}"</p>
+                    <div class="col-md-8" style="height: 9rem;">
+                        <div class="card-body d-flex justify-content-between align-items-center"
+                             style="height: 100%;">
+                            {% for frame in frames[annotation] %}
+                                <img style="object-fit: contain; height: 110%;"
+                                     src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + annotation +'/' + frame) }}"
+                                     alt="Not Found">
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
-            </form>
+                <div class="row g-0 border-top border-secondary border-opacity-50">
+                    <p class="expression_description">Phrase: "{{ frames_info[annotation]["phrase"] }}"</p>
+                </div>
+            </div>
         </div>
     {% endfor %}
 {% endblock %}
 
 {% block modal_buttons %}
     <button id="clip_button" type="button" class="btn btn-primary">Play Expression</button>
-    <form id="thesaurus_button" type="button" class="btn btn-outline-primary">Search Thesaurus</form>
+    <form id="thesaurus_form"
+          action="{{ url_for('query.clips_results', video=video) }}"
+          method="post">
+        <div onclick="this.parentNode.submit();">
+            <button type="button" id="thesaurus_button" class="btn btn-outline-primary">Search Thesaurus</button>
+            <input type="hidden" name="selected_annotation" value="">
+        </div>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }} <!-- This will include the scripts from the parent template -->
+
+    <script>
+        let thesaurus_form = document.getElementById('thesaurus_form');
+
+        // Extend the setModalData function
+        let originalSetModalData = setModalData;
+        setModalData = function () {
+            // Call the original function
+            originalSetModalData();
+
+            // Set the value of the hidden input to the current annotation
+            thesaurus_form.querySelector('input[name="selected_annotation"]').value = current_annotation;
+        };
+    </script>
 {% endblock %}
