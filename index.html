@@ -34,25 +34,25 @@
 
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-                <a href="https://TODO/" style="color:#008AD7;font-weight:normal;">Gonçalo Martins<sup>1</sup></a>,
+                <a href="https://TODO/" style="color:#008AD7;font-weight:normal;">Gonçalo Martins<sup></sup></a>,
             </span>
             <span class="author-block">
-                <a href="https://TODO/" style="color:#008AD7;font-weight:normal;">Afonso Quinaz<sup>1</sup></a>,
+                <a href="https://TODO/" style="color:#008AD7;font-weight:normal;">Afonso Quinaz<sup></sup></a>,
             </span>
             <span class="author-block">
-                <a href="http://ctp.di.fct.unl.pt/~jmag/" style="color:#008AD7;font-weight:normal;">João Magalhães<sup>1</sup></a>,
+                <a href="http://ctp.di.fct.unl.pt/~jmag/" style="color:#008AD7;font-weight:normal;">João Magalhães<sup></sup></a>,
             </span>
             <span class="author-block">
-                <a href="https://TODO/" style="color:#008AD7;font-weight:normal;">Sofia Cavaco<sup>1</sup></a>,
+                <a href="https://TODO/" style="color:#008AD7;font-weight:normal;">Sofia Cavaco<sup></sup></a>,
             </span>
             <span class="author-block">
-                <a href="https://TODO/" style="color:#008AD7;font-weight:normal;">Carla Viegas<sup>1</sup></a>,
+                <a href="https://TODO/" style="color:#008AD7;font-weight:normal;">Carla Viegas<sup></sup></a>,
             </span>
             <span class="author-block">
         </div>
 
         <div class="is-size-5 publication-authors">
-          <span class="author-block"><sup>1</sup>Universidade NOVA de Lisboa,</span>
+          <span class="author-block"><sup></sup>Universidade NOVA de Lisboa,</span>
         </div>
 
           <div class="column has-text-centered">
@@ -89,7 +89,7 @@
               -->
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/novasearch/generating-coherent-sequences"
+                <a href="https://github.com/novasearch/video-sl"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -116,16 +116,16 @@
   </div>
 </section>
 
+<!--
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
       <h2 class="subtitle has-text-centered">
-        Our model integrates a Latent Diffusion Model (LDM) with an LLM that rewrites sequences of steps into image generation prompts.
-        We then generate coherent sequences of images through a sequence conditioned reverse diffusion process.
+        
       </h2>
     </div>
   </div>
-</section>
+</section> -->
 
 
 <section class="hero is-light is-small">
@@ -144,33 +144,33 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Multistep instructions, such as recipes and how-to guides, greatly benefit from visual aids,
-            such
-            as a series of images that accompany the instruction steps. While Large Language Models
-            (LLMs) have become adept at generating coherent textual steps, Large Vision/Language
-            Models (LVLMs) are less capable of generating accompanying image sequences. The most
-            challenging aspect is that each generated image needs to adhere to the relevant textual step
-            instruction, as well as be visually consistent with
-            earlier images in the sequence.</p>
-            <p>To address this problem, we propose an approach for
-            generating consistent image sequences,
-            which integrates a Latent Diffusion Model (LDM) with an LLM to transform the sequence into a
-            caption to maintain the semantic coherence of the
-            sequence. In addition, to maintain the visual coherence of the image sequence, we introduce
-            a copy mechanism to initialise reverse diffusion
-            processes with a latent vector iteration from a previously generated image from a relevant
-            step. Both strategies will condition the reverse
-            diffusion process on the sequence of instruction
-            steps and tie the contents of the current image
-            to previous instruction steps and corresponding
-            images.</p>
-            <p>Experiments show that the proposed
-            approach is preferred by humans in 46.6% of
-            the cases against 26.6% for the second best
-            method. In addition, automatic metrics showed
-            that the proposed method maintains semantic
-            coherence and visual consistency across the
-            sequence of visual illustrations.</p>
+            Sign Language Recognition has been a more and more studied 
+            and developed subject throughout the years to help deaf and 
+            hard-of-hearing people in their day-to-day lives. These 
+            technologies have an advanced recognition of manual signs, still, 
+            most of them lack the recognition of facial expressions, which 
+            are also an essential part of Sign Language as they allow the 
+            speaker to add expressiveness to their dialogue or even change 
+            the meaning of certain manual signs.
+          </p>
+          <p>
+            SLVideo is a video 
+            moment retrieval software for Sign Language videos with a focus 
+            on signs where facial expressions have a big role. To develop this 
+            system, a collection of five hours of annotated Portuguese Sign 
+            Language videos is used as the dataset, where it generates a series 
+            of embeddings from the extracted video frames to allow the user to 
+            use a text query to search for a specific video segment. The initial 
+            results were satisfactory, knowing this is a zero-shot task, and 
+            allowed us to take away the necessary conclusions so that we could 
+            achieve the desired outcomes and help solve the problem of the lack 
+            of facial expression sign recognition in Sign Language. 
+          </p>
+          <p>  
+            Besides the 
+            video moment retrieval task, this system also includes a Sign Language 
+            thesaurus and allows the users to add annotations to the dataset.
+          </p>
         </div>
       </div>
     </div>
@@ -198,7 +198,7 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Model Architecture</h2>
-        <img src="static/images/architecture.png" alt="Model Architecture">
+        <img src="static/images/system_overview.png" alt="Model Architecture">
       </div>
     </div>
     <!--/ Architecture. -->
@@ -209,7 +209,7 @@
         <h2 class="title is-3">Examples</h2>
         <p class="subtitle is-6">(click on an image to enlarge)</p>
         <br>
-      <h4 class="subtitle is-4">Recipes</h4>
+      <h4 class="subtitle is-4">Searches</h4>
       <div class="container example-container carousel">
         <a href="static/images/recipe-sequences/visual_coherence_0.png" target="_blank">
           <img src="static/images/recipe-sequences/visual_coherence_0.png" alt="Example Generation">
@@ -240,7 +240,29 @@
         </a>
       </div>
       <br>
-      <h4 class="subtitle is-4">Manual Tasks</h4>
+      <h4 class="subtitle is-4">Thesaurus</h4>
+      <div class="container example-container carousel">
+        <a href="static/images/task-sequences/wikihow_paint.png" target="_blank">
+          <img src="static/images/task-sequences/wikihow_paint.png" alt="Example Generation">
+        </a>
+        <hr>
+        <a href="static/images/task-sequences/wikihow_clean_stone.png" target="_blank">
+          <img src="static/images/task-sequences/wikihow_clean_stone.png" alt="Example Generation">
+        </a>
+        <hr>
+        <a href="static/images/task-sequences/wikihow_clean_surface.png" target="_blank">
+          <img src="static/images/task-sequences/wikihow_clean_surface.png" alt="Example Generation">
+        </a>
+        <hr>
+        <a href="static/images/task-sequences/wikihow_map_task.png" target="_blank">
+          <img src="static/images/task-sequences/wikihow_map_task.png" alt="Example Generation">
+        </a>
+        <hr>
+        <a href="static/images/task-sequences/wikihow_wood.png" target="_blank">
+          <img src="static/images/task-sequences/wikihow_wood.png" alt="Example Generation">
+        </a>
+      </div>
+      <h4 class="subtitle is-4">Annotation Evaluation and Edition</h4>
       <div class="container example-container carousel">
         <a href="static/images/task-sequences/wikihow_paint.png" target="_blank">
           <img src="static/images/task-sequences/wikihow_paint.png" alt="Example Generation">
@@ -281,14 +303,15 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@misc{bordalo2024generating,
-      title={Generating Coherent Sequences of Visual Illustrations for Real-World Manual Tasks}, 
-      author={João Bordalo and Vasco Ramos and Rodrigo Valério and Diogo Glória-Silva and Yonatan Bitton and Michal Yarom and Idan Szpektor and Joao Magalhaes},
-      year={2024},
-      eprint={2405.10122},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}</code></pre>
+    <pre><code>@inproceedings{SLVideo2024,
+               title={SLVideo: A Sign Language Video Moment Retrieval Open Framework},
+               author={Gonçalo Martins and Afonso Quinaz and João Magalhães and Sofia Cavaco and Carla Viegas},
+               year={2024},
+               booktitle={TODO},
+               doi={TODO}
+               publisher={TODO}
+}
+</code></pre>
   </div>
 </section>
 
