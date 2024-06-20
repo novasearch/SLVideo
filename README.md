@@ -101,7 +101,7 @@ This script handles the user queries and displays its results in the web applica
 If you use our code in your scientific work, please cite us!
 
 ```bibtex
-@inproceedings{@inproceedings{SLVideo2024,
+@inproceedings{SLVideo2024,
                title={SLVideo: A Sign Language Video Moment Retrieval Open Framework},
                author={Gonçalo Martins and Afonso Quinaz and João Magalhães and Sofia Cavaco and Carla Viegas},
                year={2024},
