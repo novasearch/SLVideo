@@ -246,8 +246,7 @@ def query_true_expression(query_input):
     """ Get the results of the query using the ground truth """
     query_results = {}
     search_mode = session.get('search_mode', 1)
-    pattern = re.compile(r'(^|\b|\[|_|]){}($|\b|\]|_|)'.format(query_input.lower()), re.IGNORECASE)
-
+    pattern = re.compile(r'(^|\[|_|]|\(|-){}($|\]|_|(?=\W)|\)|-)'.format(query_input.lower()), re.IGNORECASE)
     with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
         average_frame_embeddings = pickle.load(f)
 

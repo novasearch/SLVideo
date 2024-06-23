@@ -51,39 +51,19 @@ class LGPOpenSearch:
                     },
                     "base_frame_embedding": {
                         'dimension': 512,
-                        'type': 'knn_vector',
-                        "method": {
-                            "name": "hnsw",
-                            "space_type": "l2",
-                            "engine": "faiss"
-                        }
+                        'type': 'knn_vector'
                     },
                     "average_frame_embedding": {
                         'dimension': 512,
-                        'type': 'knn_vector',
-                        "method": {
-                            "name": "hnsw",
-                            "space_type": "l2",
-                            "engine": "faiss"
-                        }
+                        'type': 'knn_vector'
                     },
                     "best_frame_embedding": {
                         'dimension': 512,
-                        'type': 'knn_vector',
-                        "method": {
-                            "name": "hnsw",
-                            "space_type": "l2",
-                            "engine": "faiss"
-                        }
+                        'type': 'knn_vector'
                     },
                     "annotation_embedding": {
                         'dimension': 512,
-                        'type': 'knn_vector',
-                        "method": {
-                            "name": "hnsw",
-                            "space_type": "l2",
-                            "engine": "faiss"
-                        }
+                        'type': 'knn_vector'
                     },
                     "start_time": {
                         "type": "integer"
@@ -159,6 +139,8 @@ class LGPOpenSearch:
 
     def delete_index(self):
         """ Delete the index """
+        if not self.index_exists():
+            return False
         self.client.indices.delete(
             index=self.index_name
         )
@@ -167,13 +149,14 @@ class LGPOpenSearch:
     def knn_query(self, embedding, k):
         """ Performs a k-nearest neighbors (k-NN) search on the base_frame_embedding field of the OpenSearch index """
         query_obj = {
+            "size": k,
             "query": {
                 "bool": {
                     "should": {
                         "knn": {
                             "base_frame_embedding": {
                                 "vector": embedding,
-                                "k": k
+                                "k": 10
                             }
                         }
 
@@ -189,6 +172,7 @@ class LGPOpenSearch:
     def knn_query_average(self, embedding, k):
         """ Performs a k-nearest neighbors (k-NN) search on the average_frame_embedding field of the OpenSearch index"""
         query_obj = {
+            "size": k,
             "query": {
                 "bool": {
                     "should": {
@@ -211,6 +195,7 @@ class LGPOpenSearch:
     def knn_query_best(self, embedding, k):
         """ Performs a k-nearest neighbors (k-NN) search on the best_frame_embedding field of the OpenSearch index """
         query_obj = {
+            "size": k,
             "query": {
                 "bool": {
                     "should": {
@@ -233,6 +218,7 @@ class LGPOpenSearch:
     def knn_query_annotations(self, embedding, k):
         """ Performs a k-nearest neighbors (k-NN) search on the annotation_embedding field of the OpenSearch index """
         query_obj = {
+            "size": k,
             "query": {
                 "bool": {
                     "should": {

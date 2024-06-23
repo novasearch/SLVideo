@@ -7,12 +7,14 @@ class CapivaraEncoder(Encoder):
     """ Encoder class to encode text and image using the CAPIVARA model """
 
     def __init__(self, device):
+        self.device = device
         self.model, _, self.preprocess_val = open_clip.create_model_and_transforms('hf-hub:hiaac-nlp/CAPIVARA')
         self.tokenizer = open_clip.get_tokenizer('hf-hub:hiaac-nlp/CAPIVARA')
-        self.model = self.model.to(device)
+        self.model = self.model.to(self.device)
 
     def text_encode(self, text):
         text = self.tokenizer(text)
+        text = text.to(self.device)
         model_output = self.model.encode_text(text)
         if model_output.dim() > 1:
             model_output = model_output.view(-1)
