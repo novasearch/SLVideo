@@ -63,6 +63,8 @@ class ObjectDetector:
                 image.save(image_path)
                 image.close()
 
+        print(f"{parent_name} - {base_name} || Cropping Finished", flush=True)
+
     def detect_person_box(self, images_paths):
         """ Detect a person in an image, crop the person box and save the cropped image """
 
