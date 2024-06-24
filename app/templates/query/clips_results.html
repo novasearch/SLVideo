@@ -60,7 +60,7 @@
     {% block scripts %}
         <script>
             let frames = {{ frames_info | tojson }};
-            let annotations = Object.keys(frames);
+            let annotations = sortByScore(frames);
             let current_annotation, next_annotation, previous_annotation, current_index, start_time, end_time,
                 isPlayingClip;
 
@@ -146,6 +146,18 @@
 
                 document.querySelector('#previous_clip').style.transform = `translateX(-${offset + buttonWidth + 10}px)`;
                 document.querySelector('#next_clip').style.transform = `translateX(${offset + 10}px)`;
+            }
+
+            function sortByScore(frames) {
+                let framesArray = Object.entries(frames);
+
+                framesArray.sort((a, b) => {
+                    let aValue = a[1]["similarity_score"];
+                    let bValue = b[1]["similarity_score"];
+                    return bValue - aValue; // for descending order
+                });
+
+                return framesArray.map(item => item[0]);
             }
         </script>
     {% endblock %}
