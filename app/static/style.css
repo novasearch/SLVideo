@@ -69,3 +69,9 @@
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
 }
+
+.rating-stars{
+    display: flex;
+    justify-content: flex-end;
+    color: #bcbcbc;
+}

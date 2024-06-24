@@ -2,6 +2,16 @@
 
 {% block results_desc %}"{{ query_input }}"{% endblock %}
 
+{% block modal_header %}
+    <div class="d-flex mx-2 fs-5 ">
+        <i id="star1" class="bi bi-star-fill rating-stars mx-1 star"></i>
+        <i id="star2" class="bi bi-star-fill rating-stars mx-1 star"></i>
+        <i id="star3" class="bi bi-star-fill rating-stars mx-1 star"></i>
+        <i id="star4" class="bi bi-star-fill rating-stars mx-1 star"></i>
+        <i id="star5" class="bi bi-star-fill rating-stars mx-1 star"></i>
+    </div>
+{% endblock %}
+
 {% block annotations_loop %}
     {% for annotation in frames_info %}
         <div class="d-flex justify-content-center">
@@ -67,5 +77,29 @@
             // Set the value of the hidden input to the current annotation
             thesaurus_form.querySelector('input[name="selected_annotation"]').value = current_annotation;
         };
+
+        let stars = document.querySelectorAll('.star');
+
+        // Function to reset all stars to the original color
+        function resetStars() {
+            stars.forEach(star => {
+                star.style.color = "#bcbcbc"; // original color
+            });
+        }
+
+        // Function to color the stars
+        function colorStars(starId) {
+            let starNumber = parseInt(starId.replace('star', ''));
+            for (let i = 1; i <= starNumber; i++) {
+                document.getElementById('star' + i).style.color = "#fdcc0d"; // selected color
+            }
+        }
+
+        stars.forEach(star => {
+            star.addEventListener('click', function () {
+                resetStars();
+                colorStars(this.id);
+            });
+        });
     </script>
 {% endblock %}

@@ -36,9 +36,12 @@
         </button>
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header d-flex">
                     <h1 class="modal-title fs-5" id="clipModalLabel">*Expression*</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="d-flex">
+                        {% block modal_header %} {% endblock %}
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body" style="padding: 0">
                     <video id="searched_video" controls>
