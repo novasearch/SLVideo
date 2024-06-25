@@ -44,11 +44,6 @@ class LGPOpenSearch:
                     "annotation_id": {
                         "type": "keyword"
                     },
-                    "annotation_value": {
-                        'analyzer': 'standard',
-                        'similarity': 'BM25',
-                        'type': 'text'
-                    },
                     "base_frame_embedding": {
                         'dimension': 512,
                         'type': 'knn_vector'
@@ -64,15 +59,6 @@ class LGPOpenSearch:
                     "annotation_embedding": {
                         'dimension': 512,
                         'type': 'knn_vector'
-                    },
-                    "start_time": {
-                        "type": "integer"
-                    },
-                    "end_time": {
-                        "type": "integer"
-                    },
-                    "phrase": {
-                        'type': 'text'
                     }
                 }
             }

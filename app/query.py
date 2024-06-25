@@ -221,20 +221,29 @@ def set_query_results(search_results, query_input=None):
     """ Set the info of the query from the search results """
     query_results = {}
 
+    videos_annotations = {}
+
     for hit in search_results['hits']['hits']:
-        if hit['_source']['video_id'] not in query_results:
-            query_results[hit['_source']['video_id']] = {}
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']] = {}
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['annotation_value'] = hit['_source'][
-            'annotation_value']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['start_time'] = hit['_source'][
-            'start_time']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['end_time'] = hit['_source'][
-            'end_time']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['phrase'] = hit['_source']['phrase']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['similarity_score'] = hit['_score']
-        query_results[hit['_source']['video_id']][hit['_source']['annotation_id']]['video_id'] = hit['_source'][
-            'video_id']
+        video_id = hit['_source']['video_id']
+        annotation_id = hit['_source']['annotation_id']
+
+        if video_id not in query_results:
+            query_results[video_id] = {}
+            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
+                videos_annotations[video_id] = json.load(f)
+
+        query_results[video_id][annotation_id] = {}
+        query_results[video_id][annotation_id]['video_id'] = video_id
+        query_results[video_id][annotation_id]['similarity_score'] = hit['_score']
+
+        for annotation in videos_annotations[video_id][FACIAL_EXPRESSIONS_ID]["annotations"]:
+            if annotation["annotation_id"] == annotation_id:
+                query_results[video_id][annotation_id]['annotation_value'] = annotation['value']
+                query_results[video_id][annotation_id]['start_time'] = annotation['start_time']
+                query_results[video_id][annotation_id]['end_time'] = annotation['end_time']
+                query_results[video_id][annotation_id]['phrase'] = annotation['phrase']
+                query_results[video_id][annotation_id]['user_rating'] = annotation['user_rating']
+                break
 
     if query_input:
         print_performance_metrics(query_results, query_input)
@@ -336,3 +345,4 @@ def get_frames_to_display(frames):
         frames_to_display[expression] = frames_to_display[expression][:N_FRAMES_TO_DISPLAY]
 
     return frames_to_display
+

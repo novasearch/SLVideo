@@ -11,7 +11,6 @@ from .eaf_parser import eaf_parser
 from .opensearch.opensearch import LGPOpenSearch
 from .embeddings import embeddings_processing
 
-
 # Initialize the OpenSearch client
 opensearch = LGPOpenSearch()
 
@@ -39,21 +38,16 @@ def run_in_env(script_path, env_path):
     process.wait()
 
 
-def gen_doc(video_id: str, annotation_id: str, annotation_value: str,
-            base_frame_embedding, average_frame_embedding, best_frame_embedding, annotation_embedding,
-            start_time: int, end_time: int, phrase: str):
+def gen_doc(video_id: str, annotation_id: str, base_frame_embedding, average_frame_embedding, best_frame_embedding,
+            annotation_embedding):
     """ Generate a document for indexing in OpenSearch """
     return {
         "video_id": video_id,
         "annotation_id": annotation_id,
-        "annotation_value": annotation_value,
         "base_frame_embedding": base_frame_embedding,
         "average_frame_embedding": average_frame_embedding,
         "best_frame_embedding": best_frame_embedding,
         "annotation_embedding": annotation_embedding,
-        "start_time": start_time,
-        "end_time": end_time,
-        "phrase": phrase
     }
 
 
@@ -89,8 +83,8 @@ with open(os.path.join(EMBEDDINGS_PATH, "annotations_embeddings.json.embeddings"
     annotations_embeddings = CPU_Unpickler(f).load()
 
 print("ENTERING INDEXING LOOP", flush=True)
-# opensearch.delete_index()
-# opensearch.create_index()
+opensearch.delete_index()
+opensearch.create_index()
 for video_id in os.listdir(facial_expressions_frames_path):
 
     # Read annotations
@@ -116,18 +110,14 @@ for video_id in os.listdir(facial_expressions_frames_path):
             doc = gen_doc(
                 video_id=video_id,
                 annotation_id=annotation_id,
-                annotation_value=annotation_value,
                 base_frame_embedding=base_frame_embeddings[video_id][annotation_id].tolist(),
                 average_frame_embedding=average_frame_embeddings[video_id][annotation_id].tolist(),
                 best_frame_embedding=best_frame_embeddings[video_id][annotation_id].tolist(),
                 annotation_embedding=annotations_embeddings[video_id][annotation_id].tolist(),
-                start_time=start_time,
-                end_time=end_time,
-                phrase=phrase
             )
 
             # Index the document in OpenSearch
             # opensearch.index_if_not_exists(doc)
-            # opensearch.delete_doc_and_index(doc)
+            opensearch.delete_doc_and_index(doc)
 
 print("Finished processing videos", flush=True)
