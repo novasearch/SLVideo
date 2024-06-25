@@ -75,7 +75,8 @@ def parse_eaf_files(eaf_dir):
                             'value': annotation.find('ANNOTATION_VALUE').text,
                             'start_time': annotation_timestamps[annotation_ref]['start_time'],
                             'end_time': annotation_timestamps[annotation_ref]['end_time'],
-                            'phrase': 'N/A'
+                            'phrase': 'N/A',
+                            'user_rating': 'N/A'
                         })
 
             # Check if "GLOSA_P1_EXPRESSÃO" is in the data_dict and replace for "GLOSA_P1_EXPRESSAO"
