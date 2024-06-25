@@ -56,8 +56,15 @@
           action="{{ url_for('query.clips_results', video=video) }}"
           method="post">
         <div onclick="this.parentNode.submit();">
-            <button type="button" id="thesaurus_button" class="btn btn-outline-primary">Search Thesaurus</button>
+            <button id="edit_button" type="button" class="btn btn btn-outline-secondary"
+                    onclick="submitForm('edit')">Edit
+            </button>
+            <button type="button" id="thesaurus_button" class="btn btn-outline-primary"
+                    onclick="submitForm('thesaurus')">Search Thesaurus
+            </button>
             <input type="hidden" name="selected_annotation" value="">
+            <input type="hidden" id="button_clicked" name="button_clicked" value="">
+
         </div>
     </form>
 {% endblock %}
@@ -124,5 +131,17 @@
                 });
             });
         });
+
+        function submitForm(buttonId) {
+            let form = document.getElementById('thesaurus_form');
+            let buttonClicked = document.getElementById('button_clicked');
+
+            if (buttonId === 'edit')
+                buttonClicked.value = 'edit';
+            else if (buttonId === 'thesaurus')
+                buttonClicked.value = 'thesaurus';
+
+            form.submit();
+        }
     </script>
 {% endblock %}

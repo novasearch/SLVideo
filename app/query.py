@@ -125,9 +125,14 @@ def clips_results(video):
         frames_to_display = get_frames_to_display(frames)
 
         if request.method == "POST":
+            button_clicked = request.form.get("button_clicked")
             selected_annotation = request.form.get("selected_annotation")
 
-            return redirect(url_for("query.thesaurus_results", video_id=video, annotation_id=selected_annotation))
+            if button_clicked == 'edit':
+                return redirect(url_for("annotations.edit_annotation", video_id=video, annotation_id=selected_annotation))
+
+            elif button_clicked == 'thesaurus':
+                return redirect(url_for("query.thesaurus_results", video_id=video, annotation_id=selected_annotation))
 
         return render_template("query/clips_results/expressions_clips.html", frames=frames_to_display,
                                frames_info=query_results, query_input=query_input,

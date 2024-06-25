@@ -1,11 +1,20 @@
 import json
 import os
 
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 
 from app.constants import ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID
 
 bp = Blueprint('annotations', __name__)
+
+
+@bp.route("/edit_annotation/<video_id>/<annotation_id>", methods=("GET", "POST"))
+def edit_annotation(video_id, annotation_id):
+    """ Edit an annotation """
+    
+    prev_page = request.headers.get('Referer', None)
+
+    return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id, prev_page=prev_page)
 
 
 @bp.route("/update_user_rating", methods=["POST"])
