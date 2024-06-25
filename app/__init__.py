@@ -22,8 +22,9 @@ try:
 except OSError:
     pass
 
-from . import query
+from . import query, annotations
 
 app.register_blueprint(query.bp)
+app.register_blueprint(annotations.bp)
 
 app.add_url_rule("/", endpoint="query")

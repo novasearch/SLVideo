@@ -76,6 +76,13 @@
 
             // Set the value of the hidden input to the current annotation
             thesaurus_form.querySelector('input[name="selected_annotation"]').value = current_annotation;
+
+            // Paint the stars accordingly to the current rating
+            let rating = frames[current_annotation]['user_rating'];
+            console.log(rating)
+            resetStars();
+            if (rating > 0)
+                colorStars(rating);
         };
 
         let stars = document.querySelectorAll('.star');
@@ -88,8 +95,7 @@
         }
 
         // Function to color the stars
-        function colorStars(starId) {
-            let starNumber = parseInt(starId.replace('star', ''));
+        function colorStars(starNumber) {
             for (let i = 1; i <= starNumber; i++) {
                 document.getElementById('star' + i).style.color = "#fdcc0d"; // selected color
             }
@@ -98,7 +104,24 @@
         stars.forEach(star => {
             star.addEventListener('click', function () {
                 resetStars();
-                colorStars(this.id);
+
+                let starNumber = parseInt(this.id.replace('star', ''));
+                frames[current_annotation]['user_rating'] = starNumber;
+
+                colorStars(starNumber);
+
+                // Update the rating in the JSON files
+                fetch('/update_user_rating', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'video_id': {{ video }},
+                        'annotation_id': current_annotation,
+                        'rating': starNumber
+                    })
+                });
             });
         });
     </script>
