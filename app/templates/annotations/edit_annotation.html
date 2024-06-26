@@ -31,7 +31,8 @@
                 </video>
             </div>
             <div id="form-col" class="col-4">
-                <form>
+                <form action="{{ url_for('annotations.edit_annotation', video_id=video, annotation_id=annotation_id) }}"
+                      method="post">
                     <div class="row">
                         <div class="col-6">
                             <div class="mb-3">
@@ -68,7 +69,8 @@
                         </div>
                         <div class="col-4">
                             <button type="button" class="btn btn-outline-info" style="margin-top: 2rem"
-                                    onclick="playClip()">Test</button>
+                                    onclick="playClip()">Test
+                            </button>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -80,6 +82,14 @@
                     </div>
                 </form>
             </div>
+        </div>
+        <div class="row justify-content-center">
+            {% for message in get_flashed_messages() %}
+                <div class="alert alert-info alert-dismissible" style="width: 50%">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
         </div>
     </div>
 
