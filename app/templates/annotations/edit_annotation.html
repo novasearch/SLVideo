@@ -18,14 +18,124 @@
 {% endblock %}
 
 {% block content %}
+    <div class="container">
+        <div class="row  justify-content-center ">
+            <div id="video_col" class="col-5">
+                <video id="searched_video" controls style="width: 100%; height: auto;">
+                    <source id="video_source"
+                            src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t={{ start_time }}"
+                            type="video/mp4">
+                    <track id="video_captions" kind="captions"
+                           src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
+                           srclang="pt" label="Portuguese" default>
+                </video>
+            </div>
+            <div id="form-col" class="col-4">
+                <form>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="annotation_id" class="form-label">Id</label>
+                                <input type="text" class="form-control" id="annotation_id" value="{{ annotation_id }}"
+                                       disabled>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="video_id" class="form-label">Video</label>
+                                <input type="text" class="form-control" id="video_id" value="{{ video }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="expression" class="form-label">Expression</label>
+                        <input type="text" class="form-control" id="expression" value="{{ expression }}" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="start_time" class="form-label">Start</label>
+                                <input type="time" step="1" class="form-control" id="start_time"
+                                       value="{{ start_time }}" required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="end_time" class="form-label">End</label>
+                                <input type="time" step="1" class="form-control" id="end_time" value="{{ end_time }}"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn btn-outline-info" style="margin-top: 2rem"
+                                    onclick="playClip()">Test</button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phrase" class="form-label">Phrase</label>
+                        <input type="text" class="form-control" id="phrase" value="{{ phrase }}" required>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <video id="searched_video" controls>
-        <source id="video_source"
-                src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}"
-                type="video/mp4">
-        <track id="video_captions" kind="captions"
-               src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
-               srclang="pt" label="Portuguese" default>
-    </video>
+    <script>
+        var video = document.getElementById('searched_video');
+        var startInput = document.getElementById('start_time');
+        var endInput = document.getElementById('end_time');
+        var videoDuration;
+        var startSeconds = convertTimeToSeconds(startInput.value);
+        var endSeconds = convertTimeToSeconds(endInput.value);
+        let isPlayingClip = false;
 
+        document.addEventListener('DOMContentLoaded', (event) => {
+            video.addEventListener('loadedmetadata', function () {
+                videoDuration = video.duration;
+            });
+
+            video.addEventListener('timeupdate', checkVideoTime);
+
+            startInput.addEventListener('change', function () {
+                startSeconds = convertTimeToSeconds(startInput.value);
+                if (startSeconds > endSeconds) {
+                    startInput.value = endInput.value;
+                }
+            });
+
+            endInput.addEventListener('change', function () {
+                endSeconds = convertTimeToSeconds(endInput.value);
+                console.log(endSeconds, videoDuration)
+                if (endSeconds > videoDuration) {
+                    endInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                }
+                if (endSeconds < startSeconds) {
+                    endInput.value = startInput.value;
+                }
+            });
+        });
+
+        function convertTimeToSeconds(time) {
+            var timeArray = time.split(':');
+            return parseInt(timeArray[0]) * 3600 + parseInt(timeArray[1]) * 60 + parseInt(timeArray[2]);
+        }
+
+        // Function to play the video clip with the retrieved facial expression
+        function playClip() {
+            video.currentTime = startSeconds;
+            video.play();
+            isPlayingClip = true;
+        }
+
+        // Function to check the video time and pause it if it reaches the end time when the clip is playing
+        function checkVideoTime() {
+            if (video.currentTime >= endSeconds && isPlayingClip) {
+                video.pause();
+                isPlayingClip = false;
+            }
+        }
+    </script>
 {% endblock %}
