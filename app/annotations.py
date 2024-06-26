@@ -1,6 +1,7 @@
 import json
 import os
 import datetime
+from datetime import datetime as dt
 
 from flask import Blueprint, request, render_template, flash, url_for
 
@@ -42,21 +43,23 @@ def edit_annotation(video_id, annotation_id):
         "%H:%M:%S")
 
     if request.method == "POST":
-        # data = request.form
-        # expression = data["expression"]
-        # start_time = data["start_time"]
-        # end_time = data["end_time"]
-        # phrase = data["phrase"]
-        #
-        # for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
-        #     if annotation["annotation_id"] == annotation_id:
-        #         annotation["value"] = expression
-        #         annotation["start_time"] = int(start_time)
-        #         annotation["end_time"] = int(end_time)
-        #         annotation["phrase"] = phrase
-        #
-        # with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
-        #     json.dump(video_annotations, f, indent=4)
+        print(request.form)
+        expression = request.form.get("expression")
+        start_time = convert_to_milliseconds(request.form.get("start_time"))
+        end_time = convert_to_milliseconds(request.form.get("end_time"))
+        phrase = request.form.get("phrase")
+
+        print(expression, start_time, end_time, phrase)
+
+        for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
+            if annotation["annotation_id"] == annotation_id:
+                annotation["value"] = expression
+                annotation["start_time"] = int(start_time)
+                annotation["end_time"] = int(end_time)
+                annotation["phrase"] = phrase
+
+        with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+            json.dump(video_annotations, f, indent=4)
 
         flash("Annotation updated successfully!", "success")
 
@@ -91,3 +94,13 @@ def updated_user_rating():
         json.dump(video_annotations, f, indent=4)
 
     return '', 204
+
+
+def convert_to_milliseconds(time_str):
+    # Convert the time string to a datetime object
+    time_obj = dt.strptime(time_str, '%H:%M:%S')
+
+    # Calculate the total milliseconds
+    milliseconds = (time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second) * 1000
+
+    return milliseconds
