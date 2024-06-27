@@ -49,6 +49,11 @@ def query():
             else:  # True Expression / Ground Truth
                 session['query_results'] = query_true_expression(query_input)
 
+            # If there are no results, display a message
+            if query_input is not None and not session['query_results']:
+                flash("No results found.")
+                return render_template("query/query.html")
+
             return redirect(url_for("query.videos_results"))
 
     return render_template("query/query.html")
@@ -260,7 +265,7 @@ def query_true_expression(query_input):
     """ Get the results of the query using the ground truth """
     query_results = {}
     search_mode = session.get('search_mode', 1)
-    pattern = re.compile(r'(^|\[|_|]|\(|-){}($|\]|_|(?=\W)|\)|-)'.format(query_input.lower()), re.IGNORECASE)
+    pattern = re.compile(r'(^|\[|_|]|\(|-|\s){}($|\]|_|(?=\W)|\)|-|\s)'.format(query_input.lower()), re.IGNORECASE)
     with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
         average_frame_embeddings = pickle.load(f)
 

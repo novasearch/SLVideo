@@ -43,13 +43,10 @@ def edit_annotation(video_id, annotation_id):
         "%H:%M:%S")
 
     if request.method == "POST":
-        print(request.form)
         expression = request.form.get("expression")
         start_time = convert_to_milliseconds(request.form.get("start_time"))
         end_time = convert_to_milliseconds(request.form.get("end_time"))
         phrase = request.form.get("phrase")
-
-        print(expression, start_time, end_time, phrase)
 
         for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
             if annotation["annotation_id"] == annotation_id:
