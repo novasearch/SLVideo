@@ -31,7 +31,8 @@
                 </video>
             </div>
             <div id="form-col" class="col-4">
-                <form action="{{ url_for('annotations.edit_annotation', video_id=video, annotation_id=annotation_id) }}"
+                <form id="annotationForm" onsubmit="handleSubmit(event)"
+                      action="{{ url_for('annotations.edit_annotation', video_id=video, annotation_id=annotation_id) }}"
                       method="post">
                     <div class="row">
                         <div class="col-6">
@@ -80,14 +81,15 @@
                         <input type="text" class="form-control" name="phrase" id="phrase" value="{{ phrase }}" required>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="submit" class="btn btn-primary" onclick="update_annotation_info()">Save Changes
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
         <div class="row justify-content-center">
             {% for message in get_flashed_messages() %}
-                <div class="alert alert-info alert-dismissible" style="width: 50%">
+                <div class="alert alert-info alert-dismissible mt-2" style="width: 50%">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -148,6 +150,35 @@
                 video.pause();
                 isPlayingClip = false;
             }
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            fetch('/update_annotation_info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'video_id': document.getElementById('video_id').value,
+                    'annotation_id': document.getElementById('annotation_id').value,
+                    'expression': document.getElementById('expression').value,
+                    'start_time': document.getElementById('start_time').value,
+                    'end_time': document.getElementById('end_time').value,
+                    'phrase': document.getElementById('phrase').value
+                })
+            }).then(response => {
+                if (response.ok) {
+                    // If the response is ok, manually submit the form
+                    document.getElementById('annotationForm').submit();
+                } else {
+                    // Handle any errors
+                    console.error('Failed to update annotation info');
+                }
+            })
+                .catch(error => console.error('Error:', error));
+
         }
     </script>
 {% endblock %}

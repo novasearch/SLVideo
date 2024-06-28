@@ -129,6 +129,18 @@
                         'rating': starNumber
                     })
                 });
+
+                fetch('/update_annotation_rating', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'video_id': {{ video }},
+                        'annotation_id': current_annotation,
+                        'rating': starNumber
+                    })
+                });
             });
         });
 

@@ -4,6 +4,7 @@ import os
 import pickle
 import re
 from collections import OrderedDict
+from datetime import datetime as dt
 
 from flask import (
     Blueprint, flash, redirect, render_template, request, session, url_for
@@ -63,6 +64,7 @@ def query():
 def videos_results():
     """ Display the videos that contain the query results """
     query_results = session.get('query_results')
+
     search_mode = session.get('search_mode', 1)
 
     # Sort the query results by the number of annotations
@@ -105,6 +107,7 @@ def videos_results():
 def clips_results(video):
     """ Display the video segments of one video that contain the query results """
     query_results = session.get('query_results')[video]
+
     query_input = session.get('query_input')
     search_mode = session.get('search_mode', 1)
 
@@ -356,3 +359,52 @@ def get_frames_to_display(frames):
 
     return frames_to_display
 
+
+@bp.route("/update_annotation_rating", methods=["POST"])
+def update_annotation_rating():
+    """ Update the rating of an annotation in the session variable """
+    data = request.get_json()
+    video_id = str(data['video_id'])
+    annotation_id = data['annotation_id']
+    rating = data['rating']
+
+    query_results = session.get('query_results', {})
+
+    query_results[video_id][annotation_id]['user_rating'] = rating
+
+    session['query_results'] = query_results
+
+    return '', 204
+
+
+@bp.route('/update_annotation_info', methods=["POST"])
+def update_annotation_info():
+    """ Update the information of an annotation in the session variable """
+    data = request.get_json()
+    video_id = str(data['video_id'])
+    annotation_id = data['annotation_id']
+    annotation_value = data['expression']
+    phrase = data['phrase']
+    start_time = convert_to_milliseconds(data['start_time'])
+    end_time = convert_to_milliseconds(data['end_time'])
+
+    query_results = session.get('query_results', {})
+
+    query_results[video_id][annotation_id]['annotation_value'] = annotation_value
+    query_results[video_id][annotation_id]['phrase'] = phrase
+    query_results[video_id][annotation_id]['start_time'] = start_time
+    query_results[video_id][annotation_id]['end_time'] = end_time
+
+    session['query_results'] = query_results
+
+    return '', 204
+
+
+def convert_to_milliseconds(time_str):
+    # Convert the time string to a datetime object
+    time_obj = dt.strptime(time_str, '%H:%M:%S')
+
+    # Calculate the total milliseconds
+    milliseconds = (time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second) * 1000
+
+    return milliseconds
