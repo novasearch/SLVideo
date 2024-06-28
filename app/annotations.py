@@ -44,15 +44,18 @@ def edit_annotation(video_id, annotation_id):
 
     if request.method == "POST":
         expression = request.form.get("expression")
-        start_time = convert_to_milliseconds(request.form.get("start_time"))
-        end_time = convert_to_milliseconds(request.form.get("end_time"))
+        start_time = request.form.get("start_time")
+        end_time = request.form.get("end_time")
         phrase = request.form.get("phrase")
+
+        converted_start_time = convert_to_milliseconds(start_time)
+        converted_end_time = convert_to_milliseconds(end_time)
 
         for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
             if annotation["annotation_id"] == annotation_id:
                 annotation["value"] = expression
-                annotation["start_time"] = int(start_time)
-                annotation["end_time"] = int(end_time)
+                annotation["start_time"] = int(converted_start_time)
+                annotation["end_time"] = int(converted_end_time)
                 annotation["phrase"] = phrase
 
         with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
@@ -61,8 +64,8 @@ def edit_annotation(video_id, annotation_id):
         flash("Annotation updated successfully!", "success")
 
         return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
-                               prev_page=prev_page, expression=expression, start_time=converted_start_time,
-                               end_time=converted_end_time, phrase=phrase)
+                               prev_page=prev_page, expression=expression, start_time=start_time,
+                               end_time=end_time, phrase=phrase)
 
     return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
                            prev_page=prev_page, expression=expression, start_time=converted_start_time,
