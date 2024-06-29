@@ -10,6 +10,12 @@ CAPTIONS_PATH = "app/static/videofiles/captions"
 def parse_eaf_files(eaf_dir):
     """ Parses the eaf files and extracts the data from it """
 
+    # Create the annotations and captions directories if they don't exist
+    if not os.path.exists(ANNOTATIONS_PATH):
+        os.makedirs(ANNOTATIONS_PATH)
+    if not os.path.exists(CAPTIONS_PATH):
+        os.makedirs(CAPTIONS_PATH)
+
     for eaf in os.listdir(eaf_dir):
         videoname, extension = os.path.splitext(eaf)
         video_annotations_path = os.path.join(ANNOTATIONS_PATH, videoname + '.json')

@@ -32,7 +32,9 @@ In this deployed version, the model that is being used to generate the embedding
 
 ### Locally
 
-To run SLVideo in your system, first, you need to clone this repository:
+We recommend using an Ubuntu system to run SLVideo locally.
+
+First, you need to clone this repository:
 
 ```sh
 git clone https://github.com/novasearch/video-sl.git
@@ -46,6 +48,10 @@ pip install -r requirements.txt
 
 You need to have one or more videos and its associated EAF files with the respective annotations you want to use in the
 system. You can use the ones available in `url` as an example.
+
+To index the videos and annotations in OpenSearch, you need to have an OpenSearch instance running and set the
+environment variables `OPENSEARCH_HOST`, `OPENSEARCH_PORT`, `OPENSEARCH_USER` and `OPENSEARCH_PASSWORD` with the
+respective information of the OpenSearch instance you want to use.
 
 After this, run the `preprocess.py` script to do all the pre-processing needed to execute the application correctly. To
 run it, you need to execute the command `python -m app.preprocess`.

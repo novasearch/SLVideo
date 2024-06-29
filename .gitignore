@@ -156,3 +156,5 @@ cython_debug/
 *.eaf
 
 preprocess.sh
+*.json
+*.vtt
