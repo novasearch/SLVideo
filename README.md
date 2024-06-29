@@ -6,8 +6,9 @@ This is the official GitHub repo for the paper "SLVideo: A Sign Language Video M
 
 ## What is SLVideo
 
-SLVideo is a video moment retrieval software for Portuguese Sign Language videos focusing on signs where facial
-expressions have a big role. A collection of five hours of annotated Portuguese Sign Language videos is used as the
+SLVideo is a video moment retrieval software for Sign Language videos focusing on signs where facial
+expressions have an important role. A collection of five hours of annotated Portuguese Sign Language videos is used as
+the
 dataset, where it generates a series of embeddings from the extracted video frames and the videos' annotations to allow
 the user to use a text query to search for a specific video segment.
 
@@ -16,7 +17,8 @@ ones that were retrieved. That thesaurus is available by searching for a facial 
 Thesaurus" button on the opened modal when selecting a clip.
 
 To improve the dataset and train a future model to be used in this system, the users can also rate the retrieved video
-segments and edit the annotations of those video segments.
+segments and edit the annotations of those video segments. To do this, the user must search for a facial expression and
+rate it using the available rating stars or edit it by pressing the "Edit" button and updating the editable information.
 
 This system includes a web application developed in Flask that allows the users to try SLVideo.
 
@@ -33,7 +35,7 @@ In this deployed version, the model that is being used to generate the embedding
 To run SLVideo in your system, first, you need to clone this repository:
 
 ```sh
-git clone TODO
+git clone https://github.com/novasearch/video-sl.git
 ```
 
 Then, you must install all the needed dependencies through pip:
@@ -42,7 +44,11 @@ Then, you must install all the needed dependencies through pip:
 pip install -r requirements.txt
 ```
 
-After this, run the `preprocess.sh` script to do all the pre-processing needed to execute the application correctly.
+You need to have one or more videos and its associated EAF files with the respective annotations you want to use in the
+system. You can use the ones available in `url` as an example.
+
+After this, run the `preprocess.py` script to do all the pre-processing needed to execute the application correctly. To
+run it, you need to execute the command `python -m app.preprocess`.
 
 When the pre-processing phase is finished, just execute the Flask run command:
 
@@ -83,6 +89,8 @@ This folder contains the script responsible for parsing the **EAF** files
 
 - `eaf_parser.py`: Iterates through the available EAF files (one for each annotated video), parses the relevant info
   into JSON files and creates the video captions files
+
+### `embeddings`
 
 This folder contains the scripts responsible for generating embeddings for text and image
 

@@ -5,6 +5,7 @@ transformers==4.26.1
 numpy~=1.24.3
 torch==2.2.1
 pillow~=9.4.0
+sentence-transformers>=2.1.0
 
 omegaconf==2.2.3
 pandas==1.5.2
