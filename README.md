@@ -37,7 +37,7 @@ We recommend using an Ubuntu system to run SLVideo locally.
 First, you need to clone this repository:
 
 ```sh
-git clone https://github.com/novasearch/video-sl.git
+git clone https://github.com/novasearch/SLVideo.git
 ```
 
 Then, you must install all the needed dependencies through pip:
@@ -47,14 +47,14 @@ pip install -r requirements.txt
 ```
 
 You need to have one or more videos and its associated EAF files with the respective annotations you want to use in the
-system. You can use the ones available in `url` as an example.
+system. You can use the ones available [here](https://unlpt-my.sharepoint.com/personal/jm_magalhaes_fct_unl_pt/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjm%5Fmagalhaes%5Ffct%5Funl%5Fpt%2FDocuments%2FSLVideo%2Dexamples&ga=1) as an example. You will also have to create a directory named **videofiles** in `app/static/` and two directories named **eaf** and **mp4** inside the first one, and put the .eaf and .mp4 files in the respective directory.
 
 To index the videos and annotations in OpenSearch, you need to have an OpenSearch instance running and set the
 environment variables `OPENSEARCH_HOST`, `OPENSEARCH_PORT`, `OPENSEARCH_USER` and `OPENSEARCH_PASSWORD` with the
 respective information of the OpenSearch instance you want to use.
 
 After this, run the `preprocess.py` script to do all the pre-processing needed to execute the application correctly. To
-run it, you need to execute the command `python -m app.preprocess`.
+run it, execute the command `python -m app.preprocess`.
 
 When the pre-processing phase is finished, just execute the Flask run command:
 
@@ -74,7 +74,7 @@ And choose the host's address and port to run on:
 flask --app app run -h X.X.X.X -p XXXX
 ```
 
-## Change the encoders
+## How to change the encoder
 
 For now, two encoders are available in this repository: the `clip-ViT-B-32` and the `capivara`. If you wish to change
 the used encoder, you can add one by creating a file in the `app/embeddings/encoders` folder where you will implement
@@ -96,7 +96,7 @@ This folder contains the script responsible for parsing the **EAF** files
 - `eaf_parser.py`: Iterates through the available EAF files (one for each annotated video), parses the relevant info
   into JSON files and creates the video captions files
 
-### `embeddings`
+#### `embeddings`
 
 This folder contains the scripts responsible for generating embeddings for text and image
 
