@@ -86,7 +86,10 @@ def generate_frame_embeddings(frames_dir, result_dir, eb: Embedder):
                 torch.cuda.empty_cache()
 
             with open(embeddings_file, 'wb') as f:
-                pickle.dump(embeddings, f)
+                # Move tensors to CPU before saving
+                embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
+                                  embeddings.items()}
+                pickle.dump(embeddings_cpu, f)
 
             gc.collect()
 
@@ -164,10 +167,16 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb: Embed
                 torch.cuda.empty_cache()
 
             with open(average_embeddings_file, 'wb') as f:
-                pickle.dump(average_embeddings, f)
+                # Move tensors to CPU before saving
+                embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
+                                  average_embeddings.items()}
+                pickle.dump(embeddings_cpu, f)
 
             with open(best_embeddings_file, 'wb') as f:
-                pickle.dump(best_embeddings, f)
+                # Move tensors to CPU before saving
+                embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
+                                  best_embeddings.items()}
+                pickle.dump(embeddings_cpu, f)
 
             gc.collect()
 
@@ -211,7 +220,10 @@ def generate_annotations_embeddings(annotations_dir, facial_expressions_id, resu
                 embeddings[video_name][annotation_id] = eb.text_encode(annotation_value.lower())
 
     with open(embeddings_file, 'wb') as f:
-        pickle.dump(embeddings, f)
+        # Move tensors to CPU before saving
+        embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
+                          embeddings.items()}
+        pickle.dump(embeddings_cpu, f)
 
 
 def generate_query_embeddings(query_input, eb: Embedder):

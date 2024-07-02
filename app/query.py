@@ -269,8 +269,6 @@ def query_true_expression(query_input):
     query_results = {}
     search_mode = session.get('search_mode', 1)
     pattern = re.compile(r'(^|\[|_|]|\(|-|\s){}($|\]|_|(?=\W)|\)|-|\s)'.format(query_input.lower()), re.IGNORECASE)
-    with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
-        average_frame_embeddings = pickle.load(f)
 
     for video in os.listdir(os.path.join(FRAMES_PATH, search_mode)):
         with open(os.path.join(ANNOTATIONS_PATH, f"{video}.json"), "r") as f:
