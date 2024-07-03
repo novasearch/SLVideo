@@ -5,6 +5,25 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <section class="content">
+    <div class="container" style="width: 80%">
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand mb-0 h1">SLVideo</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup"
+                        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link active" aria-current="page" href="https://videolgp.novasearch.org/query">Query</a>
+                        <a class="nav-link disabled" href="https://videolgp.novasearch.org/videos" aria-disabled="true">Signs
+                            List</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
     <header>
         {% block header %}{% endblock %}
     </header>

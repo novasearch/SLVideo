@@ -22,7 +22,7 @@ opensearch = LGPOpenSearch()
 embedder = embeddings_processing.Embedder(check_gpu=False)
 
 
-@bp.route("/", methods=("GET", "POST"))
+@bp.route("/query", methods=("GET", "POST"))
 def query():
     """Query for a video"""
     if request.method == "POST":

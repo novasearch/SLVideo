@@ -2,14 +2,14 @@
 
 {% block header %}
     <div class="header d-flex justify-content-center">
-        <h1>{% block title %}SLVideo{% endblock %}</h1>
+        <h2>{% block title %}Query Sign{% endblock %}</h2>
     </div>
 {% endblock %}
 
 {% block content %}
     <div class="row justify-content-center">
         <div class="col-4">
-            <form action="{{ url_for('query') }}" method="post">
+            <form action="{{ url_for('query.query') }}" method="post">
                 <label for="search_field" class="form-label">Field:</label>
                 <select id="search_field" class="form-select" aria-label="Search Field" name="field">
                     <option value="1">Frames Embeddings</option>

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, redirect, url_for
 
 """Create and configure an instance of the Flask application."""
 
@@ -27,4 +27,8 @@ from . import query, annotations
 app.register_blueprint(query.bp)
 app.register_blueprint(annotations.bp)
 
-app.add_url_rule("/", endpoint="query")
+
+# Redirect the root URL to "/query"
+@app.route("/")
+def root():
+    return redirect(url_for("query.query"))
