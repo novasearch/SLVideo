@@ -89,6 +89,10 @@ def parse_eaf_files(eaf_dir):
             if 'GLOSA_P1_EXPRESSÃO' in data_dict:
                 data_dict['GLOSA_P1_EXPRESSAO'] = data_dict.pop('GLOSA_P1_EXPRESSÃO')
 
+            # Check if ""LP transcrição livre" is in the data_dict and replace for "LP_P1 transcrição livre"
+            if 'LP transcrição livre' in data_dict:
+                data_dict['LP_P1 transcrição livre'] = data_dict.pop('LP transcrição livre')
+
             # For each GLOSA_P1_EXPRESSAO annotation, add the value of the LP_P1 transcrição livre annotation
             for expression_glosa in data_dict['GLOSA_P1_EXPRESSAO']['annotations']:
                 for phrase in data_dict['LP_P1 transcrição livre']['annotations']:
