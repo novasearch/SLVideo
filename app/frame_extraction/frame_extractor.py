@@ -5,7 +5,6 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 import object_detector
 
-N_VIDEOS_TO_PROCESS = 3
 PHRASES_DIR = "LP_P1 transcrição livre"
 FACIAL_EXPRESSIONS_DIR = "GLOSA_P1_EXPRESSAO"
 
@@ -58,8 +57,8 @@ class FrameExtractor:
 
         for i, video in enumerate(os.listdir(videos_dir)):
             # Stop the loop after processing #N_VIDEOS_TO_PROCESS videos
-            if i >= N_VIDEOS_TO_PROCESS:
-                break
+            # if i >= N_VIDEOS_TO_PROCESS:
+            #     break
 
             # Define the paths for the video, phrases frames and facial expressions frames
             video_path = os.path.join(videos_dir, video)

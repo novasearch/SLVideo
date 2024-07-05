@@ -39,15 +39,17 @@ def generate_frame_embeddings(frames_dir, result_dir, eb: Embedder):
 
     for video in os.listdir(frames_dir):
 
-        if video in embeddings:
+        video_dir = os.path.join(frames_dir, video)
+
+        annotations_dir = os.listdir(video_dir)
+
+        if video in embeddings or len(annotations_dir) == 0 or video.startswith('.'):
             continue
+
+        embeddings[video] = {}
 
         print(f"Working on {video}", flush=True)
 
-        video_dir = os.path.join(frames_dir, video)
-        embeddings[video] = {}
-
-        annotations_dir = os.listdir(video_dir)
         for i in range(0, len(annotations_dir), annotations_batch_size):
             annotations_batch = annotations_dir[i:i + annotations_batch_size]
 
@@ -114,15 +116,20 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb: Embed
 
     for video in os.listdir(frames_dir):
 
+        video_dir = os.path.join(frames_dir, video)
+        annotations_dir = os.listdir(video_dir)
+
         if video in average_embeddings and video in best_embeddings:
             continue
 
-        print(f"Working on {video}", flush=True)
-        video_dir = os.path.join(frames_dir, video)
+        if len(annotations_dir) == 0 or video.startswith('.'):
+            continue
+
         average_embeddings[video] = {}
         best_embeddings[video] = {}
 
-        annotations_dir = os.listdir(video_dir)
+        print(f"Working on {video}", flush=True)
+
         for i in range(0, len(annotations_dir), annotations_batch_size):
             annotations_batch = annotations_dir[i:i + annotations_batch_size]
 
@@ -196,7 +203,7 @@ def generate_annotations_embeddings(annotations_dir, facial_expressions_id, resu
 
         video_name = video_annotations.split(".")[0]
 
-        if video_name in embeddings:
+        if video_name in embeddings or video_annotations.startswith('.'):
             continue
 
         print(f"Working on {video_annotations}", flush=True)
@@ -217,7 +224,10 @@ def generate_annotations_embeddings(annotations_dir, facial_expressions_id, resu
                 annotation_id = expression["annotation_id"]
                 annotation_value = expression["value"]
 
-                embeddings[video_name][annotation_id] = eb.text_encode(annotation_value.lower())
+                if annotation_value is not None:
+                    embeddings[video_name][annotation_id] = eb.text_encode(annotation_value.lower())
+                else:
+                    embeddings[video_name][annotation_id] = torch.zeros(512)
 
     with open(embeddings_file, 'wb') as f:
         # Move tensors to CPU before saving

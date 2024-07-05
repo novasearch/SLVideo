@@ -93,13 +93,14 @@ def parse_eaf_files(eaf_dir):
             if 'LP transcrição livre' in data_dict:
                 data_dict['LP_P1 transcrição livre'] = data_dict.pop('LP transcrição livre')
 
-            # For each GLOSA_P1_EXPRESSAO annotation, add the value of the LP_P1 transcrição livre annotation
-            for expression_glosa in data_dict['GLOSA_P1_EXPRESSAO']['annotations']:
-                for phrase in data_dict['LP_P1 transcrição livre']['annotations']:
-                    if int(phrase['start_time']) - 10 <= int(expression_glosa['start_time']) and int(
-                            phrase['end_time']) + 10 >= int(expression_glosa['end_time']):
-                        expression_glosa['phrase'] = phrase['value']
-                        break
+            if 'GLOSA_P1_EXPRESSAO' in data_dict:
+                # For each GLOSA_P1_EXPRESSAO annotation, add the value of the LP_P1 transcrição livre annotation
+                for expression_glosa in data_dict['GLOSA_P1_EXPRESSAO']['annotations']:
+                    for phrase in data_dict['LP_P1 transcrição livre']['annotations']:
+                        if int(phrase['start_time']) - 10 <= int(expression_glosa['start_time']) and int(
+                                phrase['end_time']) + 10 >= int(expression_glosa['end_time']):
+                            expression_glosa['phrase'] = phrase['value']
+                            break
 
             # Save the data dict as a json file
             with open(video_annotations_path, 'w') as f:
