@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Videos List{% endblock %}
+
+{% block content %}
+    <div class="row row-cols-1 row-cols-md-4 g-4 mt-0" style="margin-left: 10%; margin-right: 10%;">
+        {% for video in videos %}
+            <div class="col">
+                <div class="d-flex justify-content-center">
+                    <form action="{{ url_for('videos.list_videos') }}" method="post">
+                        <div class="card mb-1 w-10 border-secondary mx-auto text-bg-dark" onclick="this.parentNode.submit();"
+                             style="cursor: pointer; width: 17rem; height: 16rem;">
+                            <img src="{{ url_for('static', filename=videos[video]['thumbnail']) }}"
+                                 class="card-img-top" alt="No video thumbnail"
+                                 style="height: 9.5rem; ; width: auto; object-fit: contain; background-color: black">
+                            <div class="card-img-overlay">
+                                <h5 class="card-title">{{ video }}</h5>
+                                <input type="hidden" name="selected_video" value="{{ video }}">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
