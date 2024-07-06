@@ -21,7 +21,6 @@ def list_videos():
 
         videos[video_name] = {}
         videos[video_name]['path'] = os.path.join(VIDEO_PATH, video)
-        videos[video_name]['thumbnail'] = os.path.join(frames_path, first_annotation_path, thumbnail)
-        print(videos[video_name]['thumbnail'])
+        videos[video_name]['thumbnail'] = os.path.join(PHRASES_ID, video_name, first_annotation_path, thumbnail)
 
     return render_template("videos_list/videos_list.html", videos=videos)
