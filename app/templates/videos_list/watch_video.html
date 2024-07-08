@@ -5,29 +5,33 @@
 {% block content %}
     <div class="container text-center">
         <div class="row justify-content-center mt-3">
-            <video id="selected_video" controls style="width: 60%; height: auto;">
-                <source id="video_source"
-                        src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}"
-                        type="video/mp4">
-                <track id="video_captions" kind="captions"
-                       src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
-                       srclang="pt" label="Portuguese" default>
-            </video>
-        </div>
-        <div class="row justify-content-center mt-3 bg-secondary-subtle rounded mx-auto" style="width: 80%">
-            <p class="text-start mt-1 mb-0 fw-semibold">Facial Expressions Glosses</p>
-            <div class="hstack gap-2 overflow-x-auto mt-0">
-                {% for annotation in annotations %}
-                    <div class="p-2">
-                        <div class="badge text-bg-primary text-wrap text-break d-flex align-items-center justify-content-center"
-                             style="width: 6rem; height: 3.2rem; cursor: pointer;"
-                             onclick="playExpression({{ annotations[annotation]['start_time'] }}, {{ annotations[annotation]['end_time'] }})">
-                            {{ annotations[annotation]["value"] }}
-                        </div>
-                    </div>
-                {% endfor %}
+            <div class="ratio ratio-16x9" style="width: 60%; height: auto; background-color: black">
+                <video id="selected_video" controls>
+                    <source id="video_source"
+                            src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}"
+                            type="video/mp4">
+                    <track id="video_captions" kind="captions"
+                           src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
+                           srclang="pt" label="Portuguese" default>
+                </video>
             </div>
         </div>
+        {% if annotations %}
+            <div class="row justify-content-center mt-3 bg-secondary-subtle rounded mx-auto" style="width: 80%">
+                <p class="text-start mt-1 mb-0 fw-semibold">Facial Expressions Glosses</p>
+                <div class="hstack gap-2 overflow-x-auto mt-0">
+                    {% for annotation in annotations %}
+                        <div class="p-2">
+                            <div class="badge text-bg-primary text-wrap text-break d-flex align-items-center justify-content-center"
+                                 style="width: 6rem; height: 3.2rem; cursor: pointer;"
+                                 onclick="playExpression({{ annotations[annotation]['start_time'] }}, {{ annotations[annotation]['end_time'] }})">
+                                {{ annotations[annotation]["value"] }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 
     <script>
