@@ -3,17 +3,17 @@
 {% block title %}Videos List{% endblock %}
 
 {% block content %}
-    <div class="row row-cols-md-4 g-3 mt-1" style="margin-left: 15%; margin-right: 15%;">
+    <div class="row g-3 mt-1" style="margin-left: 15%; margin-right: 15%;">
         {% for video in videos %}
-            <div class="col">
+            <div class="col-sm-3 col-md-4">
                 <div class="d-flex justify-content-center">
                     <form action="{{ url_for('videos.list_videos') }}" method="post">
                         <div class="card"
                              onclick="this.parentNode.submit();"
                              style="cursor: pointer; width: 17rem;">
-                            <img src="{{ url_for('static', filename="videofiles/frames/" + videos[video]['thumbnail']) }}"
+                            <img src="{{ url_for('static', filename='videofiles/frames/' + videos[video]['thumbnail']) }}"
                                  class="card-img-top" alt="..."
-                                 style="height: 9.5rem; ; width: auto; object-fit: contain; background-color: black">
+                                 style="height: 9.5rem; width: auto; object-fit: contain; background-color: black">
                             <div class="card-body">
                                 <h5 class="card-title">{{ video }}</h5>
                                 <input type="hidden" name="selected_video" value="{{ video }}">
