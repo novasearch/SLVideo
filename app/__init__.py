@@ -22,10 +22,11 @@ try:
 except OSError:
     pass
 
-from . import query, annotations
+from . import query, annotations, videos
 
 app.register_blueprint(query.bp)
 app.register_blueprint(annotations.bp)
+app.register_blueprint(videos.bp)
 
 
 # Redirect the root URL to "/query"
