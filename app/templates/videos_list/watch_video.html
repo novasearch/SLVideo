@@ -18,15 +18,16 @@
         </div>
         {% if annotations %}
             <div class="row justify-content-center mt-3 bg-secondary-subtle rounded mx-auto" style="width: 80%">
-                <p class="text-start mt-1 mb-0 fw-semibold">Facial Expressions Glosses</p>
+                <p class="text-start mt-1 mb-0 fw-semibold" style="color:#4a4a4a">Facial Expressions Glosses</p>
                 <div class="hstack gap-2 overflow-x-auto mt-0">
                     {% for annotation in annotations %}
                         <div class="p-2">
-                            <div class="badge text-bg-primary text-wrap text-break d-flex align-items-center justify-content-center"
-                                 style="width: 6rem; height: 3.2rem; cursor: pointer;"
-                                 onclick="playExpression({{ annotations[annotation]['start_time'] }}, {{ annotations[annotation]['end_time'] }})">
+                            <button type="button"
+                                    class="btn btn-primary text-wrap text-break fw-bold lh-1"
+                                    style="width: 6rem; height: 3.2rem; cursor: pointer; font-size: 75%; padding: 0;"
+                                    onclick="playExpression({{ annotations[annotation]['start_time'] }}, {{ annotations[annotation]['end_time'] }})">
                                 {{ annotations[annotation]["value"] }}
-                            </div>
+                            </button>
                         </div>
                     {% endfor %}
                 </div>
