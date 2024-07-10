@@ -45,7 +45,11 @@ def query():
                 session['query_results'] = query_average_frames_embeddings(query_input)
             elif selected_field == 3:  # Best Frame Embeddings
                 session['query_results'] = query_best_frame_embedding(query_input)
-            elif selected_field == 4:  # Annotations Embeddings
+            elif selected_field == 4:  # Summed Frames Embeddings
+                session['query_results'] = query_summed_frames_embeddings(query_input)
+            elif selected_field == 5:  # Combined Frames Embeddings
+                session['query_results'] = query_combined_frames_embeddings(query_input)
+            elif selected_field == 6:  # Annotations Embeddings
                 session['query_results'] = query_annotations_embeddings(query_input)
             else:  # True Expression / Ground Truth
                 session['query_results'] = query_true_expression(query_input)
@@ -211,6 +215,20 @@ def query_best_frame_embedding(query_input):
     """ Get the results of the query using the best frame embedding """
     query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
     search_results = opensearch.knn_query_best(query_embedding.tolist(), N_RESULTS)
+    return set_query_results(search_results, query_input)
+
+
+def query_summed_frames_embeddings(query_input):
+    """ Get the results of the query using the summed frames embeddings """
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
+    search_results = opensearch.knn_query_summed(query_embedding.tolist(), N_RESULTS)
+    return set_query_results(search_results, query_input)
+
+
+def query_combined_frames_embeddings(query_input):
+    """ Get the results of the query using the combined frames embeddings """
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
+    search_results = opensearch.knn_query_combined(query_embedding.tolist(), N_RESULTS)
     return set_query_results(search_results, query_input)
 
 

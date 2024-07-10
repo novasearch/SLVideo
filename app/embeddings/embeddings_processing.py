@@ -19,6 +19,9 @@ def generate_video_embeddings(frames_dir, annotations_dir, facial_expressions_id
     generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb)
     print("Average and best frame embeddings generated", flush=True)
 
+    generate_summed_embeddings(result_dir)
+    print("Summed embeddings generated", flush=True)
+
     generate_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb)
     print("Annotations embeddings generated", flush=True)
 
@@ -186,6 +189,47 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb: Embed
                 pickle.dump(embeddings_cpu, f)
 
             gc.collect()
+
+
+def generate_summed_embeddings(result_dir):
+    """ Generate the summed embeddings for all the facial expressions annotations' values """
+    print("Generating summed embeddings", flush=True)
+
+    # Load embeddings
+    with open(os.path.join(result_dir, 'frame_embeddings.json.embeddings'), 'rb') as f:
+        base_embeddings = pickle.load(f)
+    with open(os.path.join(result_dir, 'average_frame_embeddings.json.embeddings'), 'rb') as f:
+        average_embeddings = pickle.load(f)
+    with open(os.path.join(result_dir, 'best_frame_embeddings.json.embeddings'), 'rb') as f:
+        best_embeddings = pickle.load(f)
+
+    summed_embeddings_file = os.path.join(result_dir, 'summed_frame_embeddings.json.embeddings')
+
+    summed_embeddings = {}
+    if os.path.exists(summed_embeddings_file):
+        with open(summed_embeddings_file, 'rb') as f:
+            summed_embeddings = pickle.load(f)
+
+    for video, annotations in base_embeddings.items():
+
+        if video in summed_embeddings or video not in base_embeddings:
+            continue
+
+        summed_embeddings[video] = {}
+
+        print(f"Working on {video}", flush=True)
+
+        for annotation_id, base_emb in annotations.items():
+            # Ensure the annotation exists in all embeddings
+            if video in average_embeddings and annotation_id in average_embeddings[video] and \
+                    video in best_embeddings and annotation_id in best_embeddings[video]:
+                # Sum the embeddings
+                summed_emb = base_emb + average_embeddings[video][annotation_id] + best_embeddings[video][annotation_id]
+                summed_embeddings[video][annotation_id] = summed_emb.cpu()
+
+    # Save the summed embeddings
+    with open(summed_embeddings_file, 'wb') as f:
+        pickle.dump(summed_embeddings, f)
 
 
 def generate_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb: Embedder):
