@@ -37,8 +37,8 @@ def run_in_env(script_path, env_path):
     process.wait()
 
 
-def gen_doc(video_id: str, annotation_id: str, base_frame_embedding, average_frame_embedding, best_frame_embedding,
-            annotation_embedding):
+def gen_doc(video_id: str, annotation_id: str, base_frame_embedding, average_frame_embedding, summed_frame_embeddings,
+            best_frame_embedding, annotation_embedding):
     """ Generate a document for indexing in OpenSearch """
     return {
         "video_id": video_id,
@@ -46,6 +46,7 @@ def gen_doc(video_id: str, annotation_id: str, base_frame_embedding, average_fra
         "base_frame_embedding": base_frame_embedding,
         "average_frame_embedding": average_frame_embedding,
         "best_frame_embedding": best_frame_embedding,
+        "summed_frame_embeddings": summed_frame_embeddings,
         "annotation_embedding": annotation_embedding,
     }
 
@@ -87,6 +88,9 @@ with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embedding
 with open(os.path.join(EMBEDDINGS_PATH, "best_frame_embeddings.json.embeddings"), "rb") as f:
     best_frame_embeddings = CPU_Unpickler(f).load()
 
+with open(os.path.join(EMBEDDINGS_PATH, "summed_frame_embeddings.json.embeddings"), "rb") as f:
+    summed_frame_embeddings = CPU_Unpickler(f).load()
+
 with open(os.path.join(EMBEDDINGS_PATH, "annotations_embeddings.json.embeddings"), "rb") as f:
     annotations_embeddings = CPU_Unpickler(f).load()
 
@@ -121,6 +125,7 @@ for video_id in os.listdir(facial_expressions_frames_path):
                 base_frame_embedding=base_frame_embeddings[video_id][annotation_id].tolist(),
                 average_frame_embedding=average_frame_embeddings[video_id][annotation_id].tolist(),
                 best_frame_embedding=best_frame_embeddings[video_id][annotation_id].tolist(),
+                summed_frame_embeddings=summed_frame_embeddings[video_id][annotation_id].tolist(),
                 annotation_embedding=annotations_embeddings[video_id][annotation_id].tolist(),
             )
 

@@ -56,6 +56,10 @@ class LGPOpenSearch:
                         'dimension': 512,
                         'type': 'knn_vector'
                     },
+                    "summed_frame_embeddings": {
+                        'dimension': 512,
+                        'type': 'knn_vector'
+                    },
                     "annotation_embedding": {
                         'dimension': 512,
                         'type': 'knn_vector'
@@ -142,7 +146,7 @@ class LGPOpenSearch:
                         "knn": {
                             "base_frame_embedding": {
                                 "vector": embedding,
-                                "k": 10
+                                "k": k
                             }
                         }
 
@@ -200,6 +204,66 @@ class LGPOpenSearch:
             body=query_obj,
             index=self.index_name
         )
+
+    def knn_query_summed(self, embedding, k):
+        """ Performs a k-nearest neighbors (k-NN) search on the summed_frame_embeddings field of the OpenSearch index"""
+        query_obj = {
+            "size": k,
+            "query": {
+                "bool": {
+                    "should": {
+                        "knn": {
+                            "summed_frame_embeddings": {
+                                "vector": embedding,
+                                "k": k
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return self.client.search(
+            body=query_obj,
+            index=self.index_name
+        )
+
+    def knn_query_combined(self, embedding, k):
+        """Performs a k-nearest neighbors (k-NN) search using all three types of embeddings"""
+        query_obj = {
+            "size": k,
+            "query": {
+                "bool": {
+                    "should": [
+                        {
+                            "knn": {
+                                "base_frame_embedding": {
+                                    "vector": embedding,
+                                    "k": k
+                                }
+                            }
+                        },
+                        {
+                            "knn": {
+                                "average_frame_embedding": {
+                                    "vector": embedding,
+                                    "k": k
+                                }
+                            }
+                        },
+                        {
+                            "knn": {
+                                "best_frame_embedding": {
+                                    "vector": embedding,
+                                    "k": k
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+        return self.client.search(body=query_obj, index=self.index_name)
 
     def knn_query_annotations(self, embedding, k):
         """ Performs a k-nearest neighbors (k-NN) search on the annotation_embedding field of the OpenSearch index """
