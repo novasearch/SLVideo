@@ -1,41 +1,41 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<div class="header container text-center">
-    <div class="row align-items-center">
-        <div class="col">
-            <a class="btn btn-outline-dark" style="width: 25%" href="{{ url_for('query.query') }}">Back</a>
-        </div>
-        <div class="col">
-            <h2 class="text-center flex-grow-1">{% block title %}Search Results{% endblock %}</h2>
-        </div>
-        <div class="col">
-            <!-- Empty column just to center the elements -->
+    <div class="header container text-center">
+        <div class="row align-items-center">
+            <div class="col">
+                <a class="btn btn-outline-dark" style="width: 25%" href="{{ url_for('query.query') }}">Back</a>
+            </div>
+            <div class="col">
+                <h2 class="text-center flex-grow-1">{% block title %}Search Results{% endblock %}</h2>
+            </div>
+            <div class="col">
+                <!-- Empty column just to center the elements -->
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block content %}
-<div class="row row-cols-1 row-cols-md-4 g-4" style="margin-left: 10%; margin-right: 10%;">
-    {% for video in videos_info %}
-    <div class="col">
-        <div class="d-flex justify-content-center">
-            <form action="{{ url_for('query.videos_results') }}" method="post">
-                <div class="card mb-1 w-10 border-secondary mx-auto" onclick="this.parentNode.submit();"
-                     style="cursor: pointer; width: 17rem; height: 16rem;">
-                    <img src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + videos_info[video]['first_annotation'] +'/' + frames[video]) }}"
-                         class="card-img-top" alt="No video thumbnail"
-                         style="height: 9.5rem; ; width: auto; object-fit: contain; background-color: black">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ video }}</h5>
-                        <p class="card-text text-center">{{ videos_info[video]["n_annotations"] }} Matches</p>
-                        <input type="hidden" name="selected_video" value="{{ video }}">
-                    </div>
+    <div class="row row-cols-1 row-cols-md-4 g-4" style="margin-left: 10%; margin-right: 10%;">
+        {% for video in videos_info %}
+            <div class="col">
+                <div class="d-flex justify-content-center">
+                    <form action="{{ url_for('query.videos_results') }}" method="post">
+                        <div class="card mb-1 w-10 border-secondary mx-auto" onclick="this.parentNode.submit();"
+                             style="cursor: pointer; width: 17rem; height: 16rem;">
+                            <img src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + video + '/' + videos_info[video]['first_annotation'] +'/' + frames[video]) }}"
+                                 class="card-img-top" alt="No video thumbnail"
+                                 style="height: 9.5rem; ; width: auto; object-fit: contain; background-color: black">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ video }}</h5>
+                                <p class="card-text text-center">{{ videos_info[video]["n_annotations"] }} Matches</p>
+                                <input type="hidden" name="selected_video" value="{{ video }}">
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 {% endblock %}

@@ -72,6 +72,55 @@ def edit_annotation(video_id, annotation_id):
                            end_time=converted_end_time, phrase=phrase)
 
 
+@bp.route("/add_annotations/<video_id>", methods=("GET", "POST"))
+def add_annotations(video_id):
+    """ Add an annotation """
+    """
+    global prev_page
+
+    current_route = url_for('annotations.add_annotation', video_id=video_id, _external=True)
+    referer = request.headers.get('Referer', None)
+
+    if (referer.replace('http://', '').replace('https://', '') !=
+            current_route.replace('http://', '').replace('https://', '')):
+        prev_page = referer
+
+    with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
+        video_annotations = json.load(f)
+
+    if request.method == "POST":
+        expression = request.form.get("expression")
+        start_time = request.form.get("start_time")
+        end_time = request.form.get("end_time")
+        phrase = request.form.get("phrase")
+
+        converted_start_time = convert_to_milliseconds(start_time)
+        converted_end_time = convert_to_milliseconds(end_time)
+
+        annotation_id = len(video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]) + 1
+
+        annotation = {
+            "annotation_id": annotation_id,
+            "value": expression,
+            "start_time": int(converted_start_time),
+            "end_time": int(converted_end_time),
+            "phrase": phrase,
+            "user_rating": 0
+        }
+
+        video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].append(annotation)
+
+        with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+            json.dump(video_annotations, f, indent=4)
+
+        flash("Annotation added successfully!", "success")
+
+        return render_template("annotations/add_annotation.html", video=video_id, prev_page=prev_page)
+
+    """
+    print("AAAAAAAAAAAAAAAa")
+    return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page)
+
 @bp.route("/update_user_rating", methods=["POST"])
 def updated_user_rating():
     """ Update the user rating of an annotation """

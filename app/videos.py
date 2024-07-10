@@ -52,5 +52,8 @@ def watch_video(video_id):
     # Sort annotations by value alphabetically
     facial_expressions = dict(sorted(facial_expressions.items(), key=lambda item: item[1]["value"]))
 
+    if request.method == "POST":
+        return redirect(url_for("annotations.add_annotations", video_id=video_id))
+
     return render_template("videos_list/watch_video.html", video=video_id,
                            annotations=facial_expressions)
