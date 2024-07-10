@@ -3,6 +3,20 @@ import os
 from opensearchpy import OpenSearch, OpenSearchException
 
 
+def gen_doc(video_id: str, annotation_id: str, base_frame_embedding, average_frame_embedding,
+            summed_frame_embeddings, best_frame_embedding, annotation_embedding):
+    """ Generate a document for indexing in OpenSearch """
+    return {
+        "video_id": video_id,
+        "annotation_id": annotation_id,
+        "base_frame_embedding": base_frame_embedding,
+        "average_frame_embedding": average_frame_embedding,
+        "best_frame_embedding": best_frame_embedding,
+        "summed_frame_embeddings": summed_frame_embeddings,
+        "annotation_embedding": annotation_embedding,
+    }
+
+
 class LGPOpenSearch:
     """ Class for managing the OpenSearch index for the Portuguese Sign Language project """
 
