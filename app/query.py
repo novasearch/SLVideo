@@ -10,16 +10,15 @@ from flask import (
     Blueprint, flash, redirect, render_template, request, session, url_for
 )
 
-from . import embedder
 from .embeddings import embeddings_processing
 from .opensearch.opensearch import LGPOpenSearch
 from .constants import EMBEDDINGS_PATH, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, ANNOTATIONS_PATH
+from .utils import embedder, opensearch
 
 N_RESULTS = 10
 N_FRAMES_TO_DISPLAY = 6
 
 bp = Blueprint('query', __name__)
-opensearch = LGPOpenSearch()
 
 
 @bp.route("/query", methods=("GET", "POST"))

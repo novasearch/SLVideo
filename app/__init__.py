@@ -25,10 +25,6 @@ except OSError:
     pass
 
 from . import query, annotations, videos
-
-
-embedder = embeddings_processing.Embedder(check_gpu=False)
-
 app.register_blueprint(query.bp)
 app.register_blueprint(annotations.bp)
 app.register_blueprint(videos.bp)

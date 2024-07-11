@@ -4,7 +4,7 @@ import datetime
 
 from flask import Blueprint, render_template, request, redirect, url_for
 
-from app.constants import VIDEO_PATH, FRAMES_PATH, PHRASES_ID, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID
+from app.utils import VIDEO_PATH, FRAMES_PATH, PHRASES_ID, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID
 
 bp = Blueprint('videos', __name__)
 

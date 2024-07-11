@@ -5,7 +5,7 @@ from datetime import datetime as dt
 
 from flask import Blueprint, request, render_template, flash, url_for
 
-from app.constants import ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID
+from .utils import embedder, FACIAL_EXPRESSIONS_ID, ANNOTATIONS_PATH
 
 bp = Blueprint('annotations', __name__)
 

@@ -1,24 +1,13 @@
 import json
-import pickle
 import subprocess
-
-import torch
-import io
-
 from .constants import *
 from .eaf_parser import eaf_parser
 from .embeddings import embeddings_processing
 from .opensearch.opensearch import LGPOpenSearch, gen_doc
+from .utils import CPU_Unpickler
 
 # Initialize the OpenSearch client
 opensearch = LGPOpenSearch()
-
-class CPU_Unpickler(pickle.Unpickler):
-    def find_class(self, module, name):
-        if module == 'torch.storage' and name == '_load_from_bytes':
-            return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
-        else:
-            return super().find_class(module, name)
 
 
 def run_in_env(script_path, env_path):

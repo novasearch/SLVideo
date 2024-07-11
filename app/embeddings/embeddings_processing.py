@@ -9,7 +9,7 @@ import os
 import pickle
 import gc
 
-from ..constants import FACIAL_EXPRESSIONS_ID, EMBEDDINGS_PATH, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_FRAMES_DIR
+from ..utils import FACIAL_EXPRESSIONS_FRAMES_DIR, EMBEDDINGS_PATH, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID
 
 
 def generate_video_embeddings():
@@ -24,7 +24,7 @@ def generate_video_embeddings():
     generate_average_and_best_frame_embeddings(embedder)
     print("Average and best frame embeddings generated", flush=True)
 
-    generate_summed_embeddings(embedder)
+    generate_summed_embeddings()
     print("Summed embeddings generated", flush=True)
 
     generate_annotations_embeddings(embedder)
@@ -96,10 +96,7 @@ def generate_frame_embeddings(eb: Embedder):
                 torch.cuda.empty_cache()
 
             with open(embeddings_file, 'wb') as f:
-                # Move tensors to CPU before saving
-                embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
-                                  embeddings.items()}
-                pickle.dump(embeddings_cpu, f)
+                pickle.dump(embeddings, f)
 
             gc.collect()
 
@@ -182,16 +179,10 @@ def generate_average_and_best_frame_embeddings(eb: Embedder):
                 torch.cuda.empty_cache()
 
             with open(average_embeddings_file, 'wb') as f:
-                # Move tensors to CPU before saving
-                embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
-                                  average_embeddings.items()}
-                pickle.dump(embeddings_cpu, f)
+                pickle.dump(average_embeddings, f)
 
             with open(best_embeddings_file, 'wb') as f:
-                # Move tensors to CPU before saving
-                embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
-                                  best_embeddings.items()}
-                pickle.dump(embeddings_cpu, f)
+                pickle.dump(best_embeddings, f)
 
             gc.collect()
 
@@ -279,10 +270,7 @@ def generate_annotations_embeddings(eb: Embedder):
                     embeddings[video_name][annotation_id] = torch.zeros(512)
 
     with open(embeddings_file, 'wb') as f:
-        # Move tensors to CPU before saving
-        embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
-                          embeddings.items()}
-        pickle.dump(embeddings_cpu, f)
+        pickle.dump(embeddings, f)
 
 
 def generate_query_embeddings(query_input, eb: Embedder):

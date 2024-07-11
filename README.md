@@ -144,10 +144,6 @@ This script initializes the Flask web application
 This script is responsible for all the annotations update related operations, such as editing existing ones and rating
 the retrieved video segments
 
-#### `constants.py`
-
-This script contains all the constants used in the application
-
 #### `preprocess.py`
 
 This script is responsible for all the pre-processing tasks before starting the application, such as parsing the
@@ -156,6 +152,10 @@ annotations files, extracting the relevant frames, generating the embeddings and
 #### `query.py`
 
 This script handles the user queries and displays its results in the web application
+
+#### `utils.py`
+
+This script contains the constants and utility functions used in the other scripts
 
 #### `videos.py`
 
