@@ -1,10 +1,11 @@
 import json
+import os
 import subprocess
-from .constants import *
 from .eaf_parser import eaf_parser
 from .embeddings import embeddings_processing
 from .opensearch.opensearch import LGPOpenSearch, gen_doc
-from .utils import CPU_Unpickler
+from .utils import CPU_Unpickler, RESULTS_PATH, EAF_PATH, VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH, EMBEDDINGS_PATH, \
+    FACIAL_EXPRESSIONS_FRAMES_DIR, FACIAL_EXPRESSIONS_ID
 
 # Initialize the OpenSearch client
 opensearch = LGPOpenSearch()

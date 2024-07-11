@@ -1,7 +1,6 @@
 import datetime
 import json
 import os
-import pickle
 import re
 from collections import OrderedDict
 from datetime import datetime as dt
@@ -11,9 +10,7 @@ from flask import (
 )
 
 from .embeddings import embeddings_processing
-from .opensearch.opensearch import LGPOpenSearch
-from .constants import EMBEDDINGS_PATH, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, ANNOTATIONS_PATH
-from .utils import embedder, opensearch
+from .utils import embedder, opensearch, CPU_Unpickler, EMBEDDINGS_PATH, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, ANNOTATIONS_PATH
 
 N_RESULTS = 10
 N_FRAMES_TO_DISPLAY = 6
@@ -241,7 +238,7 @@ def query_annotations_embeddings(query_input):
 def query_thesaurus(video_id, annotation_id):
     """ Get the results of querying for a similar sign """
     with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
-        average_frame_embeddings = pickle.load(f)
+        average_frame_embeddings = CPU_Unpickler(f).load()
     embedding = average_frame_embeddings[video_id][annotation_id].tolist()
     search_results = opensearch.knn_query_average(embedding, N_RESULTS)
     return set_query_results(search_results)

@@ -26,6 +26,7 @@ embedder = embeddings_processing.Embedder(check_gpu=False)
 # OpenSearch instance to be used throughout the application
 opensearch = LGPOpenSearch()
 
+
 # Custom Unpickler to load torch tensors on CPU
 class CPU_Unpickler(pickle.Unpickler):
     def find_class(self, module, name):
@@ -33,5 +34,3 @@ class CPU_Unpickler(pickle.Unpickler):
             return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
         else:
             return super().find_class(module, name)
-
-
