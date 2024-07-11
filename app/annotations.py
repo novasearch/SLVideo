@@ -5,6 +5,7 @@ from datetime import datetime as dt
 
 from flask import Blueprint, request, render_template, flash, url_for
 
+from .embeddings import embeddings_processing
 from .utils import embedder, FACIAL_EXPRESSIONS_ID, ANNOTATIONS_PATH
 
 bp = Blueprint('annotations', __name__)
@@ -60,6 +61,9 @@ def edit_annotation(video_id, annotation_id):
 
         with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
             json.dump(video_annotations, f, indent=4)
+
+        # Update the embeddings
+        embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
 
         flash("Annotation updated successfully!", "success")
 

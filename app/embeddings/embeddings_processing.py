@@ -9,7 +9,8 @@ import os
 import pickle
 import gc
 
-from ..utils import FACIAL_EXPRESSIONS_FRAMES_DIR, EMBEDDINGS_PATH, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID
+from ..utils import FACIAL_EXPRESSIONS_FRAMES_DIR, EMBEDDINGS_PATH, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID, opensearch, \
+    CPU_Unpickler
 
 
 def generate_video_embeddings():
@@ -268,6 +269,36 @@ def generate_annotations_embeddings(eb: Embedder):
                     embeddings[video_name][annotation_id] = eb.text_encode(annotation_value.lower())
                 else:
                     embeddings[video_name][annotation_id] = torch.zeros(512)
+
+    with open(embeddings_file, 'wb') as f:
+        pickle.dump(embeddings, f)
+
+
+def update_annotations_embeddings(video_id, annotation_id, eb: Embedder):
+    """ Update the embeddings for a specific annotation of a video """
+    embeddings_file = os.path.join(EMBEDDINGS_PATH, 'annotations_embeddings.json.embeddings')
+
+    with open(embeddings_file, 'rb') as f:
+        embeddings = CPU_Unpickler(f).load()
+
+    annotation_json = os.path.join(ANNOTATIONS_PATH, f"{video_id}.json")
+
+    with open(annotation_json, 'r') as f:
+        annotations = json.load(f)
+
+        expressions = annotations[FACIAL_EXPRESSIONS_ID]["annotations"]
+
+        for expression in expressions:
+            if expression["annotation_id"] == annotation_id:
+                annotation_value = expression["value"]
+
+                if annotation_value is not None:
+                    embeddings[video_id][annotation_id] = eb.text_encode(annotation_value.lower())
+                else:
+                    embeddings[video_id][annotation_id] = torch.zeros(512)
+
+    # Update the opensearch index
+    opensearch.update_annotation_embedding(video_id, annotation_id, embeddings[video_id][annotation_id])
 
     with open(embeddings_file, 'wb') as f:
         pickle.dump(embeddings, f)

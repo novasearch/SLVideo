@@ -99,6 +99,6 @@ for video_id in os.listdir(FACIAL_EXPRESSIONS_FRAMES_DIR):
 
             # Index the document in OpenSearch
             # opensearch.index_if_not_exists(doc)
-            opensearch.delete_doc_and_index(doc)
+            opensearch.update_doc_and_index(doc)
 
 print("Finished processing videos", flush=True)
