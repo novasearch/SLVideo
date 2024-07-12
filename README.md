@@ -26,7 +26,7 @@ This system includes a web application developed in Flask that allows the users 
 
 ### In the deployed web application
 
-You just need to access this link: https://videolgp.novasearch.org/
+You just need to access this link: https://slvideo.novasearch.org/
 
 In this deployed version, the model that is being used to generate the embeddings is `clip-ViT-B-32`.
 
