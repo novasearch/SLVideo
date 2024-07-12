@@ -311,7 +311,6 @@ class LGPOpenSearch:
             }
         }
         try:
-            response = self.client.update(index=self.index_name, id=document_id, body=update_body, refresh=True)
-            print("Update response:", response)
+            self.client.update(index=self.index_name, id=document_id, body=update_body, refresh=True)
         except OpenSearchException as e:
             print("Error updating document:", e)

@@ -3,7 +3,7 @@ import os
 import datetime
 from datetime import datetime as dt
 
-from flask import Blueprint, request, render_template, flash, url_for
+from flask import Blueprint, request, render_template, flash, url_for, redirect
 
 from .embeddings import embeddings_processing
 from .utils import embedder, FACIAL_EXPRESSIONS_ID, ANNOTATIONS_PATH
@@ -44,32 +44,50 @@ def edit_annotation(video_id, annotation_id):
         "%H:%M:%S")
 
     if request.method == "POST":
-        expression = request.form.get("expression")
-        start_time = request.form.get("start_time")
-        end_time = request.form.get("end_time")
-        phrase = request.form.get("phrase")
+        action = request.form.get("action_type")
 
-        converted_start_time = convert_to_milliseconds(start_time)
-        converted_end_time = convert_to_milliseconds(end_time)
+        # If the user wants to delete the annotation
+        if action == "delete":
+            for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
+                if annotation["annotation_id"] == annotation_id:
+                    video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].remove(annotation)
 
-        for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
-            if annotation["annotation_id"] == annotation_id:
-                annotation["value"] = expression
-                annotation["start_time"] = int(converted_start_time)
-                annotation["end_time"] = int(converted_end_time)
-                annotation["phrase"] = phrase
+            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+                json.dump(video_annotations, f, indent=4)
 
-        with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
-            json.dump(video_annotations, f, indent=4)
+            # Update the embeddings
+            embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
 
-        # Update the embeddings
-        embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
+            return redirect(prev_page)
 
-        flash("Annotation updated successfully!", "success")
+        # If the user wants to edit the annotation
+        elif action == "edit":
+            expression = request.form.get("expression")
+            start_time = request.form.get("start_time")
+            end_time = request.form.get("end_time")
+            phrase = request.form.get("phrase")
 
-        return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
-                               prev_page=prev_page, expression=expression, start_time=start_time,
-                               end_time=end_time, phrase=phrase)
+            converted_start_time = convert_to_milliseconds(start_time)
+            converted_end_time = convert_to_milliseconds(end_time)
+
+            for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
+                if annotation["annotation_id"] == annotation_id:
+                    annotation["value"] = expression
+                    annotation["start_time"] = int(converted_start_time)
+                    annotation["end_time"] = int(converted_end_time)
+                    annotation["phrase"] = phrase
+
+            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+                json.dump(video_annotations, f, indent=4)
+
+            # Update the embeddings
+            embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
+
+            flash("Annotation updated successfully!", "success")
+
+            return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
+                                   prev_page=prev_page, expression=expression, start_time=start_time,
+                                   end_time=end_time, phrase=phrase)
 
     return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
                            prev_page=prev_page, expression=expression, start_time=converted_start_time,

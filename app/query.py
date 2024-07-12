@@ -10,7 +10,8 @@ from flask import (
 )
 
 from .embeddings import embeddings_processing
-from .utils import embedder, opensearch, CPU_Unpickler, EMBEDDINGS_PATH, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, ANNOTATIONS_PATH
+from .utils import embedder, opensearch, CPU_Unpickler, EMBEDDINGS_PATH, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, \
+    ANNOTATIONS_PATH
 
 N_RESULTS = 10
 N_FRAMES_TO_DISPLAY = 6
@@ -137,7 +138,8 @@ def clips_results(video):
             selected_annotation = request.form.get("selected_annotation")
 
             if button_clicked == 'edit':
-                return redirect(url_for("annotations.edit_annotation", video_id=video, annotation_id=selected_annotation))
+                return redirect(
+                    url_for("annotations.edit_annotation", video_id=video, annotation_id=selected_annotation))
 
             elif button_clicked == 'thesaurus':
                 return redirect(url_for("query.thesaurus_results", video_id=video, annotation_id=selected_annotation))
@@ -285,6 +287,8 @@ def query_true_expression(query_input):
     pattern = re.compile(r'(^|\[|_|]|\(|-|\s){}($|\]|_|(?=\W)|\)|-|\s)'.format(query_input.lower()), re.IGNORECASE)
 
     for video in os.listdir(os.path.join(FRAMES_PATH, search_mode)):
+        if not video.endswith(".mp4"):
+            continue
         with open(os.path.join(ANNOTATIONS_PATH, f"{video}.json"), "r") as f:
             video_annotations = json.load(f)
             if search_mode in video_annotations:
@@ -395,21 +399,32 @@ def update_annotation_info():
     data = request.get_json()
     video_id = str(data['video_id'])
     annotation_id = data['annotation_id']
-    annotation_value = data['expression']
-    phrase = data['phrase']
-    start_time = convert_to_milliseconds(data['start_time'])
-    end_time = convert_to_milliseconds(data['end_time'])
 
     query_results = session.get('query_results', {})
 
-    query_results[video_id][annotation_id]['annotation_value'] = annotation_value
-    query_results[video_id][annotation_id]['phrase'] = phrase
-    query_results[video_id][annotation_id]['start_time'] = start_time
-    query_results[video_id][annotation_id]['end_time'] = end_time
+    if video_id not in query_results or annotation_id not in query_results[video_id]:
+        return '', 204
 
-    session['query_results'] = query_results
+    action = data['action_type']
 
-    return '', 204
+    if action == 'delete':
+        del query_results[video_id][annotation_id]
+        session['query_results'] = query_results
+        return '', 204
+    elif action == 'edit':
+        annotation_value = data['expression']
+        phrase = data['phrase']
+        start_time = convert_to_milliseconds(data['start_time'])
+        end_time = convert_to_milliseconds(data['end_time'])
+
+        query_results[video_id][annotation_id]['annotation_value'] = annotation_value
+        query_results[video_id][annotation_id]['phrase'] = phrase
+        query_results[video_id][annotation_id]['start_time'] = start_time
+        query_results[video_id][annotation_id]['end_time'] = end_time
+
+        session['query_results'] = query_results
+
+        return '', 204
 
 
 def convert_to_milliseconds(time_str):

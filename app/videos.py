@@ -15,6 +15,8 @@ def list_videos():
 
     videos = {}
     for video in os.listdir(VIDEO_PATH):
+        if not video.endswith(".mp4"):
+            continue
         video_name = video.split('.')[0]
         frames_path = os.path.join(FRAMES_PATH, PHRASES_ID, video_name)
         first_annotation_path = os.listdir(frames_path)[0]
