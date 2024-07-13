@@ -4,68 +4,27 @@ import json
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 import object_detector
-
-PHRASES_DIR = "LP_P1 transcrição livre"
-FACIAL_EXPRESSIONS_DIR = "GLOSA_P1_EXPRESSAO"
-
-
-def extract_phrases_frames(video_path, phrases_dir, annotation_path):
-    """" Extract one frame per phrase from the videos """
-
-    # Cycle through the annotations referring facial expressions
-    with open(annotation_path, "r") as f:
-        annotations = json.load(f)
-
-        if PHRASES_DIR in annotations:
-            for phrase in annotations[PHRASES_DIR]["annotations"]:
-                # Convert start and end time from milliseconds to hh:mm:ss format
-                start_time_milliseconds = int(phrase["start_time"])
-
-                end_time_milliseconds = int(phrase["end_time"])
-
-                middle_time_seconds = ((start_time_milliseconds + end_time_milliseconds) / 2) / 1000
-                middle_time_str = str(datetime.timedelta(seconds=middle_time_seconds))
-
-                annotation_id = phrase["annotation_id"]
-
-                # Create a directory for the facial expression inside the video directory
-                annotation_dir = os.path.join(phrases_dir, f"{annotation_id}")
-                os.makedirs(annotation_dir, exist_ok=True)
-
-                print("Extracting phrases frames from video", video_path, "of annotation", phrase["annotation_id"],
-                      flush=True)
-
-                # Extract the phrase middle frame from the video
-                command = ["ffmpeg",
-                           "-loglevel", "error",  # suppress the output
-                           "-i", video_path,  # input file
-                           "-ss", middle_time_str,  # start time
-                           "-vframes", "1",  # output one frame
-                           "-update", "1",  # write a single image
-                           os.path.join(annotation_dir, f"{annotation_id}.png")  # output file
-                           ]
-
-                subprocess.call(command)
+from app.utils import PHRASES_ID, FACIAL_EXPRESSIONS_ID, VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH
 
 
 class FrameExtractor:
     def __init__(self):
         self.od = object_detector.ObjectDetector()
 
-    def extract_frames(self, videos_dir, frames_dir, annotations_dir):
+    def extract_frames(self):
         """ Extract the frames from the videos and save them in the static/videofiles/frames folder. """
 
-        for i, video in enumerate(os.listdir(videos_dir)):
+        for i, video in enumerate(os.listdir(VIDEO_PATH)):
             # Stop the loop after processing #N_VIDEOS_TO_PROCESS videos
             # if i >= N_VIDEOS_TO_PROCESS:
             #     break
 
             # Define the paths for the video, phrases frames and facial expressions frames
-            video_path = os.path.join(videos_dir, video)
+            video_path = os.path.join(VIDEO_PATH, video)
             videoname, extension = os.path.splitext(video)
-            video_phrases_dir = os.path.join(frames_dir, PHRASES_DIR, videoname)
-            video_facial_expressions_dir = os.path.join(frames_dir, FACIAL_EXPRESSIONS_DIR, videoname)
-            annotation_path = os.path.join(annotations_dir, f"{videoname}.json")
+            video_phrases_dir = os.path.join(FRAMES_PATH, PHRASES_ID, videoname)
+            video_facial_expressions_dir = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID, videoname)
+            annotation_path = os.path.join(ANNOTATIONS_PATH, f"{videoname}.json")
 
             if os.path.isdir(video_facial_expressions_dir):
                 continue
@@ -75,7 +34,7 @@ class FrameExtractor:
             os.makedirs(video_facial_expressions_dir, exist_ok=True)
 
             self.extract_facial_expressions_frames(video_path, video_facial_expressions_dir, annotation_path)
-            extract_phrases_frames(video_path, video_phrases_dir, annotation_path)
+            self.extract_phrases_frames(video_path, video_phrases_dir, annotation_path)
 
     def extract_facial_expressions_frames(self, video_path, facial_expressions_dir, annotation_path):
         """ Extract the facial expressions frames from the videos
@@ -87,10 +46,10 @@ class FrameExtractor:
         with open(annotation_path, "r") as f:
             annotations = json.load(f)
 
-            if FACIAL_EXPRESSIONS_DIR in annotations:
+            if FACIAL_EXPRESSIONS_ID in annotations:
                 with ThreadPoolExecutor(max_workers=4) as executor:
                     futures = []
-                    for facial_expression in annotations[FACIAL_EXPRESSIONS_DIR]["annotations"]:
+                    for facial_expression in annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
                         future = executor.submit(self.process_facial_expression, video_path, facial_expressions_dir,
                                                  facial_expression)
                         futures.append(future)
@@ -138,3 +97,44 @@ class FrameExtractor:
 
         # Crop the extracted frames to contain only the person
         self.od.detect_person(images_paths)
+
+    def extract_phrases_frames(self, video_path, phrases_dir, annotation_path):
+        """" Extract one frame per phrase from the videos """
+
+        # Cycle through the annotations referring facial expressions
+        with open(annotation_path, "r") as f:
+            annotations = json.load(f)
+
+            if PHRASES_ID in annotations:
+                for phrase in annotations[PHRASES_ID]["annotations"]:
+                    # Convert start and end time from milliseconds to hh:mm:ss format
+                    start_time_milliseconds = int(phrase["start_time"])
+
+                    end_time_milliseconds = int(phrase["end_time"])
+
+                    middle_time_seconds = ((start_time_milliseconds + end_time_milliseconds) / 2) / 1000
+                    middle_time_str = str(datetime.timedelta(seconds=middle_time_seconds))
+
+                    annotation_id = phrase["annotation_id"]
+
+                    # Create a directory for the facial expression inside the video directory
+                    annotation_dir = os.path.join(phrases_dir, f"{annotation_id}")
+                    os.makedirs(annotation_dir, exist_ok=True)
+
+                    print("Extracting phrases frames from video", video_path, "of annotation",
+                          phrase["annotation_id"],
+                          flush=True)
+
+                    # Extract the phrase middle frame from the video
+                    command = ["ffmpeg",
+                               "-loglevel", "error",  # suppress the output
+                               "-i", video_path,  # input file
+                               "-ss", middle_time_str,  # start time
+                               "-vframes", "1",  # output one frame
+                               "-update", "1",  # write a single image
+                               os.path.join(annotation_dir, f"{annotation_id}.png")  # output file
+                               ]
+
+                    subprocess.call(command)
+
+

@@ -18,6 +18,7 @@ CAPTIONS_PATH = "app/static/videofiles/captions"
 PHRASES_ID = "LP_P1 transcrição livre"
 FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"
 
+PHRASES_FRAMES_DIR = os.path.join(FRAMES_PATH, PHRASES_ID)
 FACIAL_EXPRESSIONS_FRAMES_DIR = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
 
 # Embedder to be used throughout the application
