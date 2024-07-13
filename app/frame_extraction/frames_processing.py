@@ -1,9 +1,10 @@
 import datetime
 import os
 import json
+import shutil
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
-import object_detector
+from app.frame_extraction import object_detector
 from app.utils import PHRASES_ID, FACIAL_EXPRESSIONS_ID, VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH
 
 
@@ -138,3 +139,42 @@ class FrameExtractor:
                     subprocess.call(command)
 
 
+def extract_annotation_frames(video_id, annotation_id, start_time, end_time):
+    """ Extract the frames of a facial expression from the video in the specified time range."""
+
+    # Create a directory for the facial expression inside the video directory
+    video_facial_expressions_dir = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID, video_id)
+    expression_dir = os.path.join(video_facial_expressions_dir, f"{annotation_id}")
+    print(expression_dir)
+    os.makedirs(expression_dir, exist_ok=True)
+
+    # Extract the facial expressions frames from the video
+    command = ["ffmpeg",
+               "-loglevel", "error",  # suppress the output
+               "-i", os.path.join(VIDEO_PATH, video_id + ".mp4"),  # input file
+               "-ss", start_time,  # start time in HH:MM:SS format
+               "-to", end_time,  # end time in HH:MM:SS format
+               # "-vf", "fps=1",  # extract 1 frame per second
+               os.path.join(expression_dir, f"{annotation_id}_%02d.png")  # output file
+               ]
+
+    print(video_id, "-", annotation_id, "|| Extraction Started", flush=True)
+    subprocess.call(command)
+    print(video_id, "-", annotation_id, "|| Extraction Finished", flush=True)
+
+    # Prepend the directory path to each filename in expression_dir
+    images_paths = [os.path.join(expression_dir, image_path) for image_path in os.listdir(expression_dir)]
+
+    # Crop the extracted frames to contain only the person
+    od = object_detector.ObjectDetector()
+    od.detect_person(images_paths)
+
+
+def delete_frames(video_id, annotation_id):
+    """ Delete the frames of a facial expression from the annotation in the video. """
+
+    video_facial_expressions_dir = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID, video_id)
+    expression_dir = os.path.join(video_facial_expressions_dir, f"{annotation_id}")
+
+    if os.path.exists(expression_dir):
+        shutil.rmtree(expression_dir)

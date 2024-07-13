@@ -274,6 +274,15 @@ def generate_annotations_embeddings(eb: Embedder):
         pickle.dump(embeddings, f)
 
 
+def generate_query_embeddings(query_input, eb: Embedder):
+    """ Generate the user queries embeddings """
+    return eb.text_encode(query_input.lower())
+
+
+def add_embeddings(video_id, annotation_id, eb: Embedder):
+    """ TODO: Add the embeddings for a specific annotation of a video """
+
+
 def update_annotations_embeddings(video_id, annotation_id, eb: Embedder):
     """ Update the embeddings for a specific annotation of a video """
     embeddings_file = os.path.join(EMBEDDINGS_PATH, 'annotations_embeddings.json.embeddings')
@@ -297,13 +306,54 @@ def update_annotations_embeddings(video_id, annotation_id, eb: Embedder):
                 else:
                     embeddings[video_id][annotation_id] = torch.zeros(512)
 
-    # Update the opensearch index
-    opensearch.update_annotation_embedding(video_id, annotation_id, embeddings[video_id][annotation_id])
-
     with open(embeddings_file, 'wb') as f:
         pickle.dump(embeddings, f)
 
+    return embeddings[video_id][annotation_id]
 
-def generate_query_embeddings(query_input, eb: Embedder):
-    """ Generate the user queries embeddings """
-    return eb.text_encode(query_input.lower())
+
+def delete_embeddings(video_id, annotation_id):
+    """ Delete the embeddings for a specific annotation of a video """
+    base_frames_embeddings_file = os.path.join(EMBEDDINGS_PATH, 'frame_embeddings.json.embeddings')
+    average_frames_embeddings_file = os.path.join(EMBEDDINGS_PATH, 'average_frame_embeddings.json.embeddings')
+    best_frames_embeddings_file = os.path.join(EMBEDDINGS_PATH, 'best_frame_embeddings.json.embeddings')
+    summed_frames_embeddings_file = os.path.join(EMBEDDINGS_PATH, 'summed_frame_embeddings.json.embeddings')
+    annotations_embeddings_file = os.path.join(EMBEDDINGS_PATH, 'annotations_embeddings.json.embeddings')
+
+    with open(base_frames_embeddings_file, 'rb') as f:
+        base_embeddings = CPU_Unpickler(f).load()
+
+    with open(average_frames_embeddings_file, 'rb') as f:
+        average_embeddings = CPU_Unpickler(f).load()
+
+    with open(best_frames_embeddings_file, 'rb') as f:
+        best_embeddings = CPU_Unpickler(f).load()
+
+    with open(summed_frames_embeddings_file, 'rb') as f:
+        summed_embeddings = CPU_Unpickler(f).load()
+
+    with open(annotations_embeddings_file, 'rb') as f:
+        annotations_embeddings = CPU_Unpickler(f).load()
+
+    # Delete the embeddings
+    del base_embeddings[video_id][annotation_id]
+    del average_embeddings[video_id][annotation_id]
+    del best_embeddings[video_id][annotation_id]
+    del summed_embeddings[video_id][annotation_id]
+    del annotations_embeddings[video_id][annotation_id]
+
+    # Save the embeddings
+    with open(base_frames_embeddings_file, 'wb') as f:
+        pickle.dump(base_embeddings, f)
+
+    with open(average_frames_embeddings_file, 'wb') as f:
+        pickle.dump(average_embeddings, f)
+
+    with open(best_frames_embeddings_file, 'wb') as f:
+        pickle.dump(best_embeddings, f)
+
+    with open(summed_frames_embeddings_file, 'wb') as f:
+        pickle.dump(summed_embeddings, f)
+
+    with open(annotations_embeddings_file, 'wb') as f:
+        pickle.dump(annotations_embeddings, f)

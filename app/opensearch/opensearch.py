@@ -314,3 +314,11 @@ class LGPOpenSearch:
             self.client.update(index=self.index_name, id=document_id, body=update_body, refresh=True)
         except OpenSearchException as e:
             print("Error updating document:", e)
+
+    def delete_document(self, video_id, annotation_id):
+        """ Delete a document from the index """
+        document_id = f"{video_id}_{annotation_id}"
+        try:
+            self.client.delete(index=self.index_name, id=document_id)
+        except OpenSearchException as e:
+            print("Error deleting document:", e)

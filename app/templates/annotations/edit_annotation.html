@@ -81,10 +81,10 @@
                         <input type="text" class="form-control" name="phrase" id="phrase" value="{{ phrase }}" required>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-primary" onclick="setAction('edit')">Save
-                            Changes
+                        <button id="edit_button" type="submit" class="btn btn-primary" onclick="setAction('edit')">
+                            Save Changes
                         </button>
-                        <button type="submit" class="btn btn-outline-danger" onclick="setAction('delete')">
+                        <button id="delete_button" type="submit" class="btn btn-outline-danger" onclick="setAction('delete')">
                             Delete Annotation
                         </button>
                         <input type="hidden" id="action_type" name="action_type" value="">
@@ -176,7 +176,21 @@
                     // If user cancels, exit the function without submitting the form
                     return;
                 }
+                // Change the button content to show the spinner and "Saving..." text
+                document.getElementById('delete_button').innerHTML = `
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    <span role="status">Deleting...</span>
+                    `;
+            } else if (action === "edit") {
+                // Change the button content to show the spinner and "Saving..." text
+                document.getElementById('edit_button').innerHTML = `
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    <span role="status">Saving...</span>
+                `;
             }
+
+            document.getElementById('edit_button').disabled = true;
+            document.getElementById('delete_button').disabled = true;
 
             fetch('/update_annotation_info', {
                 method: 'POST',

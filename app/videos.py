@@ -36,7 +36,6 @@ def list_videos():
 @bp.route('/videos/<video_id>', methods=("GET", "POST"))
 def watch_video(video_id):
     """ Shows the selected video. """
-
     facial_expressions = {}
 
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:

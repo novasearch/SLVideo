@@ -1,5 +1,5 @@
 import argparse
-from frame_extractor import FrameExtractor
+from frames_processing import FrameExtractor
 
 # Create the parser
 parser = argparse.ArgumentParser(description='Process video frames.')
