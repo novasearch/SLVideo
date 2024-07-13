@@ -66,6 +66,8 @@ print("ENTERING INDEXING LOOP", flush=True)
 # opensearch.delete_index()
 # opensearch.create_index()
 for video_id in os.listdir(FACIAL_EXPRESSIONS_FRAMES_DIR):
+    if video_id.startswith("."):
+        continue
 
     # Read annotations
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
