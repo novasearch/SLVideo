@@ -1,8 +1,160 @@
 {% extends 'base.html' %}
 
 {% block header %}
-     <h2 class="text-center flex-grow-1">{% block title %}Add Annotations{% endblock %}</h2>
+    <div class="header container text-center">
+        <div class="row align-items-center">
+            <div class="col">
+                <a class="btn btn-outline-dark" style="width: 25%"
+                   href="{{ prev_page if prev_page else url_for('query.query') }}">Back</a>
+            </div>
+            <div class="col">
+                <h2 class="text-center flex-grow-1">{% block title %}Add Annotation{% endblock %}</h2>
+            </div>
+            <div class="col">
+                <!-- Empty column just to center the elements -->
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block content %}
+    <div class="container">
+        <div class="row  justify-content-center ">
+            <div id="video_col" class="col-5">
+                <video id="searched_video" controls style="width: 100%; height: auto;">
+                    <source id="video_source"
+                            src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t={{ start_time }}"
+                            type="video/mp4">
+                    <track id="video_captions" kind="captions"
+                           src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
+                           srclang="pt" label="Portuguese" default>
+                </video>
+            </div>
+            <div id="form-col" class="col-4">
+                <form id="annotationForm" name="annotationForm"
+                      action="{{ url_for('annotations.add_annotation', video_id=video) }}"
+                      method="post">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="annotation_id" class="form-label">ID (Last ID plus 1)</label>
+                                <input type="text" class="form-control" name="annotation_id" id="annotation_id"
+                                       value="{{ new_annotation_id }}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="video_id" class="form-label">Video</label>
+                                <input type="text" class="form-control" name="video_id" id="video_id"
+                                       value="{{ video }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="expression" class="form-label">Facial Expression Glosse</label>
+                        <input type="text" class="form-control" name="expression" id="expression" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="start_time" class="form-label">Start</label>
+                                <input type="time" step="1" class="form-control" name="start_time" id="start_time"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="end_time" class="form-label">End</label>
+                                <input type="time" step="1" class="form-control" name="end_time" id="end_time" required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn btn-outline-info" style="margin-top: 2rem"
+                                    onclick="playClip()">Test
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phrase" class="form-label">Phrase</label>
+                        <input type="text" class="form-control" name="phrase" id="phrase" required>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Save Annotation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            {% for message in get_flashed_messages() %}
+                <div class="alert alert-info alert-dismissible mt-2" style="width: 50%">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        var video = document.getElementById('searched_video');
+        var startInput = document.getElementById('start_time');
+        var endInput = document.getElementById('end_time');
+        var videoDuration;
+        var startSeconds = convertTimeToSeconds(startInput.value);
+        var endSeconds = convertTimeToSeconds(endInput.value);
+        let isPlayingClip = false;
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            video.addEventListener('loadedmetadata', function () {
+                videoDuration = video.duration;
+            });
+
+            video.addEventListener('timeupdate', checkVideoTime);
+
+            video.addEventListener('loadedmetadata', function () {
+                let maxTime = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                startInput.setAttribute('max', maxTime);
+                endInput.setAttribute('max', maxTime);
+            });
+
+            startInput.addEventListener('change', function () {
+                startSeconds = convertTimeToSeconds(startInput.value);
+                if (startSeconds > videoDuration) {
+                    startInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                }
+                if (startSeconds > endSeconds) {
+                    startInput.value = endInput.value;
+                }
+            });
+
+            endInput.addEventListener('change', function () {
+                endSeconds = convertTimeToSeconds(endInput.value);
+                if (endSeconds > videoDuration) {
+                    endInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                }
+                if (endSeconds < startSeconds) {
+                    endInput.value = startInput.value;
+                }
+            });
+        });
+
+        function convertTimeToSeconds(time) {
+            var timeArray = time.split(':');
+            return parseInt(timeArray[0]) * 3600 + parseInt(timeArray[1]) * 60 + parseInt(timeArray[2]);
+        }
+
+        // Function to play the video clip with the retrieved facial expression
+        function playClip() {
+            video.currentTime = startSeconds;
+            video.play();
+            isPlayingClip = true;
+        }
+
+        // Function to check the video time and pause it if it reaches the end time when the clip is playing
+        function checkVideoTime() {
+            if (video.currentTime >= endSeconds && isPlayingClip) {
+                video.pause();
+                isPlayingClip = false;
+            }
+        }
+    </script>
 {% endblock %}

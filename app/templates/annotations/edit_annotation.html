@@ -37,7 +37,7 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="annotation_id" class="form-label">Id</label>
+                                <label for="annotation_id" class="form-label">ID</label>
                                 <input type="text" class="form-control" name="annotation_id" id="annotation_id"
                                        value="{{ annotation_id }}" disabled>
                             </div>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="expression" class="form-label">Expression</label>
+                        <label for="expression" class="form-label">Facial Expression Glosse</label>
                         <input type="text" class="form-control" name="expression" id="expression"
                                value="{{ expression }}" required>
                     </div>
@@ -117,6 +117,12 @@
             });
 
             video.addEventListener('timeupdate', checkVideoTime);
+
+            video.addEventListener('loadedmetadata', function () {
+                let maxTime = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                startInput.setAttribute('max', maxTime);
+                endInput.setAttribute('max', maxTime);
+            });
 
             startInput.addEventListener('change', function () {
                 startSeconds = convertTimeToSeconds(startInput.value);

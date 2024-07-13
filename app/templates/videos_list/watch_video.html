@@ -3,11 +3,6 @@
 {% block title %}Watch{% endblock %}
 
 {% block content %}
-
-    <form action="{{ url_for('videos.watch_video', video_id=video) }}" method="post">
-        <button class="btn btn-outline-info position-fixed" style="left: 8%">Add Annotations</button>
-        <input type="hidden" name="add_annotation" value="">
-    </form>
     <div class="container text-center">
         <div class="row justify-content-center mt-3">
             <div class="ratio ratio-16x9" style="width: 60%; height: auto; background-color: black">
@@ -25,6 +20,17 @@
             <div class="row justify-content-center mt-3 bg-secondary-subtle rounded mx-auto" style="width: 80%">
                 <p class="text-start mt-1 mb-0 fw-semibold" style="color:#4a4a4a">Facial Expressions Glosses</p>
                 <div class="hstack gap-2 overflow-x-auto mt-0">
+                    <div class="p-2">
+                        <form action="{{ url_for('videos.watch_video', video_id=video) }}" method="post">
+                            <button type="submit"
+                                    class="btn btn-outline-primary text-wrap text-break fw-bold lh-1"
+                                    style="width: 6rem; height: 3.2rem; cursor: pointer; font-size: 180%; padding: 0;"
+                                    value="add">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                            <input type="hidden" name="form_type" value="add">
+                        </form>
+                    </div>
                     {% for annotation in annotations %}
                         <div class="p-2 position-relative">
                             <button type="button"
@@ -39,6 +45,7 @@
                                     <i class="bi bi-pencil-square" style="font-size: 150%"></i>
                                 </span>
                                 <input type="hidden" name="selected_annotation" value="{{ annotation }}">
+                                <input type="hidden" name="form_type" value="edit">
                             </form>
                         </div>
                     {% endfor %}

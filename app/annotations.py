@@ -10,21 +10,12 @@ from .utils import embedder, FACIAL_EXPRESSIONS_ID, ANNOTATIONS_PATH
 
 bp = Blueprint('annotations', __name__)
 
-prev_page = None
-
 
 @bp.route("/edit_annotation/<video_id>/<annotation_id>", methods=("GET", "POST"))
 def edit_annotation(video_id, annotation_id):
     """ Edit an annotation """
-    global prev_page
-
-    current_route = url_for('annotations.edit_annotation', video_id=video_id, annotation_id=annotation_id,
-                            _external=True)
-    referer = request.headers.get('Referer', None)
-
-    if (referer.replace('http://', '').replace('https://', '') !=
-            current_route.replace('http://', '').replace('https://', '')):
-        prev_page = referer
+    prev_page = define_prev_page(url_for('annotations.edit_annotation', video_id=video_id,
+                                         annotation_id=annotation_id, _external=True))
 
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
@@ -62,20 +53,20 @@ def edit_annotation(video_id, annotation_id):
 
         # If the user wants to edit the annotation
         elif action == "edit":
-            expression = request.form.get("expression")
-            start_time = request.form.get("start_time")
-            end_time = request.form.get("end_time")
-            phrase = request.form.get("phrase")
+            new_expression = request.form.get("expression")
+            new_start_time = request.form.get("start_time")
+            new_end_time = request.form.get("end_time")
+            new_phrase = request.form.get("phrase")
 
-            converted_start_time = convert_to_milliseconds(start_time)
-            converted_end_time = convert_to_milliseconds(end_time)
+            converted_start_time = convert_to_milliseconds(new_start_time)
+            converted_end_time = convert_to_milliseconds(new_end_time)
 
             for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
                 if annotation["annotation_id"] == annotation_id:
-                    annotation["value"] = expression
+                    annotation["value"] = new_expression
                     annotation["start_time"] = int(converted_start_time)
                     annotation["end_time"] = int(converted_end_time)
-                    annotation["phrase"] = phrase
+                    annotation["phrase"] = new_phrase
 
             with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
                 json.dump(video_annotations, f, indent=4)
@@ -86,29 +77,25 @@ def edit_annotation(video_id, annotation_id):
             flash("Annotation updated successfully!", "success")
 
             return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
-                                   prev_page=prev_page, expression=expression, start_time=start_time,
-                                   end_time=end_time, phrase=phrase)
+                                   prev_page=prev_page, expression=new_expression, start_time=new_start_time,
+                                   end_time=new_end_time, phrase=new_phrase)
 
     return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
                            prev_page=prev_page, expression=expression, start_time=converted_start_time,
                            end_time=converted_end_time, phrase=phrase)
 
 
-@bp.route("/add_annotations/<video_id>", methods=("GET", "POST"))
-def add_annotations(video_id):
+@bp.route("/add_annotation/<video_id>", methods=("GET", "POST"))
+def add_annotation(video_id):
     """ Add an annotation """
-    """
-    global prev_page
-
-    current_route = url_for('annotations.add_annotation', video_id=video_id, _external=True)
-    referer = request.headers.get('Referer', None)
-
-    if (referer.replace('http://', '').replace('https://', '') !=
-            current_route.replace('http://', '').replace('https://', '')):
-        prev_page = referer
+    prev_page = define_prev_page(url_for('annotations.add_annotation', video_id=video_id, _external=True))
 
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
+
+    last_annotation_id = video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"][-1]["annotation_id"]
+
+    new_annotation_id = "a" + str(int(last_annotation_id.split("a")[1]) + 1)
 
     if request.method == "POST":
         expression = request.form.get("expression")
@@ -119,10 +106,8 @@ def add_annotations(video_id):
         converted_start_time = convert_to_milliseconds(start_time)
         converted_end_time = convert_to_milliseconds(end_time)
 
-        annotation_id = len(video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]) + 1
-
         annotation = {
-            "annotation_id": annotation_id,
+            "annotation_id": new_annotation_id,
             "value": expression,
             "start_time": int(converted_start_time),
             "end_time": int(converted_end_time),
@@ -130,18 +115,25 @@ def add_annotations(video_id):
             "user_rating": 0
         }
 
-        video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].append(annotation)
+        if new_annotation_id not in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
+            video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].append(annotation)
 
-        with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
-            json.dump(video_annotations, f, indent=4)
+            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+                json.dump(video_annotations, f, indent=4)
 
-        flash("Annotation added successfully!", "success")
+            # Update the embeddings
+            embeddings_processing.update_annotations_embeddings(video_id, new_annotation_id, embedder)
 
-        return render_template("annotations/add_annotation.html", video=video_id, prev_page=prev_page)
+            flash("Annotation added successfully!", "success")
+        else:
+            flash(f"Annotation with ID {new_annotation_id} already exists!", "danger")
 
-    """
-    print("AAAAAAAAAAAAAAAa")
-    return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page)
+        return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
+                               new_annotation_id=new_annotation_id)
+
+    return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
+                           new_annotation_id=new_annotation_id)
+
 
 @bp.route("/update_user_rating", methods=["POST"])
 def updated_user_rating():
@@ -175,3 +167,12 @@ def convert_to_milliseconds(time_str):
     milliseconds = (time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second) * 1000
 
     return milliseconds
+
+
+def define_prev_page(current_route):
+    referer = request.headers.get('Referer', None)
+
+    if (referer.replace('http://', '').replace('https://', '') !=
+            current_route.replace('http://', '').replace('https://', '')):
+        return referer
+    return None
