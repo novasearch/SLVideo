@@ -1,29 +1,14 @@
 import json
 import os
-import pickle
 import subprocess
-
-import torch
-import io
-
-from .constants import *
 from .eaf_parser import eaf_parser
-from .opensearch.opensearch import LGPOpenSearch
 from .embeddings import embeddings_processing
+from .opensearch.opensearch import LGPOpenSearch, gen_doc
+from .utils import CPU_Unpickler, RESULTS_PATH, EAF_PATH, VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH, EMBEDDINGS_PATH, \
+    FACIAL_EXPRESSIONS_FRAMES_DIR, FACIAL_EXPRESSIONS_ID
 
 # Initialize the OpenSearch client
 opensearch = LGPOpenSearch()
-
-# Initialize the Embeddings Generator
-embedder = embeddings_processing.Embedder(check_gpu=True)
-
-
-class CPU_Unpickler(pickle.Unpickler):
-    def find_class(self, module, name):
-        if module == 'torch.storage' and name == '_load_from_bytes':
-            return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
-        else:
-            return super().find_class(module, name)
 
 
 def run_in_env(script_path, env_path):
@@ -35,20 +20,6 @@ def run_in_env(script_path, env_path):
     if process.returncode != 0:
         print(f"Error occurred: {err.decode()}")
     process.wait()
-
-
-def gen_doc(video_id: str, annotation_id: str, base_frame_embedding, average_frame_embedding, summed_frame_embeddings,
-            best_frame_embedding, annotation_embedding):
-    """ Generate a document for indexing in OpenSearch """
-    return {
-        "video_id": video_id,
-        "annotation_id": annotation_id,
-        "base_frame_embedding": base_frame_embedding,
-        "average_frame_embedding": average_frame_embedding,
-        "best_frame_embedding": best_frame_embedding,
-        "summed_frame_embeddings": summed_frame_embeddings,
-        "annotation_embedding": annotation_embedding,
-    }
 
 
 """ Preprocess videos, extract frames, generate embeddings and create indexes in OpenSearch """
@@ -72,11 +43,8 @@ run_in_env(f"app/frame_extraction/run_frame_extraction.py {VIDEO_PATH} {FRAMES_P
            "python_environments/object_detectors_env")
 print("Extracted facial expressions frames", flush=True)
 
-facial_expressions_frames_path = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
-
 # Generate embeddings
-embeddings_processing.generate_video_embeddings(facial_expressions_frames_path, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID,
-                                                EMBEDDINGS_PATH, embedder)
+embeddings_processing.generate_video_embeddings()
 
 # Load the base, average, and best frame embeddings
 with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:
@@ -97,7 +65,9 @@ with open(os.path.join(EMBEDDINGS_PATH, "annotations_embeddings.json.embeddings"
 print("ENTERING INDEXING LOOP", flush=True)
 # opensearch.delete_index()
 # opensearch.create_index()
-for video_id in os.listdir(facial_expressions_frames_path):
+for video_id in os.listdir(FACIAL_EXPRESSIONS_FRAMES_DIR):
+    if video_id.startswith("."):
+        continue
 
     # Read annotations
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
@@ -106,7 +76,7 @@ for video_id in os.listdir(facial_expressions_frames_path):
         if FACIAL_EXPRESSIONS_ID not in video_annotations:
             continue
 
-        if video_id not in os.listdir(facial_expressions_frames_path):
+        if video_id not in os.listdir(FACIAL_EXPRESSIONS_FRAMES_DIR):
             continue
 
         annotations = video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]
@@ -131,6 +101,6 @@ for video_id in os.listdir(facial_expressions_frames_path):
 
             # Index the document in OpenSearch
             # opensearch.index_if_not_exists(doc)
-            opensearch.delete_doc_and_index(doc)
+            opensearch.update_doc_and_index(doc)
 
 print("Finished processing videos", flush=True)

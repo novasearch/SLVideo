@@ -3,8 +3,7 @@ import os
 import webvtt
 import xml.etree.ElementTree as ET
 
-ANNOTATIONS_PATH = "app/static/videofiles/annotations"
-CAPTIONS_PATH = "app/static/videofiles/captions"
+from app.utils import ANNOTATIONS_PATH, CAPTIONS_PATH
 
 
 def parse_eaf_files(eaf_dir):

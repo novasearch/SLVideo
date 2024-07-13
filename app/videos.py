@@ -4,7 +4,7 @@ import datetime
 
 from flask import Blueprint, render_template, request, redirect, url_for
 
-from app.constants import VIDEO_PATH, FRAMES_PATH, PHRASES_ID, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID
+from app.utils import VIDEO_PATH, FRAMES_PATH, PHRASES_ID, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID
 
 bp = Blueprint('videos', __name__)
 
@@ -15,6 +15,8 @@ def list_videos():
 
     videos = {}
     for video in os.listdir(VIDEO_PATH):
+        if not video.endswith(".mp4"):
+            continue
         video_name = video.split('.')[0]
         frames_path = os.path.join(FRAMES_PATH, PHRASES_ID, video_name)
         first_annotation_path = os.listdir(frames_path)[0]
@@ -53,7 +55,8 @@ def watch_video(video_id):
     facial_expressions = dict(sorted(facial_expressions.items(), key=lambda item: item[1]["value"]))
 
     if request.method == "POST":
-        return redirect(url_for("annotations.add_annotations", video_id=video_id))
+        annotation_id = request.form.get("selected_annotation")
+        return redirect(url_for("annotations.edit_annotation", video_id=video_id, annotation_id=annotation_id))
 
     return render_template("videos_list/watch_video.html", video=video_id,
                            annotations=facial_expressions)

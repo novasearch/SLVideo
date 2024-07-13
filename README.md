@@ -26,7 +26,7 @@ This system includes a web application developed in Flask that allows the users 
 
 ### In the deployed web application
 
-You just need to access this link: https://videolgp.novasearch.org/
+You just need to access this link: https://slvideo.novasearch.org/
 
 In this deployed version, the model that is being used to generate the embeddings is `clip-ViT-B-32`.
 
@@ -151,7 +151,16 @@ annotations files, extracting the relevant frames, generating the embeddings and
 
 #### `query.py`
 
-This script handles the user queries and displays its results in the web application.
+This script handles the user queries and displays its results in the web application
+
+#### `utils.py`
+
+This script contains the constants and utility functions used in the other scripts
+
+#### `videos.py`
+
+This script is responsible for all the video-related operations, such as playing the video segments and showing the
+videos annotations
 
 ## Cite us
 

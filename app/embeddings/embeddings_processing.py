@@ -9,24 +9,30 @@ import os
 import pickle
 import gc
 
+from ..utils import FACIAL_EXPRESSIONS_FRAMES_DIR, EMBEDDINGS_PATH, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID, opensearch, \
+    CPU_Unpickler
 
-def generate_video_embeddings(frames_dir, annotations_dir, facial_expressions_id, result_dir, eb: Embedder):
+
+def generate_video_embeddings():
     """ Generates all the embeddings for a folder of video frames """
 
-    generate_frame_embeddings(frames_dir, result_dir, eb)
+    # Initialize the Embeddings Generator using the GPU
+    embedder = Embedder(check_gpu=True)
+
+    generate_frame_embeddings(embedder)
     print("Frame embeddings generated", flush=True)
 
-    generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb)
+    generate_average_and_best_frame_embeddings(embedder)
     print("Average and best frame embeddings generated", flush=True)
 
-    generate_summed_embeddings(result_dir)
+    generate_summed_embeddings()
     print("Summed embeddings generated", flush=True)
 
-    generate_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb)
+    generate_annotations_embeddings(embedder)
     print("Annotations embeddings generated", flush=True)
 
 
-def generate_frame_embeddings(frames_dir, result_dir, eb: Embedder):
+def generate_frame_embeddings(eb: Embedder):
     """ Generates facial expression frame embeddings for a folder of videos, choosing 4 frames
     equally spaced for each video. """
     print("Generating frame embeddings", flush=True)
@@ -35,14 +41,14 @@ def generate_frame_embeddings(frames_dir, result_dir, eb: Embedder):
     embeddings = {}
     annotations_batch_size = 32
 
-    embeddings_file = os.path.join(result_dir, 'frame_embeddings.json.embeddings')
+    embeddings_file = os.path.join(EMBEDDINGS_PATH, 'frame_embeddings.json.embeddings')
     if os.path.exists(embeddings_file):
         with open(embeddings_file, 'rb') as f:
             embeddings = pickle.load(f)
 
-    for video in os.listdir(frames_dir):
+    for video in os.listdir(FACIAL_EXPRESSIONS_FRAMES_DIR):
 
-        video_dir = os.path.join(frames_dir, video)
+        video_dir = os.path.join(FACIAL_EXPRESSIONS_FRAMES_DIR, video)
 
         annotations_dir = os.listdir(video_dir)
 
@@ -91,20 +97,17 @@ def generate_frame_embeddings(frames_dir, result_dir, eb: Embedder):
                 torch.cuda.empty_cache()
 
             with open(embeddings_file, 'wb') as f:
-                # Move tensors to CPU before saving
-                embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
-                                  embeddings.items()}
-                pickle.dump(embeddings_cpu, f)
+                pickle.dump(embeddings, f)
 
             gc.collect()
 
 
-def generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb: Embedder):
+def generate_average_and_best_frame_embeddings(eb: Embedder):
     """ Generates the average and best facial expression frame embeddings of a video for a folder of videos """
     print("Generating average and best frame embeddings", flush=True)
 
-    average_embeddings_file = os.path.join(result_dir, 'average_frame_embeddings.json.embeddings')
-    best_embeddings_file = os.path.join(result_dir, 'best_frame_embeddings.json.embeddings')
+    average_embeddings_file = os.path.join(EMBEDDINGS_PATH, 'average_frame_embeddings.json.embeddings')
+    best_embeddings_file = os.path.join(EMBEDDINGS_PATH, 'best_frame_embeddings.json.embeddings')
     annotations_batch_size = 8
     average_embeddings = {}
     best_embeddings = {}
@@ -117,9 +120,9 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb: Embed
         with open(best_embeddings_file, 'rb') as f:
             best_embeddings = pickle.load(f)
 
-    for video in os.listdir(frames_dir):
+    for video in os.listdir(FACIAL_EXPRESSIONS_FRAMES_DIR):
 
-        video_dir = os.path.join(frames_dir, video)
+        video_dir = os.path.join(FACIAL_EXPRESSIONS_FRAMES_DIR, video)
         annotations_dir = os.listdir(video_dir)
 
         if video in average_embeddings and video in best_embeddings:
@@ -177,33 +180,27 @@ def generate_average_and_best_frame_embeddings(frames_dir, result_dir, eb: Embed
                 torch.cuda.empty_cache()
 
             with open(average_embeddings_file, 'wb') as f:
-                # Move tensors to CPU before saving
-                embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
-                                  average_embeddings.items()}
-                pickle.dump(embeddings_cpu, f)
+                pickle.dump(average_embeddings, f)
 
             with open(best_embeddings_file, 'wb') as f:
-                # Move tensors to CPU before saving
-                embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
-                                  best_embeddings.items()}
-                pickle.dump(embeddings_cpu, f)
+                pickle.dump(best_embeddings, f)
 
             gc.collect()
 
 
-def generate_summed_embeddings(result_dir):
+def generate_summed_embeddings():
     """ Generate the summed embeddings for all the facial expressions annotations' values """
     print("Generating summed embeddings", flush=True)
 
     # Load embeddings
-    with open(os.path.join(result_dir, 'frame_embeddings.json.embeddings'), 'rb') as f:
+    with open(os.path.join(EMBEDDINGS_PATH, 'frame_embeddings.json.embeddings'), 'rb') as f:
         base_embeddings = pickle.load(f)
-    with open(os.path.join(result_dir, 'average_frame_embeddings.json.embeddings'), 'rb') as f:
+    with open(os.path.join(EMBEDDINGS_PATH, 'average_frame_embeddings.json.embeddings'), 'rb') as f:
         average_embeddings = pickle.load(f)
-    with open(os.path.join(result_dir, 'best_frame_embeddings.json.embeddings'), 'rb') as f:
+    with open(os.path.join(EMBEDDINGS_PATH, 'best_frame_embeddings.json.embeddings'), 'rb') as f:
         best_embeddings = pickle.load(f)
 
-    summed_embeddings_file = os.path.join(result_dir, 'summed_frame_embeddings.json.embeddings')
+    summed_embeddings_file = os.path.join(EMBEDDINGS_PATH, 'summed_frame_embeddings.json.embeddings')
 
     summed_embeddings = {}
     if os.path.exists(summed_embeddings_file):
@@ -232,18 +229,18 @@ def generate_summed_embeddings(result_dir):
         pickle.dump(summed_embeddings, f)
 
 
-def generate_annotations_embeddings(annotations_dir, facial_expressions_id, result_dir, eb: Embedder):
+def generate_annotations_embeddings(eb: Embedder):
     """ Generate the embeddings for all the facial expressions annotations' values """
     print("Generating annotations embeddings", flush=True)
 
     embeddings = {}
 
-    embeddings_file = os.path.join(result_dir, 'annotations_embeddings.json.embeddings')
+    embeddings_file = os.path.join(EMBEDDINGS_PATH, 'annotations_embeddings.json.embeddings')
     if os.path.exists(embeddings_file):
         with open(embeddings_file, 'rb') as f:
             embeddings = pickle.load(f)
 
-    for video_annotations in os.listdir(annotations_dir):
+    for video_annotations in os.listdir(ANNOTATIONS_PATH):
 
         video_name = video_annotations.split(".")[0]
 
@@ -252,17 +249,17 @@ def generate_annotations_embeddings(annotations_dir, facial_expressions_id, resu
 
         print(f"Working on {video_annotations}", flush=True)
 
-        annotation_json = os.path.join(annotations_dir, video_annotations)
+        annotation_json = os.path.join(ANNOTATIONS_PATH, video_annotations)
 
         embeddings[video_name] = {}
 
         with open(annotation_json, 'r') as f:
             annotations = json.load(f)
 
-            if facial_expressions_id not in annotations:
+            if FACIAL_EXPRESSIONS_ID not in annotations:
                 continue
 
-            expressions = annotations[facial_expressions_id]["annotations"]
+            expressions = annotations[FACIAL_EXPRESSIONS_ID]["annotations"]
 
             for expression in expressions:
                 annotation_id = expression["annotation_id"]
@@ -274,10 +271,37 @@ def generate_annotations_embeddings(annotations_dir, facial_expressions_id, resu
                     embeddings[video_name][annotation_id] = torch.zeros(512)
 
     with open(embeddings_file, 'wb') as f:
-        # Move tensors to CPU before saving
-        embeddings_cpu = {k: {k_inner: v_inner.cpu() for k_inner, v_inner in v.items()} for k, v in
-                          embeddings.items()}
-        pickle.dump(embeddings_cpu, f)
+        pickle.dump(embeddings, f)
+
+
+def update_annotations_embeddings(video_id, annotation_id, eb: Embedder):
+    """ Update the embeddings for a specific annotation of a video """
+    embeddings_file = os.path.join(EMBEDDINGS_PATH, 'annotations_embeddings.json.embeddings')
+
+    with open(embeddings_file, 'rb') as f:
+        embeddings = CPU_Unpickler(f).load()
+
+    annotation_json = os.path.join(ANNOTATIONS_PATH, f"{video_id}.json")
+
+    with open(annotation_json, 'r') as f:
+        annotations = json.load(f)
+
+        expressions = annotations[FACIAL_EXPRESSIONS_ID]["annotations"]
+
+        for expression in expressions:
+            if expression["annotation_id"] == annotation_id:
+                annotation_value = expression["value"]
+
+                if annotation_value is not None:
+                    embeddings[video_id][annotation_id] = eb.text_encode(annotation_value.lower())
+                else:
+                    embeddings[video_id][annotation_id] = torch.zeros(512)
+
+    # Update the opensearch index
+    opensearch.update_annotation_embedding(video_id, annotation_id, embeddings[video_id][annotation_id])
+
+    with open(embeddings_file, 'wb') as f:
+        pickle.dump(embeddings, f)
 
 
 def generate_query_embeddings(query_input, eb: Embedder):

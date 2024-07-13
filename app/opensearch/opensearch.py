@@ -3,6 +3,20 @@ import os
 from opensearchpy import OpenSearch, OpenSearchException
 
 
+def gen_doc(video_id: str, annotation_id: str, base_frame_embedding, average_frame_embedding,
+            summed_frame_embeddings, best_frame_embedding, annotation_embedding):
+    """ Generate a document for indexing in OpenSearch """
+    return {
+        "video_id": video_id,
+        "annotation_id": annotation_id,
+        "base_frame_embedding": base_frame_embedding,
+        "average_frame_embedding": average_frame_embedding,
+        "best_frame_embedding": best_frame_embedding,
+        "summed_frame_embeddings": summed_frame_embeddings,
+        "annotation_embedding": annotation_embedding,
+    }
+
+
 class LGPOpenSearch:
     """ Class for managing the OpenSearch index for the Portuguese Sign Language project """
 
@@ -120,8 +134,8 @@ class LGPOpenSearch:
             else:
                 raise
 
-    def delete_doc_and_index(self, doc):
-        """ Delete a document and index it again """
+    def update_doc_and_index(self, doc):
+        """ Updates a document and index it again """
         if self.client.exists(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"]):
             self.client.delete(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"])
         self.client.create(index=self.index_name, id=doc["video_id"] + "_" + doc["annotation_id"], body=doc)
@@ -287,3 +301,16 @@ class LGPOpenSearch:
             body=query_obj,
             index=self.index_name
         )
+
+    def update_annotation_embedding(self, video_id, annotation_id, new_embedding):
+        """ Update the annotation_embedding field of a document identified by video_id and annotation_id """
+        document_id = f"{video_id}_{annotation_id}"
+        update_body = {
+            "doc": {
+                "annotation_embedding": new_embedding.tolist()
+            }
+        }
+        try:
+            self.client.update(index=self.index_name, id=document_id, body=update_body, refresh=True)
+        except OpenSearchException as e:
+            print("Error updating document:", e)

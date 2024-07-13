@@ -2,6 +2,8 @@ import os
 
 from flask import Flask, redirect, url_for
 
+from app.embeddings import embeddings_processing
+
 """Create and configure an instance of the Flask application."""
 
 app = Flask(__name__, instance_relative_config=True)
@@ -23,7 +25,6 @@ except OSError:
     pass
 
 from . import query, annotations, videos
-
 app.register_blueprint(query.bp)
 app.register_blueprint(annotations.bp)
 app.register_blueprint(videos.bp)
