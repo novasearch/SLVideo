@@ -39,7 +39,7 @@ if not os.path.exists(FRAMES_PATH):
     os.makedirs(FRAMES_PATH)
 
 # Due to dependencies incompatibilities, this step is done in a separate environment
-run_in_env(f"app/frame_extraction/run_frame_extraction.py {VIDEO_PATH} {FRAMES_PATH} {ANNOTATIONS_PATH}",
+run_in_env(f"app/frame_extraction/run_frame_extraction.py",
            "python_environments/object_detectors_env")
 print("Extracted facial expressions frames", flush=True)
 
