@@ -21,6 +21,12 @@ FACIAL_EXPRESSIONS_ID = "GLOSA_P1_EXPRESSAO"
 PHRASES_FRAMES_DIR = os.path.join(FRAMES_PATH, PHRASES_ID)
 FACIAL_EXPRESSIONS_FRAMES_DIR = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID)
 
+BASE_FRAMES_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'frame_embeddings.json.embeddings')
+AVERAGE_FRAMES_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'average_frame_embeddings.json.embeddings')
+BEST_FRAMES_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'best_frame_embeddings.json.embeddings')
+SUMMED_FRAMES_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'summed_frame_embeddings.json.embeddings')
+ANNOTATIONS_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'annotations_embeddings.json.embeddings')
+
 # Embedder to be used throughout the application
 embedder = embeddings_processing.Embedder(check_gpu=False)
 

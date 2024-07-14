@@ -16,42 +16,40 @@
                 </video>
             </div>
         </div>
-        {% if annotations %}
-            <div class="row justify-content-center mt-3 bg-secondary-subtle rounded mx-auto" style="width: 80%">
-                <p class="text-start mt-1 mb-0 fw-semibold" style="color:#4a4a4a">Facial Expressions Glosses</p>
-                <div class="hstack gap-2 overflow-x-auto mt-0">
-                    <div class="p-2">
+        <div class="row justify-content-center mt-3 bg-secondary-subtle rounded mx-auto" style="width: 80%">
+            <p class="text-start mt-1 mb-0 fw-semibold" style="color:#4a4a4a">Facial Expressions Glosses</p>
+            <div class="hstack gap-2 overflow-x-auto mt-0">
+                <div class="p-2">
+                    <form action="{{ url_for('videos.watch_video', video_id=video) }}" method="post">
+                        <button type="submit"
+                                class="btn btn-outline-primary text-wrap text-break fw-bold lh-1"
+                                style="width: 6rem; height: 3.2rem; cursor: pointer; font-size: 180%; padding: 0;"
+                                value="add">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                        <input type="hidden" name="form_type" value="add">
+                    </form>
+                </div>
+                {% for annotation in annotations %}
+                    <div class="p-2 position-relative">
+                        <button type="button"
+                                class="btn btn-primary text-wrap text-break fw-bold lh-1 position-relative"
+                                style="width: 6rem; height: 3.2rem; cursor: pointer; font-size: 75%; padding: 0;"
+                                onclick="playExpression({{ annotations[annotation]['start_time'] }}, {{ annotations[annotation]['end_time'] }}, '{{ annotation }}')">
+                            {{ annotations[annotation]["value"] }}
+                        </button>
                         <form action="{{ url_for('videos.watch_video', video_id=video) }}" method="post">
-                            <button type="submit"
-                                    class="btn btn-outline-primary text-wrap text-break fw-bold lh-1"
-                                    style="width: 6rem; height: 3.2rem; cursor: pointer; font-size: 180%; padding: 0;"
-                                    value="add">
-                                <i class="bi bi-plus-lg"></i>
-                            </button>
-                            <input type="hidden" name="form_type" value="add">
-                        </form>
-                    </div>
-                    {% for annotation in annotations %}
-                        <div class="p-2 position-relative">
-                            <button type="button"
-                                    class="btn btn-primary text-wrap text-break fw-bold lh-1 position-relative"
-                                    style="width: 6rem; height: 3.2rem; cursor: pointer; font-size: 75%; padding: 0;"
-                                    onclick="playExpression({{ annotations[annotation]['start_time'] }}, {{ annotations[annotation]['end_time'] }}, '{{ annotation }}')">
-                                {{ annotations[annotation]["value"] }}
-                            </button>
-                            <form action="{{ url_for('videos.watch_video', video_id=video) }}" method="post">
                                 <span id="edit_{{ annotation }}" class="position-absolute badge rounded-pill bg-info"
                                       style="top: 0; left: 75%" hidden onclick="this.parentNode.submit()">
                                     <i class="bi bi-pencil-square" style="font-size: 150%"></i>
                                 </span>
-                                <input type="hidden" name="selected_annotation" value="{{ annotation }}">
-                                <input type="hidden" name="form_type" value="edit">
-                            </form>
-                        </div>
-                    {% endfor %}
-                </div>
+                            <input type="hidden" name="selected_annotation" value="{{ annotation }}">
+                            <input type="hidden" name="form_type" value="edit">
+                        </form>
+                    </div>
+                {% endfor %}
             </div>
-        {% endif %}
+        </div>
     </div>
 
     <script>

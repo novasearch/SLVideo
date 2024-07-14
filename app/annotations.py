@@ -21,11 +21,7 @@ def edit_annotation(video_id, annotation_id):
 
     current_route = url_for('annotations.edit_annotation', video_id=video_id, annotation_id=annotation_id,
                             _external=True)
-    referer = request.headers.get('Referer', None)
-
-    if (referer.replace('http://', '').replace('https://', '') !=
-            current_route.replace('http://', '').replace('https://', '')):
-        prev_page = referer
+    prev_page = define_prev_page(current_route)
 
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
@@ -117,11 +113,7 @@ def add_annotation(video_id):
     global prev_page
 
     current_route = url_for('annotations.add_annotation', video_id=video_id, _external=True)
-    referer = request.headers.get('Referer', None)
-
-    if (referer.replace('http://', '').replace('https://', '') !=
-            current_route.replace('http://', '').replace('https://', '')):
-        prev_page = referer
+    prev_page = define_prev_page(current_route)
 
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
@@ -210,3 +202,12 @@ def convert_to_milliseconds(time_str):
     milliseconds = (time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second) * 1000
 
     return milliseconds
+
+
+def define_prev_page(current_route):
+    referer = request.headers.get('Referer', None)
+
+    if (referer.replace('http://', '').replace('https://', '') !=
+            current_route.replace('http://', '').replace('https://', '')):
+        return referer
+    return ""

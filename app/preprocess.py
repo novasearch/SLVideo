@@ -5,7 +5,8 @@ from .eaf_parser import eaf_parser
 from .embeddings import embeddings_processing
 from .opensearch.opensearch import LGPOpenSearch, gen_doc
 from .utils import CPU_Unpickler, RESULTS_PATH, EAF_PATH, VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH, EMBEDDINGS_PATH, \
-    FACIAL_EXPRESSIONS_FRAMES_DIR, FACIAL_EXPRESSIONS_ID
+    FACIAL_EXPRESSIONS_FRAMES_DIR, FACIAL_EXPRESSIONS_ID, BASE_FRAMES_EMBEDDINGS_FILE, AVERAGE_FRAMES_EMBEDDINGS_FILE, \
+    BEST_FRAMES_EMBEDDINGS_FILE, SUMMED_FRAMES_EMBEDDINGS_FILE, ANNOTATIONS_EMBEDDINGS_FILE
 
 # Initialize the OpenSearch client
 opensearch = LGPOpenSearch()
@@ -47,19 +48,19 @@ print("Extracted facial expressions frames", flush=True)
 embeddings_processing.generate_video_embeddings()
 
 # Load the base, average, and best frame embeddings
-with open(os.path.join(EMBEDDINGS_PATH, "frame_embeddings.json.embeddings"), "rb") as f:
+with open(BASE_FRAMES_EMBEDDINGS_FILE, "rb") as f:
     base_frame_embeddings = CPU_Unpickler(f).load()
 
-with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
+with open(AVERAGE_FRAMES_EMBEDDINGS_FILE, "rb") as f:
     average_frame_embeddings = CPU_Unpickler(f).load()
 
-with open(os.path.join(EMBEDDINGS_PATH, "best_frame_embeddings.json.embeddings"), "rb") as f:
+with open(BEST_FRAMES_EMBEDDINGS_FILE, "rb") as f:
     best_frame_embeddings = CPU_Unpickler(f).load()
 
-with open(os.path.join(EMBEDDINGS_PATH, "summed_frame_embeddings.json.embeddings"), "rb") as f:
+with open(SUMMED_FRAMES_EMBEDDINGS_FILE, "rb") as f:
     summed_frame_embeddings = CPU_Unpickler(f).load()
 
-with open(os.path.join(EMBEDDINGS_PATH, "annotations_embeddings.json.embeddings"), "rb") as f:
+with open(ANNOTATIONS_EMBEDDINGS_FILE, "rb") as f:
     annotations_embeddings = CPU_Unpickler(f).load()
 
 print("ENTERING INDEXING LOOP", flush=True)
