@@ -11,7 +11,7 @@ from flask import (
 
 from .embeddings import embeddings_processing
 from .utils import embedder, opensearch, CPU_Unpickler, EMBEDDINGS_PATH, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, \
-    ANNOTATIONS_PATH
+    ANNOTATIONS_PATH, AVERAGE_FRAMES_EMBEDDINGS_FILE
 
 N_RESULTS = 10
 N_FRAMES_TO_DISPLAY = 6
@@ -239,7 +239,7 @@ def query_annotations_embeddings(query_input):
 
 def query_thesaurus(video_id, annotation_id):
     """ Get the results of querying for a similar sign """
-    with open(os.path.join(EMBEDDINGS_PATH, "average_frame_embeddings.json.embeddings"), "rb") as f:
+    with open(AVERAGE_FRAMES_EMBEDDINGS_FILE, "rb") as f:
         average_frame_embeddings = CPU_Unpickler(f).load()
     embedding = average_frame_embeddings[video_id][annotation_id].tolist()
     search_results = opensearch.knn_query_average(embedding, N_RESULTS)
@@ -285,9 +285,8 @@ def query_true_expression(query_input):
     query_results = {}
     search_mode = session.get('search_mode', 1)
     pattern = re.compile(r'(^|\[|_|]|\(|-|\s){}($|\]|_|(?=\W)|\)|-|\s)'.format(query_input.lower()), re.IGNORECASE)
-
     for video in os.listdir(os.path.join(FRAMES_PATH, search_mode)):
-        if not video.endswith(".mp4"):
+        if video.startswith("."):
             continue
         with open(os.path.join(ANNOTATIONS_PATH, f"{video}.json"), "r") as f:
             video_annotations = json.load(f)

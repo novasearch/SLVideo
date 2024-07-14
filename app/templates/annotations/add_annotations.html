@@ -8,7 +8,7 @@
                    href="{{ prev_page if prev_page else url_for('query.query') }}">Back</a>
             </div>
             <div class="col">
-                <h2 class="text-center flex-grow-1">{% block title %}Edit Annotation{% endblock %}</h2>
+                <h2 class="text-center flex-grow-1">{% block title %}Add Annotation{% endblock %}</h2>
             </div>
             <div class="col">
                 <!-- Empty column just to center the elements -->
@@ -31,15 +31,15 @@
                 </video>
             </div>
             <div id="form-col" class="col-4">
-                <form id="annotationForm" name="annotationForm" onsubmit="handleSubmit(event)"
-                      action="{{ url_for('annotations.edit_annotation', video_id=video, annotation_id=annotation_id) }}"
+                <form id="annotationForm" name="annotationForm"
+                      action="{{ url_for('annotations.add_annotation', video_id=video) }}"
                       method="post">
                     <div class="row">
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="annotation_id" class="form-label">ID</label>
+                                <label for="annotation_id" class="form-label">ID (Last ID plus 1)</label>
                                 <input type="text" class="form-control" name="annotation_id" id="annotation_id"
-                                       value="{{ annotation_id }}" disabled>
+                                       value="{{ new_annotation_id }}" disabled>
                             </div>
                         </div>
                         <div class="col-6">
@@ -52,22 +52,20 @@
                     </div>
                     <div class="mb-3">
                         <label for="expression" class="form-label">Facial Expression Glosse</label>
-                        <input type="text" class="form-control" name="expression" id="expression"
-                               value="{{ expression }}" required>
+                        <input type="text" class="form-control" name="expression" id="expression" required>
                     </div>
                     <div class="row">
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="start_time" class="form-label">Start</label>
                                 <input type="time" step="1" class="form-control" name="start_time" id="start_time"
-                                       value="{{ start_time }}" required>
+                                       value="00:00:00" required>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="end_time" class="form-label">End</label>
-                                <input type="time" step="1" class="form-control" name="end_time" id="end_time"
-                                       value="{{ end_time }}" required>
+                                <input type="time" step="1" class="form-control" name="end_time" id="end_time" required>
                             </div>
                         </div>
                         <div class="col-4">
@@ -78,16 +76,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="phrase" class="form-label">Phrase</label>
-                        <input type="text" class="form-control" name="phrase" id="phrase" value="{{ phrase }}" required>
+                        <input type="text" class="form-control" name="phrase" id="phrase" required>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button id="edit_button" type="submit" class="btn btn-primary" onclick="setAction('edit')">
-                            Save Changes
+                        <button id="add_button" type="submit" class="btn btn-primary" onclick="savingEffect()">Save
+                            Annotation
                         </button>
-                        <button id="delete_button" type="submit" class="btn btn-outline-danger" onclick="setAction('delete')">
-                            Delete Annotation
-                        </button>
-                        <input type="hidden" id="action_type" name="action_type" value="">
                     </div>
                 </form>
             </div>
@@ -114,6 +108,9 @@
         document.addEventListener('DOMContentLoaded', (event) => {
             video.addEventListener('loadedmetadata', function () {
                 videoDuration = video.duration;
+                endInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                endSeconds = Math.trunc(videoDuration);
+                startSeconds = 0;
             });
 
             video.addEventListener('timeupdate', checkVideoTime);
@@ -145,6 +142,10 @@
                     endInput.value = new Date(newSeconds * 1000).toISOString().substr(11, 8);
                 }
             });
+
+            document.getElementById('annotationForm').addEventListener('submit', function () {
+                document.getElementById('add_button').disabled = true;
+            });
         });
 
         function convertTimeToSeconds(time) {
@@ -167,60 +168,11 @@
             }
         }
 
-        function setAction(action) {
-            document.getElementById('action_type').value = action;
-        }
-
-        function handleSubmit(event) {
-            event.preventDefault();
-            const action = document.getElementById('action_type').value;
-
-            if (action === 'delete') {
-                const confirmDelete = confirm("Are you sure you want to delete this annotation?");
-                if (!confirmDelete) {
-                    // If user cancels, exit the function without submitting the form
-                    return;
-                }
-                // Change the button content to show the spinner and "Saving..." text
-                document.getElementById('delete_button').innerHTML = `
-                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                    <span role="status">Deleting...</span>
-                    `;
-            } else if (action === "edit") {
-                // Change the button content to show the spinner and "Saving..." text
-                document.getElementById('edit_button').innerHTML = `
+        function savingEffect() {
+            document.getElementById('add_button').innerHTML = `
                     <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
                     <span role="status">Saving...</span>
                 `;
-            }
-
-            document.getElementById('edit_button').disabled = true;
-            document.getElementById('delete_button').disabled = true;
-
-            fetch('/update_annotation_info', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'video_id': document.getElementById('video_id').value,
-                    'annotation_id': document.getElementById('annotation_id').value,
-                    'expression': document.getElementById('expression').value,
-                    'start_time': document.getElementById('start_time').value,
-                    'end_time': document.getElementById('end_time').value,
-                    'phrase': document.getElementById('phrase').value,
-                    'action_type': action
-                })
-            }).then(response => {
-                if (response.ok) {
-                    // If the response is ok, manually submit the form
-                    document.getElementById('annotationForm').submit();
-                } else {
-                    // Handle any errors
-                    console.error('Failed to update annotation info');
-                }
-            })
-                .catch(error => console.error('Error:', error));
         }
     </script>
 {% endblock %}

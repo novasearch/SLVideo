@@ -36,7 +36,6 @@ def list_videos():
 @bp.route('/videos/<video_id>', methods=("GET", "POST"))
 def watch_video(video_id):
     """ Shows the selected video. """
-
     facial_expressions = {}
 
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
@@ -55,8 +54,12 @@ def watch_video(video_id):
     facial_expressions = dict(sorted(facial_expressions.items(), key=lambda item: item[1]["value"]))
 
     if request.method == "POST":
-        annotation_id = request.form.get("selected_annotation")
-        return redirect(url_for("annotations.edit_annotation", video_id=video_id, annotation_id=annotation_id))
+        form_type = request.form.get("form_type")
+        if form_type == "add":
+            return redirect(url_for("annotations.add_annotation", video_id=video_id))
+        elif form_type == "edit":
+            annotation_id = request.form.get("selected_annotation")
+            return redirect(url_for("annotations.edit_annotation", video_id=video_id, annotation_id=annotation_id))
 
     return render_template("videos_list/watch_video.html", video=video_id,
                            annotations=facial_expressions)
