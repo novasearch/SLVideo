@@ -126,8 +126,12 @@
 
             startInput.addEventListener('change', function () {
                 startSeconds = convertTimeToSeconds(startInput.value);
-                if (startSeconds > endSeconds) {
-                    startInput.value = endInput.value;
+                if (startSeconds > videoDuration) {
+                    startInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                }
+                if (startSeconds >= endSeconds) {
+                    let newSeconds = convertTimeToSeconds(endInput.value) - 1;
+                    startInput.value = new Date(newSeconds * 1000).toISOString().substr(11, 8);
                 }
             });
 
@@ -136,8 +140,9 @@
                 if (endSeconds > videoDuration) {
                     endInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
                 }
-                if (endSeconds < startSeconds) {
-                    endInput.value = startInput.value;
+                if (endSeconds <= startSeconds && endSeconds < videoDuration) {
+                    let newSeconds = convertTimeToSeconds(startInput.value) + 1;
+                    endInput.value = new Date(newSeconds * 1000).toISOString().substr(11, 8);
                 }
             });
         });

@@ -3,10 +3,10 @@ import os
 import webvtt
 import xml.etree.ElementTree as ET
 
-from app.utils import ANNOTATIONS_PATH, CAPTIONS_PATH
+from app.utils import ANNOTATIONS_PATH, CAPTIONS_PATH, EAF_PATH
 
 
-def parse_eaf_files(eaf_dir):
+def parse_eaf_files():
     """ Parses the eaf files and extracts the data from it """
 
     # Create the annotations and captions directories if they don't exist
@@ -15,7 +15,7 @@ def parse_eaf_files(eaf_dir):
     if not os.path.exists(CAPTIONS_PATH):
         os.makedirs(CAPTIONS_PATH)
 
-    for eaf in os.listdir(eaf_dir):
+    for eaf in os.listdir(EAF_PATH):
         videoname, extension = os.path.splitext(eaf)
         video_annotations_path = os.path.join(ANNOTATIONS_PATH, videoname + '.json')
 
@@ -24,7 +24,7 @@ def parse_eaf_files(eaf_dir):
 
         data_dict = {}
 
-        with open(os.path.join(eaf_dir, eaf), "r", encoding='utf-8') as file:
+        with open(os.path.join(EAF_PATH, eaf), "r", encoding='utf-8') as file:
             file_content = file.read()
 
             root = ET.fromstring(file_content)
@@ -135,3 +135,35 @@ def convert_milliseconds_to_time_format(milliseconds):
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     return f"{hours:02d}:{minutes:02d}:{seconds:02d}.{milliseconds:03d}"
+
+
+def convert_time_format_to_milliseconds(time_format):
+    """ Converts from HH:MM:SS.mmm to milliseconds """
+    time_format = time_format.split(':')
+    hours = int(time_format[0]) * 3600000
+    minutes = int(time_format[1]) * 60000
+    seconds = int(time_format[2].split('.')[0]) * 1000
+    if '.' in time_format[2]:
+        milliseconds = int(time_format[2].split('.')[1])
+    else:
+        milliseconds = 0
+    return hours + minutes + seconds + milliseconds
+
+
+def add_annotation(video_id, tier_id, start_time, end_time, value, phrase):
+    """ Adds an annotation to the video annotations EAF file """
+    video_eaf = os.path.join(EAF_PATH, video_id + '.eaf')
+
+    start_time_mm = convert_time_format_to_milliseconds(start_time)
+    end_time_mm = convert_time_format_to_milliseconds(end_time)
+
+    with open(video_eaf, "r", encoding='utf-8') as file:
+        file_content = file.read()
+
+        root = ET.fromstring(file_content)
+
+        # Add new time slot
+        time_slots = root.findall('TIME_ORDER/TIME_SLOT')
+
+
+

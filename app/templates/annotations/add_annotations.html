@@ -59,7 +59,7 @@
                             <div class="mb-3">
                                 <label for="start_time" class="form-label">Start</label>
                                 <input type="time" step="1" class="form-control" name="start_time" id="start_time"
-                                       required>
+                                       value="00:00:00" required>
                             </div>
                         </div>
                         <div class="col-4">
@@ -79,7 +79,7 @@
                         <input type="text" class="form-control" name="phrase" id="phrase" required>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button id="add_button" type="submit" class="btn btn-primary">Save
+                        <button id="add_button" type="submit" class="btn btn-primary" onclick="savingEffect()">Save
                             Annotation
                         </button>
                     </div>
@@ -108,6 +108,9 @@
         document.addEventListener('DOMContentLoaded', (event) => {
             video.addEventListener('loadedmetadata', function () {
                 videoDuration = video.duration;
+                endInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                endSeconds = Math.trunc(videoDuration);
+                startSeconds = 0;
             });
 
             video.addEventListener('timeupdate', checkVideoTime);
@@ -123,8 +126,9 @@
                 if (startSeconds > videoDuration) {
                     startInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
                 }
-                if (startSeconds > endSeconds) {
-                    startInput.value = endInput.value;
+                if (startSeconds >= endSeconds) {
+                    let newSeconds = convertTimeToSeconds(endInput.value) - 1;
+                    startInput.value = new Date(newSeconds * 1000).toISOString().substr(11, 8);
                 }
             });
 
@@ -133,9 +137,14 @@
                 if (endSeconds > videoDuration) {
                     endInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
                 }
-                if (endSeconds < startSeconds) {
-                    endInput.value = startInput.value;
+                if (endSeconds <= startSeconds && endSeconds < videoDuration) {
+                    let newSeconds = convertTimeToSeconds(startInput.value) + 1;
+                    endInput.value = new Date(newSeconds * 1000).toISOString().substr(11, 8);
                 }
+            });
+
+            document.getElementById('annotationForm').addEventListener('submit', function () {
+                document.getElementById('add_button').disabled = true;
             });
         });
 
@@ -159,12 +168,11 @@
             }
         }
 
-        function handleSubmit() {
+        function savingEffect() {
             document.getElementById('add_button').innerHTML = `
                     <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
                     <span role="status">Saving...</span>
                 `;
-            document.getElementById('add_button').disabled = true;
         }
     </script>
 {% endblock %}

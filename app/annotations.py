@@ -8,6 +8,7 @@ from flask import Blueprint, request, render_template, flash, url_for, redirect
 from .embeddings import embeddings_processing
 from .frame_extraction import frames_processing
 from .utils import embedder, FACIAL_EXPRESSIONS_ID, ANNOTATIONS_PATH, opensearch
+from .opensearch.opensearch import gen_doc
 
 bp = Blueprint('annotations', __name__)
 
@@ -21,7 +22,12 @@ def edit_annotation(video_id, annotation_id):
 
     current_route = url_for('annotations.edit_annotation', video_id=video_id, annotation_id=annotation_id,
                             _external=True)
-    prev_page = define_prev_page(current_route)
+
+    referer = request.headers.get('Referer', None)
+
+    if (referer.replace('http://', '').replace('https://', '') !=
+            current_route.replace('http://', '').replace('https://', '')):
+        prev_page = referer
 
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
@@ -113,7 +119,12 @@ def add_annotation(video_id):
     global prev_page
 
     current_route = url_for('annotations.add_annotation', video_id=video_id, _external=True)
-    prev_page = define_prev_page(current_route)
+
+    referer = request.headers.get('Referer', None)
+
+    if (referer.replace('http://', '').replace('https://', '') !=
+            current_route.replace('http://', '').replace('https://', '')):
+        prev_page = referer
 
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
@@ -146,18 +157,27 @@ def add_annotation(video_id):
             with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
                 json.dump(video_annotations, f, indent=4)
 
-            """ TODO: Uncomment this when the embeddings are ready
-            # Update the embeddings
-            new_embeddings = embeddings_processing.update_annotations_embeddings(video_id, new_annotation_id, embedder)
-
-            # Index the new annotation in opensearch
-            doc = opensearch.gendoc(...)
-            opensearch.index_if_not_exists(doc) 
-
             # Extract the frames
             frames_processing.extract_annotation_frames(video_id, new_annotation_id, start_time, end_time)
-            
-            """
+
+            # Generate the embeddings
+            embeddings_processing.add_embeddings(video_id, new_annotation_id, embedder)
+
+            # Load the embeddings
+            (base_frame_embeddings, average_frame_embeddings, best_frame_embeddings, summed_frame_embeddings,
+             annotations_embeddings) = embeddings_processing.load_embeddings()
+
+            # Index the new annotation in opensearch
+            doc = gen_doc(
+                video_id=video_id,
+                annotation_id=new_annotation_id,
+                base_frame_embedding=base_frame_embeddings[video_id][new_annotation_id].tolist(),
+                average_frame_embedding=average_frame_embeddings[video_id][new_annotation_id].tolist(),
+                best_frame_embedding=best_frame_embeddings[video_id][new_annotation_id].tolist(),
+                summed_frame_embeddings=summed_frame_embeddings[video_id][new_annotation_id].tolist(),
+                annotation_embedding=annotations_embeddings[video_id][new_annotation_id].tolist(),
+            )
+            opensearch.index_if_not_exists(doc)
 
             flash("Annotation added successfully!", "success")
         else:
@@ -202,12 +222,3 @@ def convert_to_milliseconds(time_str):
     milliseconds = (time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second) * 1000
 
     return milliseconds
-
-
-def define_prev_page(current_route):
-    referer = request.headers.get('Referer', None)
-
-    if (referer.replace('http://', '').replace('https://', '') !=
-            current_route.replace('http://', '').replace('https://', '')):
-        return referer
-    return ""
