@@ -238,7 +238,7 @@ def generate_annotation_frame_embeddings(video_id, annotation_id, eb: Embedder):
         # generate embedding and sum it to the total embedding
         annotation_embedding += eb.image_encode(full_path)
 
-        return annotation_embedding
+    return annotation_embedding
 
 
 def generate_annotation_average_and_best_frame_embeddings(video_id, annotation_id, eb: Embedder):

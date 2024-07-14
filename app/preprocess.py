@@ -15,11 +15,12 @@ opensearch = LGPOpenSearch()
 def run_in_env(script_path, env_path):
     """ Run a script in a virtual environment """
     activate_script = f'source {env_path}/bin/activate'
-    command = f"{activate_script}; python {script_path}; deactivate"
+    command = f"{activate_script}; python -m {script_path}; deactivate"
     process = subprocess.Popen(command, shell=True, executable="/bin/bash", stderr=subprocess.PIPE)
     _, err = process.communicate()
-    if process.returncode != 0:
-        print(f"Error occurred: {err.decode()}")
+    err_decoded = err.decode()
+    if process.returncode != 0 or err_decoded:
+        print(f"Error occurred: {err_decoded}")
     process.wait()
 
 
@@ -30,7 +31,7 @@ if not os.path.exists(RESULTS_PATH):
     os.makedirs(RESULTS_PATH)
 
 # Generate json file for videos with annotations and timestamps
-eaf_parser.parse_eaf_files(EAF_PATH)
+eaf_parser.parse_eaf_files()
 print("Annotations generated", flush=True)
 
 # Extract facial expressions frames
@@ -40,7 +41,7 @@ if not os.path.exists(FRAMES_PATH):
     os.makedirs(FRAMES_PATH)
 
 # Due to dependencies incompatibilities, this step is done in a separate environment
-run_in_env(f"app/frame_extraction/run_frame_extraction.py",
+run_in_env("app.frame_extraction.run_frame_extraction.py",
            "python_environments/object_detectors_env")
 print("Extracted facial expressions frames", flush=True)
 

@@ -4,8 +4,8 @@ import json
 import shutil
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
-from app.frame_extraction import object_detector
 from app.utils import PHRASES_ID, FACIAL_EXPRESSIONS_ID, VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH
+from app.frame_extraction import object_detector
 
 
 class FrameExtractor:
