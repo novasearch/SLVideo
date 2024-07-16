@@ -8,17 +8,14 @@ This is the official GitHub repo for the paper "SLVideo: A Sign Language Video M
 
 SLVideo is a video moment retrieval software for Sign Language videos focusing on signs where facial
 expressions have an important role. A collection of five hours of annotated Portuguese Sign Language videos is used as
-the
-dataset, where it generates a series of embeddings from the extracted video frames and the videos' annotations to allow
+the dataset, where it generates a series of embeddings from the extracted video frames and the videos' annotations to allow
 the user to use a text query to search for a specific video segment.
 
 Besides the video moment retrieval task, SLVideo also includes a thesaurus, where the users can see similar signs to the
 ones that were retrieved. That thesaurus is available by searching for a facial expression and pressing the "Search
 Thesaurus" button on the opened modal when selecting a clip.
 
-To improve the dataset and train a future model to be used in this system, the users can also rate the retrieved video
-segments and edit the annotations of those video segments. To do this, the user must search for a facial expression and
-rate it using the available rating stars or edit it by pressing the "Edit" button and updating the editable information.
+It is also possible to watch all the available videos and respective facial expressions glosses in a separate page from the query page. 
 
 This system includes a web application developed in Flask that allows the users to try SLVideo.
 
@@ -32,7 +29,7 @@ In this deployed version, the model that is being used to generate the embedding
 
 ### Locally
 
-We recommend using an Ubuntu system to run SLVideo locally.
+We recommend using an Ubuntu system to run SLVideo locally. If you want to run on a Windows system you may need to adjust the code.
 
 First, you need to clone this repository:
 
@@ -76,14 +73,25 @@ flask --app app run -h X.X.X.X -p XXXX
 
 ## How to change the encoder
 
-For now, two encoders are available in this repository: the `clip-ViT-B-32` and the `capivara`. If you wish to change
-the used encoder, you can add one by creating a file in the `app/embeddings/encoders` folder where you will implement
+For now, two encoders are available in this repository: the `clip-ViT-B-32` and the `CAPIVARA`. If you wish to change
+the used encoder, you can add one by creating a file in the `app/embeddings/encoders` folder and implement
 the image and text encoding methods by extending the **Encoder**  abstract class. This approach follows the strategy
 design pattern.
 
+## How to rate and edit annotations
+
+To improve the dataset and train a future model to be used in this system, the users can also rate the retrieved video segments and edit the annotations of those video segments. 
+
+To rate an annotation, the user must search for a facial expression and rate it using the available rating stars.
+
+To add an annotation, the user must go to the videos page and select a video to watch. When watching a video, a list of the available facial expression glosses will appear and at the start of that list there is an outlined button with a plus sign. Click on that button and you will go to the annotation addition page. 
+
+The user can also edit annotations to improve them and the overall system. When watching a video segment, you can click on the **Edit** button and open the annotation edition page, where you can change the information about an annotation. In that page, you can also delete the annotation. This edition page is also reachable from the videos page by clicking on a video, then on one of the available facial expressions glosses and finally on the edit button that will pop up.
+
+
 ## Folder Structure
 
-The `object_detectors_env` folder is the conda environment that contains the necessary libraries to run the object
+The `python_environments/object_detectors_env` folder is the conda environment that contains the necessary libraries to run the object
 detection models.
 
 The `app` folder contains all the scripts and files needed to run the SLVideo web application. Here is a brief
@@ -93,15 +101,14 @@ description of each folder and script:
 
 This folder contains the script responsible for parsing the **EAF** files
 
-- `eaf_parser.py`: Iterates through the available EAF files (one for each annotated video), parses the relevant info
-  into JSON files and creates the video captions files
+- `eaf_parser.py`: Has all the functions for handling the EAF files, such as iterating through the available EAF files (one for each annotated video), parsing the relevant info into JSON files and creating the video captions files
 
 #### `embeddings`
 
 This folder contains the scripts responsible for generating embeddings for text and image
 
 - `encoders`: This folder has one file for each of the implemented encoders and one with the abstract class that is
-  extended by the other files.
+  extended by the other files
 - `embeddings_generator.py`: Has the functions responsible for generating embeddings for text and images. This is where
   the embedding generator model is defined
 - `embeddings_processing.py`: Iterates through the extracted video frames and generates its embeddings. Also contains
@@ -111,7 +118,7 @@ This folder contains the scripts responsible for generating embeddings for text 
 
 This folder contains the scripts responsible for extracting and cropping the video frames
 
-- `frame_extractor.py`: Iterates through the videos and respective annotations and extracts the frames where is being
+- `frames_processing.py`: Iterates through the videos and respective annotations and extracts the frames where is being
   performed a sign in which the facial expression has a big role and one frame for each phrase
 - `object_detector.py`: Has the functions responsible for cropping and removing the background of the extracted frames
   to only have the person. This is where the cropping and background removal models are defined
