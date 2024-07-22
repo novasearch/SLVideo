@@ -4,10 +4,16 @@ import os
 import re
 from collections import OrderedDict
 from datetime import datetime as dt
+import umap
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
+import numpy as np
 
 from flask import (
     Blueprint, flash, redirect, render_template, request, session, url_for
 )
+from sklearn.preprocessing import StandardScaler
 
 from .embeddings import embeddings_processing
 from .utils import embedder, opensearch, CPU_Unpickler, EMBEDDINGS_PATH, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, \
@@ -181,7 +187,7 @@ def thesaurus_results(video_id, annotation_id):
             search_results[video_id][annotation_id]["converted_end_time"] = converted_end_time
 
     # Not all frames of each expression are going to be displayed
-    frames_to_display = get_frames_to_display(frames)
+    frames_to_display = get_frames_to_display(frames, n_frames=1)
 
     # Initialize a dictionary to store the frames information so that the keys
     # are a composition of the video_id and the annotation_id
@@ -243,10 +249,10 @@ def query_thesaurus(video_id, annotation_id):
         average_frame_embeddings = CPU_Unpickler(f).load()
     embedding = average_frame_embeddings[video_id][annotation_id].tolist()
     search_results = opensearch.knn_query_average(embedding, N_RESULTS)
-    return set_query_results(search_results)
+    return set_query_results(search_results, plot_tsne=True)
 
 
-def set_query_results(search_results, query_input=None):
+def set_query_results(search_results, query_input=None, plot_tsne=False):
     """ Set the info of the query from the search results """
     query_results = {}
 
@@ -276,6 +282,14 @@ def set_query_results(search_results, query_input=None):
 
     if query_input:
         print_performance_metrics(query_results, query_input)
+
+    # if the query_embedding is given, gets the coordinates of the query and the results in 2D
+    if plot_tsne:
+        coordinates = get_results_tsne(
+            np.array([hit['_source']['average_frame_embedding'] for hit in search_results['hits']['hits']]))
+        for video_id in query_results.keys():
+            for i, annotation_id in enumerate(query_results[video_id].keys()):
+                query_results[video_id][annotation_id]['coordinates'] = coordinates[i].tolist()
 
     return query_results
 
@@ -353,7 +367,7 @@ def print_performance_metrics(query_results, query_input):
     print("-------------------------------------")
 
 
-def get_frames_to_display(frames):
+def get_frames_to_display(frames, n_frames=N_FRAMES_TO_DISPLAY):
     """ Get the frames to display """
     frames_to_display = {}
 
@@ -361,18 +375,40 @@ def get_frames_to_display(frames):
     for expression, all_frames in frames.items():
 
         # Calculate the step size
-        if len(all_frames) <= N_FRAMES_TO_DISPLAY:
+        if len(all_frames) <= n_frames:
             step_size = 1
         else:
-            step_size = (len(all_frames) - 1) // N_FRAMES_TO_DISPLAY + 1
+            step_size = (len(all_frames) - 1) // n_frames + 1
 
         # Select frames to display
         frames_to_display[expression] = all_frames[::step_size]
 
         # Ensure that only num_frames_to_display frames are selected
-        frames_to_display[expression] = frames_to_display[expression][:N_FRAMES_TO_DISPLAY]
+        frames_to_display[expression] = frames_to_display[expression][:n_frames]
 
     return frames_to_display
+
+
+def get_results_tsne(results_embeddings):
+    """ Get the 2D coordinates of the results using t-SNE """
+    # Standardize the embeddings
+    scaler = StandardScaler()
+    results_embeddings = scaler.fit_transform(results_embeddings)
+
+    # Reduce dimensionality with PCA before t-SNE for faster processing
+    n_pca_components = min(len(results_embeddings), N_RESULTS,
+                           50)  # Ensure PCA components do not exceed available samples
+    pca = PCA(n_components=n_pca_components)
+    results_embeddings_reduced = pca.fit_transform(results_embeddings)
+
+    # Dynamically adjust perplexity based on the number of results
+    perplexity_value = min(max(5, N_RESULTS//2), len(results_embeddings) - 1)
+
+    # Use t-SNE to reduce the dimensionality of the embeddings
+    tsne = TSNE(n_components=2, perplexity=perplexity_value)
+    embeddings_2d = tsne.fit_transform(results_embeddings_reduced)
+
+    return embeddings_2d
 
 
 @bp.route("/update_annotation_rating", methods=["POST"])

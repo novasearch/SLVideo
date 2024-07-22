@@ -7,42 +7,135 @@
 {% endblock %}
 
 {% block annotations_loop %}
-    {% for annotation in frames_info %}
-        <div class="d-flex justify-content-center">
-            <div class="card mb-2 w-100 border-secondary mx-auto" style="cursor: pointer; max-width: 75%;"
+    <div id="card-container" class="mx-auto border border-dark border-2 border-top-0 border-end-0"
+         style="max-width: 75vw; max-height: 80vh; position: relative; min-height: 80vh">
+        {% for annotation in frames_info %}
+            <div class="card" data-coordinates="{{ frames_info[annotation]["coordinates"] }}"
+                 style="cursor: pointer; height: 8rem; width: 9rem; background-color: #f4f4f4;"
                  data-bs-toggle="modal"
                  data-bs-target="#clipModal" data-bs-whatever="{{ annotation }}">
-                <div class="row g-0 border-bottom border-secondary border-opacity-25">
-                    <p class="match_score">{{ loop.index }}º Match - Similarity
-                        Score {{ frames_info[annotation]["similarity_score"] }}</p>
-                </div>
-                <div class="row g-0" style="display: flex">
-                    <div class="col-md-4"
-                         style="height: 9rem; display: flex; align-items: center; justify-content: center;">
-                        <div class="card-body">
-                            <p class="expression">{{ frames_info[annotation]["annotation_value"] }}</p>
-                            <p class="expression_description">Video: {{ video }} ;
-                                Timestamp: {{ frames_info[annotation]["converted_start_time"] }}</p>
-                        </div>
-                    </div>
-                    <div class="col-md-8" style="height: 9rem;">
-                        <div class="card-body d-flex justify-content-between align-items-center" style="height: 100%;">
-                            {% for frame in frames[annotation] %}
-                                <img style="object-fit: contain; height: 110%;"
-                                     src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + frames_info[annotation]["video_id"] + '/' + frames_info[annotation]["annotation_id"] +'/' + frame) }}"
-                                     alt="Not Found">
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-0 border-top border-secondary border-opacity-50">
-                    <p class="expression_description">Phrase: "{{ frames_info[annotation]["phrase"] }}"</p>
+                <img class="card-img-top mt-1" style="object-fit: contain; height: 50%;"
+                     src="{{ url_for('static', filename='videofiles/frames/' + search_mode + '/' + frames_info[annotation]["video_id"] + '/' + frames_info[annotation]["annotation_id"] +'/' + frames[annotation][0]) }}"
+                     alt="Not Found">
+                <div class="card-body m-0 p-0"
+                     style="width: 100%; height: 100%; overflow: hidden">
+                    <p class="fw-semibold text-break text-center" style="font-size: 100%">
+                        {{ frames_info[annotation]["annotation_value"] }}
+                    </p>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block modal_buttons %}
     <button id="clip_button" type="button" class="btn btn-primary">Play Expression</button>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        const container = document.getElementById('card-container');
+        const cards = document.querySelectorAll('.card');
+        const cards_coordinates = [];
+
+        function position_cards() {
+            const cardWidth = cards[0].offsetWidth;
+            const cardHeight = cards[0].offsetHeight;
+
+            const containerWidth = container.offsetWidth - cardWidth * 1.05;
+            const containerHeight = container.offsetHeight - cardHeight * 1.05;
+
+            // Get the coordinates of each card
+            cards.forEach(card => {
+                const card_coord = JSON.parse(card.getAttribute('data-coordinates'));
+                cards_coordinates.push(card_coord);
+            });
+
+            // Normalize coordinates to ensure there are no negative values
+            let minX = Math.min(...cards_coordinates.map(coord => coord[0]));
+            let minY = Math.min(...cards_coordinates.map(coord => coord[1]));
+            let normalizedCoordinates = cards_coordinates.map(coord => [coord[0] - minX, coord[1] - minY]);
+
+            // Find scale factors
+            let maxX = Math.max(...normalizedCoordinates.map(coord => coord[0]));
+            let maxY = Math.max(...normalizedCoordinates.map(coord => coord[1]));
+            let scaleX = containerWidth / maxX;
+            let scaleY = containerHeight / maxY;
+
+            // Apply scale factors and position cards
+            cards.forEach((card, index) => {
+                if (index < normalizedCoordinates.length) {
+                    let [x, y] = normalizedCoordinates[index];
+                    x *= scaleX;
+                    y *= scaleY;
+                    card.style.position = 'absolute';
+                    card.style.left = `${x}px`;
+                    card.style.top = `${y}px`;
+                }
+            });
+        }
+
+        // Defines the cards border colors accordingly to their distance to the first card
+        function cards_color_distance() {
+            const first_card_coord = cards_coordinates[0];
+            const distances = {};
+
+            cards.forEach((card, index) => {
+                const card_coord = cards_coordinates[index];
+                distances[index] = Math.sqrt(Math.pow(card_coord[0] - first_card_coord[0], 2) + Math.pow(card_coord[1] - first_card_coord[1], 2));
+            });
+
+            const maxDistance = Math.max(...Object.values(distances));
+            const minDistance = Math.min(...Object.values(distances));
+
+            cards.forEach((card, index) => {
+                const distance = distances[index];
+                const factor = (distance - minDistance) / (maxDistance - minDistance);
+                const color = interpolateColor([0, 255, 0], [255, 0, 0], factor);
+                card.style.borderColor = rgbToHex(color);
+            });
+        }
+
+        // Color interpolation function
+        function interpolateColor(color1, color2, factor) {
+            if (arguments.length < 3) {
+                factor = 0.5;
+            }
+            let result = color1.slice();
+            for (let i = 0; i < 3; i++) {
+                result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+            }
+            return result;
+        }
+
+        // Convert an RGB array to hex string
+        function rgbToHex(color) {
+            return '#' + color.map(x => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
+        }
+
+        // Resize font to fit the card
+        function resize_font_fit() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const cardBody = card.querySelector('.card-body');
+                const cardText = cardBody.querySelector('p');
+                const cardTextHeight = cardText.clientHeight;
+                const cardBodyHeight = cardBody.clientHeight;
+                const fontSize = parseInt(cardText.style.fontSize.split('%')[0]);
+                console.log(cardTextHeight, cardBodyHeight, fontSize);
+                if (cardTextHeight > cardBodyHeight) {
+                    cardText.style.fontSize = `${fontSize - 5}%`;
+                    resize_font_fit();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', position_cards);
+        document.addEventListener('DOMContentLoaded', cards_color_distance);
+        document.addEventListener('DOMContentLoaded', resize_font_fit);
+    </script>
 {% endblock %}

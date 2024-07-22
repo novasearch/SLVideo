@@ -61,6 +61,7 @@
 .card:hover {
     box-shadow: 0 0 10px rgba(33, 33, 33, .5); /* Adjust as needed */
     cursor: pointer;
+    z-index: 1;
 }
 
 .change-clips {
