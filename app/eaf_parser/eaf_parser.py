@@ -150,6 +150,35 @@ def convert_time_format_to_milliseconds(time_format):
     return hours + minutes + seconds + milliseconds
 
 
+def edit_annotation(video_id, tier_id, annotation_id, start_time, end_time, value):
+    """ Edit an annotation in the video EAF file """
+    video_eaf = os.path.join(EAF_PATH, video_id + '.eaf')
+
+    print("AAAAAAAAAAAAAAA", video_eaf)
+
+    with open(video_eaf, "r", encoding='utf-8') as file:
+        file_content = file.read()
+
+        root = ET.fromstring(file_content)
+
+        # Edit the time slot
+        time_slots = root.findall('TIME_ORDER/TIME_SLOT')
+
+        print("BBBBBBBBBBBBBBBBBBBBBBBB")
+
+        # Edit the annotation
+        tier_annotations = root.findall('TIER[@TIER_ID="' + tier_id + '"]/')
+        for outer_tag in tier_annotations:
+            annotation = outer_tag.find('*')  # Get the first child element
+            if annotation.attrib['ANNOTATION_ID'] == annotation_id:
+                annotation.find('ANNOTATION_VALUE').text = value
+
+        print("CCCCCCCCCCCCCCCCCCCCCCC")
+
+        with open(video_eaf, "w", encoding='utf-8') as updated_file:
+            updated_file.write(ET.tostring(root, encoding='unicode'))
+
+
 def add_annotation(video_id, tier_id, start_time, end_time, value, phrase):
     """ Adds an annotation to the video annotations EAF file """
     video_eaf = os.path.join(EAF_PATH, video_id + '.eaf')

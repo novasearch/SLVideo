@@ -5,6 +5,7 @@ from datetime import datetime as dt
 
 from flask import Blueprint, request, render_template, flash, url_for, redirect
 
+from .eaf_parser import eaf_parser
 from .embeddings import embeddings_processing
 from .frame_extraction import frames_processing
 from .utils import embedder, FACIAL_EXPRESSIONS_ID, ANNOTATIONS_PATH, opensearch
@@ -101,6 +102,10 @@ def edit_annotation(video_id, annotation_id):
                 # Update the frames
                 frames_processing.delete_frames(video_id, annotation_id)
                 frames_processing.extract_annotation_frames(video_id, annotation_id, new_start_time, new_end_time)
+
+            # Update the EAF file
+            eaf_parser.edit_annotation(video_id, FACIAL_EXPRESSIONS_ID, annotation_id, new_converted_start_time,
+                                       new_converted_end_time, new_expression)
 
             flash("Annotation updated successfully!", "success")
 
