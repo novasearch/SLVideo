@@ -146,6 +146,16 @@
             document.getElementById('annotationForm').addEventListener('submit', function () {
                 document.getElementById('add_button').disabled = true;
             });
+
+            let inputs = document.querySelectorAll('#annotationForm input');
+            inputs.forEach(function (input) {
+                input.addEventListener('keypress', function (event) {
+                    if (event.key === 'Enter') {
+                        // Prevent the form from being submitted when pressing Enter
+                        event.preventDefault();
+                    }
+                });
+            });
         });
 
         function convertTimeToSeconds(time) {

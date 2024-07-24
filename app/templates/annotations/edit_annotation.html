@@ -51,23 +51,23 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="expression" class="form-label">Facial Expression Glosse</label>
+                        <label for="expression" class="form-label">Facial Expression Gloss</label>
                         <input type="text" class="form-control" name="expression" id="expression"
                                value="{{ expression }}" required>
                     </div>
                     <div class="row">
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="start_time" class="form-label">Start</label>
-                                <input type="time" step="1" class="form-control" name="start_time" id="start_time"
-                                       value="{{ start_time }}" required>
+                                <label for="start_time" class="form-label">Start Time</label>
+                                <input type="number" class="form-control" name="start_frame" id="start_time"
+                                       step="1000" value="{{ start_time }}" required>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="end_time" class="form-label">End</label>
-                                <input type="time" step="1" class="form-control" name="end_time" id="end_time"
-                                       value="{{ end_time }}" required>
+                                <label for="end_time" class="form-label">End Time</label>
+                                <input type="number" class="form-control" name="end_frame" id="end_time"
+                                       step="1000" value="{{ end_time }}" required>
                             </div>
                         </div>
                         <div class="col-4">
@@ -84,7 +84,8 @@
                         <button id="edit_button" type="submit" class="btn btn-primary" onclick="setAction('edit')">
                             Save Changes
                         </button>
-                        <button id="delete_button" type="submit" class="btn btn-outline-danger" onclick="setAction('delete')">
+                        <button id="delete_button" type="submit" class="btn btn-outline-danger"
+                                onclick="setAction('delete')">
                             Delete Annotation
                         </button>
                         <input type="hidden" id="action_type" name="action_type" value="">
@@ -103,18 +104,23 @@
     </div>
 
     <script>
-        var video = document.getElementById('searched_video');
-        var startInput = document.getElementById('start_time');
-        var endInput = document.getElementById('end_time');
-        var videoDuration;
-        var startSeconds = convertTimeToSeconds(startInput.value);
-        var endSeconds = convertTimeToSeconds(endInput.value);
+        let video = document.getElementById('searched_video');
+        let startInput = document.getElementById('start_time');
+        let endInput = document.getElementById('end_time');
+        let videoDuration;
+        let startSeconds = startInput.value;
+        let endSeconds = endInput.value;
         let isPlayingClip = false;
+        let step_size = Math.round(1000 / {{ frame_rate }});
 
         document.addEventListener('DOMContentLoaded', (event) => {
             video.addEventListener('loadedmetadata', function () {
-                videoDuration = video.duration;
+                videoDuration = Math.floor(video.duration * 1000); // Convert to milliseconds
             });
+
+            // Set the step size for the start and end time inputs
+            startInput.setAttribute('step', step_size.toString());
+            endInput.setAttribute('step', step_size.toString());
 
             video.addEventListener('timeupdate', checkVideoTime);
 
@@ -125,32 +131,36 @@
             });
 
             startInput.addEventListener('change', function () {
-                startSeconds = convertTimeToSeconds(startInput.value);
+                startSeconds = startInput.value;
                 if (startSeconds > videoDuration) {
-                    startInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                    startInput.value = videoDuration;
                 }
                 if (startSeconds >= endSeconds) {
-                    let newSeconds = convertTimeToSeconds(endInput.value) - 1;
-                    startInput.value = new Date(newSeconds * 1000).toISOString().substr(11, 8);
+                    startInput.value = endSeconds - 1;
                 }
+                video.currentTime = startSeconds / 1000;
             });
 
             endInput.addEventListener('change', function () {
-                endSeconds = convertTimeToSeconds(endInput.value);
+                endSeconds = endInput.value;
                 if (endSeconds > videoDuration) {
-                    endInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                    endInput.value = videoDuration;
                 }
                 if (endSeconds <= startSeconds && endSeconds < videoDuration) {
-                    let newSeconds = convertTimeToSeconds(startInput.value) + 1;
-                    endInput.value = new Date(newSeconds * 1000).toISOString().substr(11, 8);
+                    endInput.value = startSeconds + 1;
                 }
             });
-        });
 
-        function convertTimeToSeconds(time) {
-            var timeArray = time.split(':');
-            return parseInt(timeArray[0]) * 3600 + parseInt(timeArray[1]) * 60 + parseInt(timeArray[2]);
-        }
+            let inputs = document.querySelectorAll('#annotationForm input');
+            inputs.forEach(function (input) {
+                input.addEventListener('keypress', function (event) {
+                    if (event.key === 'Enter') {
+                        // Prevent the form from being submitted when pressing Enter
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
 
         // Function to play the video clip with the retrieved facial expression
         function playClip() {

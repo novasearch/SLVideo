@@ -148,22 +148,3 @@ def convert_time_format_to_milliseconds(time_format):
     else:
         milliseconds = 0
     return hours + minutes + seconds + milliseconds
-
-
-def add_annotation(video_id, tier_id, start_time, end_time, value, phrase):
-    """ Adds an annotation to the video annotations EAF file """
-    video_eaf = os.path.join(EAF_PATH, video_id + '.eaf')
-
-    start_time_mm = convert_time_format_to_milliseconds(start_time)
-    end_time_mm = convert_time_format_to_milliseconds(end_time)
-
-    with open(video_eaf, "r", encoding='utf-8') as file:
-        file_content = file.read()
-
-        root = ET.fromstring(file_content)
-
-        # Add new time slot
-        time_slots = root.findall('TIME_ORDER/TIME_SLOT')
-
-
-
