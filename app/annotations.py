@@ -19,7 +19,6 @@ prev_page = ""
 def edit_annotation(video_id, annotation_id):
     """ Edit an annotation """
     frame_rate = get_video_frame_rate(os.path.join(VIDEO_PATH, f"{video_id}.mp4"))
-    print(frame_rate)
 
     global prev_page
 
@@ -73,6 +72,8 @@ def edit_annotation(video_id, annotation_id):
             new_start_time = request.form.get("start_time")
             new_end_time = request.form.get("end_time")
             new_phrase = request.form.get("phrase")
+
+            print(new_start_time, new_end_time)
 
             for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
                 if annotation["annotation_id"] == annotation_id:
@@ -191,7 +192,7 @@ def updated_user_rating():
 def update_embeddings_and_index(video_id, new_annotation_id, start_time, end_time):
     """ Update the frames, embeddings and index the new annotation """
     # Extract the frames
-    frames_processing.extract_annotation_frames(video_id, new_annotation_id, start_time, end_time)
+    frames_processing.extract_annotation_frames(video_id, new_annotation_id, str(start_time), str(end_time))
 
     # Generate the embeddings
     embeddings_processing.add_embeddings(video_id, new_annotation_id, embedder)

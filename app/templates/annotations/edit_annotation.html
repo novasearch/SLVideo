@@ -58,15 +58,15 @@
                     <div class="row">
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="start_time" class="form-label">Start Time</label>
-                                <input type="number" class="form-control" name="start_frame" id="start_time"
+                                <label for="start_time" class="form-label">Start Time (ms)</label>
+                                <input type="number" class="form-control" name="start_time" id="start_time"
                                        step="1000" value="{{ start_time }}" required>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="end_time" class="form-label">End Time</label>
-                                <input type="number" class="form-control" name="end_frame" id="end_time"
+                                <label for="end_time" class="form-label">End Time (ms)</label>
+                                <input type="number" class="form-control" name="end_time" id="end_time"
                                        step="1000" value="{{ end_time }}" required>
                             </div>
                         </div>
@@ -130,25 +130,26 @@
                 endInput.setAttribute('max', maxTime);
             });
 
-            startInput.addEventListener('change', function () {
+            startInput.addEventListener('input', function () {
                 startSeconds = startInput.value;
                 if (startSeconds > videoDuration) {
                     startInput.value = videoDuration;
                 }
                 if (startSeconds >= endSeconds) {
-                    startInput.value = endSeconds - 1;
+                    startInput.value = endSeconds - step_size;
                 }
                 video.currentTime = startSeconds / 1000;
             });
 
-            endInput.addEventListener('change', function () {
+            endInput.addEventListener('input', function () {
                 endSeconds = endInput.value;
                 if (endSeconds > videoDuration) {
                     endInput.value = videoDuration;
                 }
                 if (endSeconds <= startSeconds && endSeconds < videoDuration) {
-                    endInput.value = startSeconds + 1;
+                    endInput.value = startSeconds + step_size;
                 }
+                video.currentTime = endSeconds / 1000;
             });
 
             let inputs = document.querySelectorAll('#annotationForm input');
@@ -164,14 +165,14 @@
 
         // Function to play the video clip with the retrieved facial expression
         function playClip() {
-            video.currentTime = startSeconds;
+            video.currentTime = startSeconds / 1000;
             video.play();
             isPlayingClip = true;
         }
 
         // Function to check the video time and pause it if it reaches the end time when the clip is playing
         function checkVideoTime() {
-            if (video.currentTime >= endSeconds && isPlayingClip) {
+            if (video.currentTime >= endSeconds / 1000 && isPlayingClip) {
                 video.pause();
                 isPlayingClip = false;
             }
