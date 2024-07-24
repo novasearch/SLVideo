@@ -111,6 +111,8 @@ def edit_annotation(video_id, annotation_id):
 @bp.route("/add_annotation/<video_id>", methods=("GET", "POST"))
 def add_annotation(video_id):
     """ Add an annotation """
+    frame_rate = get_video_frame_rate(os.path.join(VIDEO_PATH, f"{video_id}.mp4"))
+
     global prev_page
 
     current_route = url_for('annotations.add_annotation', video_id=video_id, _external=True)
@@ -134,14 +136,11 @@ def add_annotation(video_id):
         end_time = request.form.get("end_time")
         phrase = request.form.get("phrase")
 
-        converted_start_time = convert_to_milliseconds(start_time)
-        converted_end_time = convert_to_milliseconds(end_time)
-
         annotation = {
             "annotation_id": new_annotation_id,
             "value": expression,
-            "start_time": int(converted_start_time),
-            "end_time": int(converted_end_time),
+            "start_time": int(start_time),
+            "end_time": int(end_time),
             "phrase": phrase,
             "user_rating": 0
         }
@@ -159,10 +158,10 @@ def add_annotation(video_id):
             flash(f"Annotation with ID {new_annotation_id} already exists!", "danger")
 
         return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                               new_annotation_id=new_annotation_id)
+                               new_annotation_id=new_annotation_id, frame_rate=frame_rate)
 
     return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                           new_annotation_id=new_annotation_id)
+                           new_annotation_id=new_annotation_id, frame_rate=frame_rate)
 
 
 @bp.route("/update_user_rating", methods=["POST"])

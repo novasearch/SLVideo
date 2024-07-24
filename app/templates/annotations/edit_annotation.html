@@ -60,7 +60,7 @@
                             <div class="mb-3">
                                 <label for="start_time" class="form-label">Start Time (ms)</label>
                                 <input type="number" class="form-control" name="start_time" id="start_time"
-                                       step="1000" value="{{ start_time }}" required>
+                                       step="1000" value="{{ start_time }}"  min="0"  required>
                             </div>
                         </div>
                         <div class="col-4">
@@ -131,7 +131,7 @@
             });
 
             startInput.addEventListener('input', function () {
-                startSeconds = startInput.value;
+                startSeconds = Number(startInput.value);
                 if (startSeconds > videoDuration) {
                     startInput.value = videoDuration;
                 }
@@ -142,7 +142,7 @@
             });
 
             endInput.addEventListener('input', function () {
-                endSeconds = endInput.value;
+                endSeconds = Number(endInput.value);
                 if (endSeconds > videoDuration) {
                     endInput.value = videoDuration;
                 }

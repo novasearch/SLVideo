@@ -51,21 +51,22 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="expression" class="form-label">Facial Expression Glosse</label>
+                        <label for="expression" class="form-label">Facial Expression Gloss</label>
                         <input type="text" class="form-control" name="expression" id="expression" required>
                     </div>
                     <div class="row">
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="start_time" class="form-label">Start</label>
-                                <input type="time" step="1" class="form-control" name="start_time" id="start_time"
-                                       value="00:00:00" required>
+                                <label for="start_time" class="form-label">Start Time (ms)</label>
+                                <input type="number" class="form-control" name="start_time" id="start_time"
+                                       step="1000" value="0" min="0" required>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="end_time" class="form-label">End</label>
-                                <input type="time" step="1" class="form-control" name="end_time" id="end_time" required>
+                                <label for="end_time" class="form-label">End Time (ms)</label>
+                                <input type="number" class="form-control" name="end_time" id="end_time"
+                                       step="1000" required>
                             </div>
                         </div>
                         <div class="col-4">
@@ -97,21 +98,23 @@
     </div>
 
     <script>
-        var video = document.getElementById('searched_video');
-        var startInput = document.getElementById('start_time');
-        var endInput = document.getElementById('end_time');
-        var videoDuration;
-        var startSeconds = convertTimeToSeconds(startInput.value);
-        var endSeconds = convertTimeToSeconds(endInput.value);
+        let video = document.getElementById('searched_video');
+        let startInput = document.getElementById('start_time');
+        let endInput = document.getElementById('end_time');
+        let videoDuration, startSeconds, endSeconds;
         let isPlayingClip = false;
+        let step_size = Math.round(1000 / {{ frame_rate }});
 
         document.addEventListener('DOMContentLoaded', (event) => {
             video.addEventListener('loadedmetadata', function () {
-                videoDuration = video.duration;
-                endInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
-                endSeconds = Math.trunc(videoDuration);
+                videoDuration = Math.floor(video.duration * 1000); // Convert to milliseconds
+                endInput.value = endSeconds = videoDuration;
                 startSeconds = 0;
             });
+
+            // Set the step size for the start and end time inputs
+            startInput.setAttribute('step', step_size.toString());
+            endInput.setAttribute('step', step_size.toString());
 
             video.addEventListener('timeupdate', checkVideoTime);
 
@@ -121,26 +124,34 @@
                 endInput.setAttribute('max', maxTime);
             });
 
-            startInput.addEventListener('change', function () {
-                startSeconds = convertTimeToSeconds(startInput.value);
+            startInput.addEventListener('input', function () {
+                startSeconds = Number(startInput.value);
+                console.log("Updating start time");
+                console.log(endSeconds);
+                console.log(startSeconds)
                 if (startSeconds > videoDuration) {
-                    startInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                    startInput.value = videoDuration;
                 }
                 if (startSeconds >= endSeconds) {
-                    let newSeconds = convertTimeToSeconds(endInput.value) - 1;
-                    startInput.value = new Date(newSeconds * 1000).toISOString().substr(11, 8);
+                    console.log("Start time is greater than end time");
+                    startInput.value = endSeconds - step_size;
                 }
+                video.currentTime = startSeconds / 1000;
             });
 
-            endInput.addEventListener('change', function () {
-                endSeconds = convertTimeToSeconds(endInput.value);
+            endInput.addEventListener('input', function () {
+                endSeconds = Number(endInput.value);
+                console.log("Updating end time");
+                console.log(endSeconds);
+                console.log(startSeconds)
                 if (endSeconds > videoDuration) {
-                    endInput.value = new Date(videoDuration * 1000).toISOString().substr(11, 8);
+                    endInput.value = videoDuration;
                 }
                 if (endSeconds <= startSeconds && endSeconds < videoDuration) {
-                    let newSeconds = convertTimeToSeconds(startInput.value) + 1;
-                    endInput.value = new Date(newSeconds * 1000).toISOString().substr(11, 8);
+                    console.log("End time is less than start time");
+                    endInput.value = startSeconds + step_size;
                 }
+                video.currentTime = endSeconds / 1000;
             });
 
             document.getElementById('annotationForm').addEventListener('submit', function () {
@@ -158,21 +169,16 @@
             });
         });
 
-        function convertTimeToSeconds(time) {
-            var timeArray = time.split(':');
-            return parseInt(timeArray[0]) * 3600 + parseInt(timeArray[1]) * 60 + parseInt(timeArray[2]);
-        }
-
         // Function to play the video clip with the retrieved facial expression
         function playClip() {
-            video.currentTime = startSeconds;
+            video.currentTime = startSeconds / 1000;
             video.play();
             isPlayingClip = true;
         }
 
         // Function to check the video time and pause it if it reaches the end time when the clip is playing
         function checkVideoTime() {
-            if (video.currentTime >= endSeconds && isPlayingClip) {
+            if (video.currentTime >= endSeconds / 1000 && isPlayingClip) {
                 video.pause();
                 isPlayingClip = false;
             }
