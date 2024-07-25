@@ -174,12 +174,13 @@ videos annotations
 If you use our code in your scientific work, please cite us!
 
 ```bibtex
-@inproceedings{SLVideo2024,
-               title={SLVideo: A Sign Language Video Moment Retrieval Open Framework},
-               author={Gonçalo Martins and Afonso Quinaz and João Magalhães and Sofia Cavaco and Carla Viegas},
-               year={2024},
-               booktitle={TODO},
-               doi={TODO},
-               publisher={TODO}
+@misc{martins2024slvideosignlanguagevideo,
+      title={SLVideo: A Sign Language Video Moment Retrieval Framework}, 
+      author={Gonçalo Vinagre Martins and Afonso Quinaz and Carla Viegas and Sofia Cavaco and João Magalhães},
+      year={2024},
+      eprint={2407.15668},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2407.15668}, 
 }
 ```
