@@ -207,8 +207,7 @@
                                 millisecondsElem.value = "000";
                             else
                                 millisecondsElem.value = step_size.toString().padStart(3, '0');
-                    else
-                        {
+                        else {
                             elemMsValue = 1000 - step_size;
                             if (secondsElem.value === "0") {
                                 secondsElem.value = "59";
@@ -342,17 +341,19 @@
 
         // Function to play the video clip with the retrieved facial expression
         function playClip() {
-            video.currentTime = startSeconds / 1000;
+            start_time = timeToMs(Number(startMinutes.value), Number(startSeconds.value), Number(startMilliseconds.value));
+            video.currentTime = start_time / 1000;
             video.play();
             isPlayingClip = true;
         }
 
         // Function to check the video time and pause it if it reaches the end time when the clip is playing
         function checkVideoTime() {
-            // if (video.currentTime >= endSeconds / 1000 && isPlayingClip) {
-            //     video.pause();
-            //     isPlayingClip = false;
-            // }
+            end_time = timeToMs(Number(endMinutes.value), Number(endSeconds.value), Number(endMilliseconds.value));
+            if (video.currentTime >= end_time / 1000 && isPlayingClip) {
+                video.pause();
+                isPlayingClip = false;
+            }
         }
 
         function setAction(action) {
