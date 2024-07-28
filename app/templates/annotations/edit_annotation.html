@@ -207,7 +207,6 @@
         ;
 
         function handleTimeInput(minutesElem, secondsElem, millisecondsElem, adjustTimeCallback, elemName) {
-
             millisecondsElem.addEventListener('input', function () {
                     let elemMsValue = Number(millisecondsElem.value);
                     if (elemMsValue >= 1000) {
@@ -243,8 +242,9 @@
                                 millisecondsElem.value = step_size.toString().padStart(3, '0');
                         else
                             millisecondsElem.value = "000";
-                    } else
+                    } else {
                         millisecondsElem.value = elemMsValue.toString().padStart(3, '0');
+                    }
 
                     if (Number(minutesElem.value) === maxMinutes && Number(secondsElem.value) === maxSeconds
                         && elemMsValue >= maxMilliseconds) {
@@ -252,7 +252,7 @@
                             if (maxMilliseconds - step_size < 0)
                                 millisecondsElem.value = "000";
                             else
-                                millisecondsElem.value = (maxMilliseconds - step_size).toString().padStart(3, '0');
+                                millisecondsElem.value = (elemMsValue - step_size).toString().padStart(3, '0');
                         } else {
                             millisecondsElem.value = maxMilliseconds.toString().padStart(3, '0');
                         }
@@ -274,7 +274,7 @@
                     if (maxMilliseconds - step_size < 0)
                         millisecondsElem.value = "000";
                     else
-                        millisecondsElem.value = (maxMilliseconds - step_size).toString().padStart(3, '0');
+                        millisecondsElem.value = (elemMsValue - step_size).toString().padStart(3, '0');
                 }
 
                 adjustTimeCallback()
@@ -294,7 +294,7 @@
                     if (maxMilliseconds - step_size < 0)
                         millisecondsElem.value = "000";
                     else
-                        millisecondsElem.value = (maxMilliseconds - step_size).toString().padStart(3, '0');
+                        millisecondsElem.value = (elemMsValue - step_size).toString().padStart(3, '0');
                 }
 
                 adjustTimeCallback()
@@ -307,9 +307,9 @@
 
         // Function to transform the time in milliseconds to the format "mm:ss,ms"
         function msToTime(ms) {
-            let milliseconds = Math.floor((ms % 1000) / 100),
-                seconds = Math.floor((ms / 1000) % 60),
-                minutes = Math.floor((ms / (1000 * 60)) % 60);
+            let minutes = Math.floor(ms / 60000);
+            let seconds = Math.floor((ms % 60000) / 1000);
+            let milliseconds = Math.floor(ms % 1000);
 
             return [minutes, seconds, milliseconds];
         }
@@ -370,7 +370,6 @@
                 // Adjust end time if it is greater than the video duration
                 if ((Number(endMinutes.value) === maxMinutes && Number(endSeconds.value) === maxSeconds &&
                     Number(endMilliseconds.value) > maxMilliseconds)) {
-                    console.log("AAAAAAAAAAAAAAa")
                     endMinutes.value = maxMinutes;
                     endSeconds.value = maxSeconds;
                     endMilliseconds.value = maxMilliseconds.toString().padStart(3, '0');

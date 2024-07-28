@@ -43,6 +43,8 @@ def edit_annotation(video_id, annotation_id):
             start_time = annotation["start_time"]
             end_time = annotation["end_time"]
             phrase = annotation["phrase"]
+            print("start_time", start_time)
+            print("end_time", end_time)
 
     if request.method == "POST":
         action = request.form.get("action_type")
@@ -69,9 +71,6 @@ def edit_annotation(video_id, annotation_id):
 
         # If the user wants to edit the annotation
         elif action == "edit":
-            data = request.form
-            print(data)
-
             new_expression = request.form.get("expression")
             new_phrase = request.form.get("phrase")
 
@@ -79,35 +78,33 @@ def edit_annotation(video_id, annotation_id):
             start_seconds = request.form.get("start_seconds")
             start_ms = request.form.get("start_ms")
             new_start_time = convert_to_milliseconds("0", start_minutes, start_seconds, start_ms)
-            print(new_start_time)
 
             end_minutes = request.form.get("end_minutes")
             end_seconds = request.form.get("end_seconds")
             end_ms = request.form.get("end_ms")
             new_end_time = convert_to_milliseconds("0", end_minutes, end_seconds, end_ms)
-            print(new_end_time)
 
-            # for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
-            #     if annotation["annotation_id"] == annotation_id:
-            #         annotation["value"] = new_expression
-            #         annotation["start_time"] = int(new_start_time)
-            #         annotation["end_time"] = int(new_end_time)
-            #         annotation["phrase"] = new_phrase
-            #
-            # with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
-            #     json.dump(video_annotations, f, indent=4)
-            #
-            # if start_time != new_start_time or end_time != new_end_time:
-            #     # Update the frames
-            #     frames_processing.delete_frames(video_id, annotation_id)
-            #     update_embeddings_and_index(video_id, annotation_id, start_time, end_time)
-            #
-            # else:
-            #     # Update the annotation's embeddings
-            #     new_embeddings = embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
-            #
-            #     # Update the opensearch index
-            #     opensearch.update_annotation_embedding(video_id, annotation_id, new_embeddings)
+            for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
+                if annotation["annotation_id"] == annotation_id:
+                    annotation["value"] = new_expression
+                    annotation["start_time"] = int(new_start_time)
+                    annotation["end_time"] = int(new_end_time)
+                    annotation["phrase"] = new_phrase
+
+            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+                json.dump(video_annotations, f, indent=4)
+
+            if start_time != new_start_time or end_time != new_end_time:
+                # Update the frames
+                frames_processing.delete_frames(video_id, annotation_id)
+                update_embeddings_and_index(video_id, annotation_id, start_time, end_time)
+
+            else:
+                # Update the annotation's embeddings
+                new_embeddings = embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
+
+                # Update the opensearch index
+                opensearch.update_annotation_embedding(video_id, annotation_id, new_embeddings)
 
             flash("Annotation updated successfully!", "success")
 
@@ -202,8 +199,14 @@ def updated_user_rating():
 
 def update_embeddings_and_index(video_id, new_annotation_id, start_time, end_time):
     """ Update the frames, embeddings and index the new annotation """
+    # Convert the start and end time from milliseconds to HH:MM:SS.MS format
+    start_time = str(dt.utcfromtimestamp(start_time / 1000).strftime('%H:%M:%S.%f')[:-3])
+    end_time = str(dt.utcfromtimestamp(end_time / 1000).strftime('%H:%M:%S.%f')[:-3])
+
+    print(start_time, end_time)
+
     # Extract the frames
-    frames_processing.extract_annotation_frames(video_id, new_annotation_id, str(start_time), str(end_time))
+    frames_processing.extract_annotation_frames(video_id, new_annotation_id, start_time, end_time)
 
     # Generate the embeddings
     embeddings_processing.add_embeddings(video_id, new_annotation_id, embedder)
