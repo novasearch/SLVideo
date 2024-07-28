@@ -21,9 +21,9 @@
     <div class="container">
         <div class="row  justify-content-center ">
             <div id="video_col" class="col-6 d-flex align-items-center">
-                <video id="searched_video" controls style="width: 100%; height: auto;">
+                <video id="searched_video" controls>
                     <source id="video_source"
-                            src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t={{ start_time }}"
+                            src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t={{ start_time / 1000 }}"
                             type="video/mp4">
                     <track id="video_captions" kind="captions"
                            src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
@@ -59,29 +59,27 @@
                         <div style="width: 100%">
                             <label for="start_time" class="form-label">Start Time</label>
                             <div class="input-group mb-3" id="start_time">
-                                <select class="form-control minutes" id="start_minutes"
+                                <select class="form-control minutes" id="start_minutes" name="start_minutes"
                                         aria-label="Minutes"></select>
                                 <span class="input-group-text">:</span>
-                                <select class="form-control seconds" id="start_seconds"
+                                <select class="form-control seconds" id="start_seconds" name="start_seconds"
                                         aria-label="Seconds"></select>
                                 <span class="input-group-text">,</span>
-                                <input type="number" class="form-control milliseconds" id="start_ms"
-                                       aria-label="Milliseconds"
-                                       step="100">
+                                <input type="number" class="form-control milliseconds" id="start_ms" name="start_ms"
+                                       aria-label="Milliseconds">
                             </div>
                         </div>
                         <div style="width: 100%">
                             <label for="end_time" class="form-label">End Time</label>
                             <div class="input-group mb-3" id="end_time">
-                                <select class="form-control minutes" id="end_minutes"
+                                <select class="form-control minutes" id="end_minutes" name="end_minutes"
                                         aria-label="Minutes"></select>
                                 <span class="input-group-text">:</span>
-                                <select class="form-control seconds" id="end_seconds"
+                                <select class="form-control seconds" id="end_seconds" name="end_seconds"
                                         aria-label="Seconds"></select>
                                 <span class="input-group-text">,</span>
-                                <input type="number" class="form-control milliseconds" id="end_ms"
-                                       aria-label="Milliseconds"
-                                       step="100">
+                                <input type="number" class="form-control milliseconds" id="end_ms" name="end_ms"
+                                       aria-label="Milliseconds">
                             </div>
                         </div>
                         <button type="button" class="btn btn-outline-info" style="margin-top: 1rem"
@@ -358,6 +356,12 @@
 
         function setAction(action) {
             document.getElementById('action_type').value = action;
+
+            if (action === 'edit') {
+                // Change step so that any value is accepted
+                startMilliseconds.setAttribute('step', 'any');
+                endMilliseconds.setAttribute('step', 'any');
+            }
         }
 
         function handleSubmit(event) {

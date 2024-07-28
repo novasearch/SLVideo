@@ -15,6 +15,7 @@ bp = Blueprint('annotations', __name__)
 
 prev_page = ""
 
+
 @bp.route("/edit_annotation/<video_id>/<annotation_id>", methods=("GET", "POST"))
 def edit_annotation(video_id, annotation_id):
     """ Edit an annotation """
@@ -68,34 +69,45 @@ def edit_annotation(video_id, annotation_id):
 
         # If the user wants to edit the annotation
         elif action == "edit":
+            data = request.form
+            print(data)
+
             new_expression = request.form.get("expression")
-            new_start_time = request.form.get("start_time")
-            new_end_time = request.form.get("end_time")
             new_phrase = request.form.get("phrase")
 
-            print(new_start_time, new_end_time)
+            start_minutes = request.form.get("start_minutes")
+            start_seconds = request.form.get("start_seconds")
+            start_ms = request.form.get("start_ms")
+            new_start_time = convert_to_milliseconds("0", start_minutes, start_seconds, start_ms)
+            print(new_start_time)
 
-            for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
-                if annotation["annotation_id"] == annotation_id:
-                    annotation["value"] = new_expression
-                    annotation["start_time"] = int(new_start_time)
-                    annotation["end_time"] = int(new_end_time)
-                    annotation["phrase"] = new_phrase
+            end_minutes = request.form.get("end_minutes")
+            end_seconds = request.form.get("end_seconds")
+            end_ms = request.form.get("end_ms")
+            new_end_time = convert_to_milliseconds("0", end_minutes, end_seconds, end_ms)
+            print(new_end_time)
 
-            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
-                json.dump(video_annotations, f, indent=4)
-
-            if start_time != new_start_time or end_time != new_end_time:
-                # Update the frames
-                frames_processing.delete_frames(video_id, annotation_id)
-                update_embeddings_and_index(video_id, annotation_id, start_time, end_time)
-
-            else:
-                # Update the annotation's embeddings
-                new_embeddings = embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
-
-                # Update the opensearch index
-                opensearch.update_annotation_embedding(video_id, annotation_id, new_embeddings)
+            # for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
+            #     if annotation["annotation_id"] == annotation_id:
+            #         annotation["value"] = new_expression
+            #         annotation["start_time"] = int(new_start_time)
+            #         annotation["end_time"] = int(new_end_time)
+            #         annotation["phrase"] = new_phrase
+            #
+            # with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+            #     json.dump(video_annotations, f, indent=4)
+            #
+            # if start_time != new_start_time or end_time != new_end_time:
+            #     # Update the frames
+            #     frames_processing.delete_frames(video_id, annotation_id)
+            #     update_embeddings_and_index(video_id, annotation_id, start_time, end_time)
+            #
+            # else:
+            #     # Update the annotation's embeddings
+            #     new_embeddings = embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
+            #
+            #     # Update the opensearch index
+            #     opensearch.update_annotation_embedding(video_id, annotation_id, new_embeddings)
 
             flash("Annotation updated successfully!", "success")
 
@@ -213,14 +225,9 @@ def update_embeddings_and_index(video_id, new_annotation_id, start_time, end_tim
     opensearch.index_if_not_exists(doc)
 
 
-def convert_to_milliseconds(time_str):
-    # Convert the time string to a datetime object
-    time_obj = dt.strptime(time_str, '%H:%M:%S')
-
-    # Calculate the total milliseconds
-    milliseconds = (time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second) * 1000
-
-    return milliseconds
+def convert_to_milliseconds(hours, minutes, seconds, milliseconds):
+    """ Convert the time to milliseconds """
+    return (int(hours) * 3600 + int(minutes) * 60 + int(seconds)) * 1000 + int(milliseconds)
 
 
 def get_video_frame_rate(video_path):
