@@ -128,6 +128,9 @@
         let endSeconds = document.getElementById('end_seconds');
         let endMilliseconds = document.getElementById('end_ms');
 
+        // Check if the changes of the milliseconds input were made by clicking the arrow buttons
+        let isArrowClick = false;
+
 
         document.addEventListener('DOMContentLoaded', (event) => {
             video.addEventListener('loadedmetadata', function () {
@@ -167,12 +170,27 @@
                 endMinutes.value = minutes;
                 endSeconds.value = seconds;
                 endMilliseconds.value = milliseconds.toString().padStart(3, '0');
-
             });
 
             // Set the step size for the start and end time inputs
             startMilliseconds.setAttribute('step', step_size.toString());
             endMilliseconds.setAttribute('step', step_size.toString());
+
+            // Check if the milliseconds input was changed by clicking the arrow buttons
+            startMilliseconds.addEventListener('mousedown', function () {
+                isArrowClick = true;
+            });
+            endMilliseconds.addEventListener('mousedown', function () {
+                isArrowClick = true;
+            });
+            startMilliseconds.addEventListener('mouseup', function () {
+                isArrowClick = false;
+            });
+            endMilliseconds.addEventListener('mouseup', function () {
+                isArrowClick = false;
+            });
+
+
 
             video.addEventListener('timeupdate', checkVideoTime);
 
@@ -189,17 +207,20 @@
         ;
 
         function handleTimeInput(minutesElem, secondsElem, millisecondsElem, adjustTimeCallback, elemName) {
+
             millisecondsElem.addEventListener('input', function () {
                     let elemMsValue = Number(millisecondsElem.value);
                     if (elemMsValue >= 1000) {
-                        elemMsValue -= 1000;
-                        if (secondsElem.value === "59") {
-                            secondsElem.value = "0";
-                            minutesElem.value = Number(minutesElem.value) + 1;
-                        } else
-                            secondsElem.value = Number(secondsElem.value) + 1;
+                        elemMsValue = parseInt(elemMsValue.toString().slice(-3));
+                        if (isArrowClick) {
+                            if (secondsElem.value === "59") {
+                                secondsElem.value = "0";
+                                minutesElem.value = Number(minutesElem.value) + 1;
+                            } else
+                                secondsElem.value = Number(secondsElem.value) + 1;
+                        }
                         millisecondsElem.value = elemMsValue.toString().padStart(3, '0');
-                    } else if (elemMsValue <= 0) {
+                    } else if (elemMsValue < 0) {
                         if (secondsElem.value === "0" && minutesElem.value === "0")
                             if (elemName === "start_ms")
                                 millisecondsElem.value = "000";
@@ -214,6 +235,14 @@
                                 secondsElem.value = Number(secondsElem.value) - 1;
                             millisecondsElem.value = elemMsValue.toString().padStart(3, '0');
                         }
+                    } else if (elemMsValue === 0) {
+                        if (secondsElem.value === "0" && minutesElem.value === "0")
+                            if (elemName === "start_ms")
+                                millisecondsElem.value = "000";
+                            else
+                                millisecondsElem.value = step_size.toString().padStart(3, '0');
+                        else
+                            millisecondsElem.value = "000";
                     } else
                         millisecondsElem.value = elemMsValue.toString().padStart(3, '0');
 
@@ -327,9 +356,21 @@
                 endSeconds.value = startSeconds.value;
                 endMilliseconds.value = (parseInt(startMilliseconds.value) + step_size).toString().padStart(3, '0');
 
+                // Adjust end time if it is greater than 1000
+                if (endMilliseconds.value >= 1000) {
+                    endMilliseconds.value = parseInt(endMilliseconds.value.toString().slice(-3));
+                    if (endSeconds.value === "59") {
+                        endSeconds.value = "0";
+                        endMinutes.value = Number(endMinutes.value) + 1;
+                    } else
+                        endSeconds.value = Number(endSeconds.value) + 1;
+                    endMilliseconds.value = endMilliseconds.value.toString().padStart(3, '0');
+                }
+
                 // Adjust end time if it is greater than the video duration
                 if ((Number(endMinutes.value) === maxMinutes && Number(endSeconds.value) === maxSeconds &&
                     Number(endMilliseconds.value) > maxMilliseconds)) {
+                    console.log("AAAAAAAAAAAAAAa")
                     endMinutes.value = maxMinutes;
                     endSeconds.value = maxSeconds;
                     endMilliseconds.value = maxMilliseconds.toString().padStart(3, '0');
