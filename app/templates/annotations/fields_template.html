@@ -1,0 +1,394 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <div class="header container text-center">
+        <div class="row align-items-center">
+            <div class="col">
+                <a class="btn btn-outline-dark" style="width: 25%"
+                   href="{{ prev_page if prev_page else url_for('videos.videos') }}">Back</a>
+            </div>
+            <div class="col">
+                <h2 class="text-center flex-grow-1">{% block title %}{% endblock %}</h2>
+            </div>
+            <div class="col">
+                <!-- Empty column just to center the elements -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row  justify-content-center ">
+            <div id="video_col" class="col-6 d-flex align-items-center">
+                <video id="searched_video" controls>
+                    <source id="video_source"
+                            src="{{ url_for('static', filename='videofiles/mp4/' + video + '.mp4') }}#t={{ start_time / 1000 if start_time else 0 }}"
+                            type="video/mp4">
+                    <track id="video_captions" kind="captions"
+                           src="{{ url_for('static', filename='videofiles/captions/' + video + '.vtt') }}"
+                           srclang="pt" label="Portuguese" default>
+                </video>
+            </div>
+            <div id="form-col" class="col-5">
+                <form id="annotationForm" name="annotationForm" {% block form_attributes %}{% endblock %}>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="annotation_id" class="form-label">ID</label>
+                                <input type="text" class="form-control" name="annotation_id" id="annotation_id"
+                                       value="{{ annotation_id }}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="video_id" class="form-label">Video</label>
+                                <input type="text" class="form-control" name="video_id" id="video_id"
+                                       value="{{ video }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="expression" class="form-label">Facial Expression Gloss</label>
+                        <input type="text" class="form-control" name="expression" id="expression"
+                               value="{{ expression }}" required>
+                    </div>
+                    <div class="hstack gap-3">
+                        <div style="width: 100%">
+                            <label for="start_time" class="form-label">Start Time</label>
+                            <div class="input-group mb-3" id="start_time">
+                                <select class="form-control minutes" id="start_minutes" name="start_minutes"
+                                        aria-label="Minutes"></select>
+                                <span class="input-group-text">:</span>
+                                <select class="form-control seconds" id="start_seconds" name="start_seconds"
+                                        aria-label="Seconds"></select>
+                                <span class="input-group-text">,</span>
+                                <input type="number" class="form-control milliseconds" id="start_ms" name="start_ms"
+                                       aria-label="Milliseconds">
+                            </div>
+                        </div>
+                        <div style="width: 100%">
+                            <label for="end_time" class="form-label">End Time</label>
+                            <div class="input-group mb-3" id="end_time">
+                                <select class="form-control minutes" id="end_minutes" name="end_minutes"
+                                        aria-label="Minutes"></select>
+                                <span class="input-group-text">:</span>
+                                <select class="form-control seconds" id="end_seconds" name="end_seconds"
+                                        aria-label="Seconds"></select>
+                                <span class="input-group-text">,</span>
+                                <input type="number" class="form-control milliseconds" id="end_ms" name="end_ms"
+                                       aria-label="Milliseconds">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-info" style="margin-top: 1rem"
+                                onclick="playClip()">Test
+                        </button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phrase" class="form-label">Phrase</label>
+                        <input type="text" class="form-control" name="phrase" id="phrase" value="{{ phrase }}" required>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        {% block buttons %}
+                        {% endblock %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            {% for message in get_flashed_messages() %}
+                <div class="alert alert-info alert-dismissible mt-2" style="width: 50%">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% block scripts %}
+        <script>
+            let video = document.getElementById('searched_video');
+            let videoDuration;
+            let maxMinutes, maxSeconds, maxMilliseconds;
+            let isPlayingClip = false;
+            let step_size = Math.round(1000 / {{ frame_rate }});
+
+            let startMinutes = document.getElementById('start_minutes');
+            let startSeconds = document.getElementById('start_seconds');
+            let startMilliseconds = document.getElementById('start_ms');
+
+            let endMinutes = document.getElementById('end_minutes');
+            let endSeconds = document.getElementById('end_seconds');
+            let endMilliseconds = document.getElementById('end_ms');
+
+            // Check if the changes of the milliseconds input were made by clicking the arrow buttons
+            let isArrowClick = false;
+
+
+            document.addEventListener('DOMContentLoaded', (event) => {
+                video.addEventListener('loadedmetadata', function () {
+                    videoDuration = Math.floor(video.duration * 1000); // Convert to milliseconds
+                    [maxMinutes, maxSeconds, maxMilliseconds] = msToTime(videoDuration);
+                    let selectableSeconds;
+                    if (videoDuration < 60000)
+                        selectableSeconds = maxSeconds;
+                    else
+                        selectableSeconds = 60;
+
+                    // Populate minutes select
+                    for (let i = 0; i <= maxMinutes; i++) {
+                        let option = document.createElement('option');
+                        option.value = i.toString();
+                        option.text = i.toString();
+                        startMinutes.appendChild(option);
+                        endMinutes.appendChild(option.cloneNode(true));
+                    }
+
+                    // Populate seconds select
+                    for (let i = 0; i < selectableSeconds; i++) {
+                        let option = document.createElement('option');
+                        option.value = i.toString();
+                        option.text = i.toString();
+                        startSeconds.appendChild(option);
+                        endSeconds.appendChild(option.cloneNode(true));
+                    }
+
+                    // Set the initial values for the start and end time inputs
+                    let [minutes, seconds, milliseconds] = msToTime({{ start_time if start_time else 0 }});
+                    startMinutes.value = minutes;
+                    startSeconds.value = seconds;
+                    startMilliseconds.value = milliseconds.toString().padStart(3, '0');
+
+                    {% set end_time = end_time if end_time else 0 %}
+                    if({{ end_time }} > 0)
+                        [minutes, seconds, milliseconds] = msToTime({{ end_time }});
+                    else
+                        [minutes, seconds, milliseconds] = msToTime(videoDuration);
+                    endMinutes.value = minutes;
+                    endSeconds.value = seconds;
+                    endMilliseconds.value = milliseconds.toString().padStart(3, '0');
+                });
+
+                // Set the step size for the start and end time inputs
+                startMilliseconds.setAttribute('step', step_size.toString());
+                endMilliseconds.setAttribute('step', step_size.toString());
+
+                // Check if the milliseconds input was changed by clicking the arrow buttons
+                startMilliseconds.addEventListener('mousedown', function () {
+                    isArrowClick = true;
+                });
+                endMilliseconds.addEventListener('mousedown', function () {
+                    isArrowClick = true;
+                });
+                startMilliseconds.addEventListener('mouseup', function () {
+                    isArrowClick = false;
+                });
+                endMilliseconds.addEventListener('mouseup', function () {
+                    isArrowClick = false;
+                });
+
+
+                video.addEventListener('timeupdate', checkVideoTime);
+
+                let inputs = document.querySelectorAll('#annotationForm input');
+                inputs.forEach(function (input) {
+                    input.addEventListener('keypress', function (event) {
+                        if (event.key === 'Enter') {
+                            // Prevent the form from being submitted when pressing Enter
+                            event.preventDefault();
+                        }
+                    });
+                });
+            })
+            ;
+
+            function handleTimeInput(minutesElem, secondsElem, millisecondsElem, adjustTimeCallback, elemName) {
+                millisecondsElem.addEventListener('input', function () {
+                        let elemMsValue = Number(millisecondsElem.value);
+                        if (elemMsValue >= 1000) {
+                            elemMsValue = parseInt(elemMsValue.toString().slice(-3));
+                            if (isArrowClick) {
+                                if (secondsElem.value === "59") {
+                                    secondsElem.value = "0";
+                                    minutesElem.value = Number(minutesElem.value) + 1;
+                                } else
+                                    secondsElem.value = Number(secondsElem.value) + 1;
+                            }
+                            millisecondsElem.value = elemMsValue.toString().padStart(3, '0');
+                        } else if (elemMsValue < 0) {
+                            if (secondsElem.value === "0" && minutesElem.value === "0")
+                                if (elemName === "start_ms")
+                                    millisecondsElem.value = "000";
+                                else
+                                    millisecondsElem.value = step_size.toString().padStart(3, '0');
+                            else {
+                                elemMsValue = 1000 - step_size;
+                                if (secondsElem.value === "0") {
+                                    secondsElem.value = "59";
+                                    minutesElem.value = Number(minutesElem.value) - 1;
+                                } else
+                                    secondsElem.value = Number(secondsElem.value) - 1;
+                                millisecondsElem.value = elemMsValue.toString().padStart(3, '0');
+                            }
+                        } else if (elemMsValue === 0) {
+                            if (secondsElem.value === "0" && minutesElem.value === "0")
+                                if (elemName === "start_ms")
+                                    millisecondsElem.value = "000";
+                                else
+                                    millisecondsElem.value = step_size.toString().padStart(3, '0');
+                            else
+                                millisecondsElem.value = "000";
+                        } else {
+                            millisecondsElem.value = elemMsValue.toString().padStart(3, '0');
+                        }
+
+                        if (Number(minutesElem.value) === maxMinutes && Number(secondsElem.value) === maxSeconds
+                            && elemMsValue >= maxMilliseconds) {
+                            if (elemName === "start_ms") {
+                                if (maxMilliseconds - step_size < 0)
+                                    millisecondsElem.value = "000";
+                                else
+                                    millisecondsElem.value = (elemMsValue - step_size).toString().padStart(3, '0');
+                            } else {
+                                millisecondsElem.value = maxMilliseconds.toString().padStart(3, '0');
+                            }
+                        }
+
+                        adjustTimeCallback()
+                        video.currentTime = timeToMs(Number(minutesElem.value), Number(secondsElem.value), elemMsValue) / 1000;
+                    }
+                )
+                ;
+
+                secondsElem.addEventListener('input', function () {
+                    let seconds = Number(secondsElem.value);
+                    let elemMsValue = Number(millisecondsElem.value);
+                    if (Number(minutesElem.value) === maxMinutes && seconds > maxSeconds)
+                        seconds = secondsElem.value = maxSeconds;
+
+                    if (Number(minutesElem.value) === maxMinutes && seconds === maxSeconds && elemMsValue > maxMilliseconds) {
+                        if (maxMilliseconds - step_size < 0)
+                            millisecondsElem.value = "000";
+                        else
+                            millisecondsElem.value = (elemMsValue - step_size).toString().padStart(3, '0');
+                    }
+
+                    adjustTimeCallback()
+                    video.currentTime = timeToMs(Number(minutesElem.value), seconds, elemMsValue) / 1000;
+                });
+
+                minutesElem.addEventListener('input', function () {
+                    let minutes = Number(minutesElem.value);
+                    let elemMsValue = Number(millisecondsElem.value);
+                    if (minutes > maxMinutes)
+                        minutesElem.value = maxMinutes;
+
+                    if (minutes === maxMinutes && Number(secondsElem.value) > maxSeconds)
+                        secondsElem.value = maxSeconds;
+
+                    if (minutes === maxMinutes && Number(secondsElem.value) === maxSeconds && elemMsValue > maxMilliseconds) {
+                        if (maxMilliseconds - step_size < 0)
+                            millisecondsElem.value = "000";
+                        else
+                            millisecondsElem.value = (elemMsValue - step_size).toString().padStart(3, '0');
+                    }
+
+                    adjustTimeCallback()
+                    video.currentTime = timeToMs(minutes, Number(secondsElem.value), elemMsValue) / 1000;
+                });
+            }
+
+            handleTimeInput(startMinutes, startSeconds, startMilliseconds, adjustEndTime, "start_ms");
+            handleTimeInput(endMinutes, endSeconds, endMilliseconds, adjustStartTime, "end_ms");
+
+            // Function to transform the time in milliseconds to the format "mm:ss,ms"
+            function msToTime(ms) {
+                let minutes = Math.floor(ms / 60000);
+                let seconds = Math.floor((ms % 60000) / 1000);
+                let milliseconds = Math.floor(ms % 1000);
+
+                return [minutes, seconds, milliseconds];
+            }
+
+            // Function to transform the time in the format "mm:ss,ms" to milliseconds
+            function timeToMs(minutes, seconds, milliseconds) {
+                return Math.floor((minutes * 60 * 1000) + (seconds * 1000) + milliseconds);
+            }
+
+            // Function to adjust the start time if the end time is less than the start time
+            function adjustStartTime() {
+                if (Number(endMinutes.value) < Number(startMinutes.value) ||
+                    (Number(endMinutes.value) === Number(startMinutes.value) &&
+                        (Number(endSeconds.value) < Number(startSeconds.value) ||
+                            (Number(endMinutes.value) === Number(startMinutes.value) &&
+                                Number(endSeconds.value) === Number(startSeconds.value) &&
+                                Number(endMilliseconds.value) < Number(startMilliseconds.value)))) ||
+                    (Number(endMinutes.value) === Number(startMinutes.value) &&
+                        Number(endSeconds.value) === Number(startSeconds.value) &&
+                        Number(endMilliseconds.value) === Number(startMilliseconds.value))) {
+                    startMinutes.value = endMinutes.value;
+                    startSeconds.value = endSeconds.value;
+                    startMilliseconds.value = (parseInt(endMilliseconds.value) - step_size).toString().padStart(3, '0');
+
+                    // Adjust start time if it is less than 0
+                    if (Number(startMilliseconds.value) < 0) {
+                        startMilliseconds.value = "000";
+                    }
+                }
+            }
+
+            // Function to adjust the end time if the start time is greater than the end time
+            function adjustEndTime() {
+                if (Number(startMinutes.value) > Number(endMinutes.value) ||
+                    (Number(startMinutes.value) === Number(endMinutes.value) &&
+                        (Number(startSeconds.value) > Number(endSeconds.value) ||
+                            (Number(startMinutes.value) === Number(endMinutes.value) &&
+                                Number(startSeconds.value) === Number(endSeconds.value) &&
+                                Number(startMilliseconds.value) > Number(endMilliseconds.value)))) ||
+                    (Number(startMinutes.value) === Number(endMinutes.value) &&
+                        Number(startSeconds.value) === Number(endSeconds.value) &&
+                        Number(startMilliseconds.value) === Number(endMilliseconds.value))) {
+                    endMinutes.value = startMinutes.value;
+                    endSeconds.value = startSeconds.value;
+                    endMilliseconds.value = (parseInt(startMilliseconds.value) + step_size).toString().padStart(3, '0');
+
+                    // Adjust end time if it is greater than 1000
+                    if (endMilliseconds.value >= 1000) {
+                        endMilliseconds.value = parseInt(endMilliseconds.value.toString().slice(-3));
+                        if (endSeconds.value === "59") {
+                            endSeconds.value = "0";
+                            endMinutes.value = Number(endMinutes.value) + 1;
+                        } else
+                            endSeconds.value = Number(endSeconds.value) + 1;
+                        endMilliseconds.value = endMilliseconds.value.toString().padStart(3, '0');
+                    }
+
+                    // Adjust end time if it is greater than the video duration
+                    if ((Number(endMinutes.value) === maxMinutes && Number(endSeconds.value) === maxSeconds &&
+                        Number(endMilliseconds.value) > maxMilliseconds)) {
+                        endMinutes.value = maxMinutes;
+                        endSeconds.value = maxSeconds;
+                        endMilliseconds.value = maxMilliseconds.toString().padStart(3, '0');
+                    }
+                }
+            }
+
+            // Function to play the video clip with the retrieved facial expression
+            function playClip() {
+                start_time = timeToMs(Number(startMinutes.value), Number(startSeconds.value), Number(startMilliseconds.value));
+                video.currentTime = start_time / 1000;
+                video.play();
+                isPlayingClip = true;
+            }
+
+            // Function to check the video time and pause it if it reaches the end time when the clip is playing
+            function checkVideoTime() {
+                end_time = timeToMs(Number(endMinutes.value), Number(endSeconds.value), Number(endMilliseconds.value));
+                if (video.currentTime >= end_time / 1000 && isPlayingClip) {
+                    video.pause();
+                    isPlayingClip = false;
+                }
+            }
+        </script>
+    {% endblock %}
+{% endblock %}

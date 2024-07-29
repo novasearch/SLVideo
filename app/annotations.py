@@ -140,16 +140,24 @@ def add_annotation(video_id):
     new_annotation_id = "a" + str(int(last_annotation_id.split("a")[1]) + 1)
 
     if request.method == "POST":
+        start_minutes = request.form.get("start_minutes")
+        start_seconds = request.form.get("start_seconds")
+        start_ms = request.form.get("start_ms")
+        new_start_time = convert_to_milliseconds("0", start_minutes, start_seconds, start_ms)
+
+        end_minutes = request.form.get("end_minutes")
+        end_seconds = request.form.get("end_seconds")
+        end_ms = request.form.get("end_ms")
+        new_end_time = convert_to_milliseconds("0", end_minutes, end_seconds, end_ms)
+
         expression = request.form.get("expression")
-        start_time = request.form.get("start_time")
-        end_time = request.form.get("end_time")
         phrase = request.form.get("phrase")
 
         annotation = {
             "annotation_id": new_annotation_id,
             "value": expression,
-            "start_time": int(start_time),
-            "end_time": int(end_time),
+            "start_time": int(new_start_time),
+            "end_time": int(new_end_time),
             "phrase": phrase,
             "user_rating": 0
         }
@@ -160,17 +168,17 @@ def add_annotation(video_id):
             with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
                 json.dump(video_annotations, f, indent=4)
 
-            update_embeddings_and_index(video_id, new_annotation_id, start_time, end_time)
+            update_embeddings_and_index(video_id, new_annotation_id, new_start_time, new_end_time)
 
             flash("Annotation added successfully!", "success")
         else:
             flash(f"Annotation with ID {new_annotation_id} already exists!", "danger")
 
         return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                               new_annotation_id=new_annotation_id, frame_rate=frame_rate)
+                               annotation_id=new_annotation_id, frame_rate=frame_rate)
 
     return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                           new_annotation_id=new_annotation_id, frame_rate=frame_rate)
+                           annotation_id=new_annotation_id, frame_rate=frame_rate)
 
 
 @bp.route("/update_user_rating", methods=["POST"])
