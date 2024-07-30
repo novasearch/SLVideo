@@ -1,13 +1,14 @@
 import json
 import os
 import datetime
+import subprocess
 from datetime import datetime as dt
 
 from flask import Blueprint, request, render_template, flash, url_for, redirect
 
 from .embeddings import embeddings_processing
 from .frame_extraction import frames_processing
-from .utils import embedder, FACIAL_EXPRESSIONS_ID, ANNOTATIONS_PATH, opensearch
+from .utils import embedder, FACIAL_EXPRESSIONS_ID, ANNOTATIONS_PATH, opensearch, VIDEO_PATH
 from .opensearch.opensearch import gen_doc
 
 bp = Blueprint('annotations', __name__)
@@ -18,6 +19,7 @@ prev_page = ""
 @bp.route("/edit_annotation/<video_id>/<annotation_id>", methods=("GET", "POST"))
 def edit_annotation(video_id, annotation_id):
     """ Edit an annotation """
+
     global prev_page
 
     current_route = url_for('annotations.edit_annotation', video_id=video_id, annotation_id=annotation_id,
@@ -32,21 +34,18 @@ def edit_annotation(video_id, annotation_id):
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
 
-    expression, start_time, end_time, phrase, converted_start_time, converted_end_time = "", "", "", "", "", ""
+    frame_rate = video_annotations["properties"]["frame_rate"]
+
+    expression, start_time, end_time, phrase = "", "", "", ""
 
     for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
         if annotation["annotation_id"] == annotation_id:
             expression = annotation["value"]
-            start_time = annotation["start_time"]
-            end_time = annotation["end_time"]
+            start_time = int(annotation["start_time"])
+            end_time = int(annotation["end_time"])
             phrase = annotation["phrase"]
-
-            converted_start_time = (
-                    datetime.datetime.min + datetime.timedelta(seconds=int(start_time) // 1000)).time().strftime(
-                "%H:%M:%S")
-            converted_end_time = (
-                    datetime.datetime.min + datetime.timedelta(seconds=int(end_time) // 1000)).time().strftime(
-                "%H:%M:%S")
+            print("start_time", start_time)
+            print("end_time", end_time)
 
     if request.method == "POST":
         action = request.form.get("action_type")
@@ -74,43 +73,49 @@ def edit_annotation(video_id, annotation_id):
         # If the user wants to edit the annotation
         elif action == "edit":
             new_expression = request.form.get("expression")
-            new_start_time = request.form.get("start_time")
-            new_end_time = request.form.get("end_time")
             new_phrase = request.form.get("phrase")
 
-            new_converted_start_time = convert_to_milliseconds(new_start_time)
-            new_converted_end_time = convert_to_milliseconds(new_end_time)
+            start_minutes = request.form.get("start_minutes")
+            start_seconds = request.form.get("start_seconds")
+            start_ms = request.form.get("start_ms")
+            new_start_time = convert_to_milliseconds("0", start_minutes, start_seconds, start_ms)
+
+            end_minutes = request.form.get("end_minutes")
+            end_seconds = request.form.get("end_seconds")
+            end_ms = request.form.get("end_ms")
+            new_end_time = convert_to_milliseconds("0", end_minutes, end_seconds, end_ms)
 
             for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
                 if annotation["annotation_id"] == annotation_id:
                     annotation["value"] = new_expression
-                    annotation["start_time"] = int(new_converted_start_time)
-                    annotation["end_time"] = int(new_converted_end_time)
+                    annotation["start_time"] = int(new_start_time)
+                    annotation["end_time"] = int(new_end_time)
                     annotation["phrase"] = new_phrase
 
             with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
                 json.dump(video_annotations, f, indent=4)
 
-            # Update the embeddings
-            new_embeddings = embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
-
-            # Update the opensearch index
-            opensearch.update_annotation_embedding(video_id, annotation_id, new_embeddings)
-
-            if converted_start_time != new_start_time or converted_end_time != new_end_time:
+            if start_time != new_start_time or end_time != new_end_time:
                 # Update the frames
                 frames_processing.delete_frames(video_id, annotation_id)
-                frames_processing.extract_annotation_frames(video_id, annotation_id, new_start_time, new_end_time)
+                update_embeddings_and_index(video_id, annotation_id, start_time, end_time)
+
+            else:
+                # Update the annotation's embeddings
+                new_embeddings = embeddings_processing.update_annotations_embeddings(video_id, annotation_id, embedder)
+
+                # Update the opensearch index
+                opensearch.update_annotation_embedding(video_id, annotation_id, new_embeddings)
 
             flash("Annotation updated successfully!", "success")
 
             return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
                                    prev_page=prev_page, expression=new_expression, start_time=new_start_time,
-                                   end_time=new_end_time, phrase=new_phrase)
+                                   end_time=new_end_time, phrase=new_phrase, frame_rate=frame_rate)
 
     return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
-                           prev_page=prev_page, expression=expression, start_time=converted_start_time,
-                           end_time=converted_end_time, phrase=phrase)
+                           prev_page=prev_page, expression=expression, start_time=start_time,
+                           end_time=end_time, phrase=phrase, frame_rate=frame_rate)
 
 
 @bp.route("/add_annotation/<video_id>", methods=("GET", "POST"))
@@ -129,65 +134,55 @@ def add_annotation(video_id):
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
 
-    last_annotation_id = video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"][-1]["annotation_id"]
+    frame_rate = video_annotations["properties"]["frame_rate"]
+    last_annotation_id = str(int(video_annotations["properties"]["lastUsedAnnotationId"]) + 1)
 
-    new_annotation_id = "a" + str(int(last_annotation_id.split("a")[1]) + 1)
+    new_annotation_id = "a" + last_annotation_id
+
+    print(new_annotation_id)
 
     if request.method == "POST":
-        expression = request.form.get("expression")
-        start_time = request.form.get("start_time")
-        end_time = request.form.get("end_time")
-        phrase = request.form.get("phrase")
+        start_minutes = request.form.get("start_minutes")
+        start_seconds = request.form.get("start_seconds")
+        start_ms = request.form.get("start_ms")
+        new_start_time = convert_to_milliseconds("0", start_minutes, start_seconds, start_ms)
 
-        converted_start_time = convert_to_milliseconds(start_time)
-        converted_end_time = convert_to_milliseconds(end_time)
+        end_minutes = request.form.get("end_minutes")
+        end_seconds = request.form.get("end_seconds")
+        end_ms = request.form.get("end_ms")
+        new_end_time = convert_to_milliseconds("0", end_minutes, end_seconds, end_ms)
+
+        expression = request.form.get("expression")
+        phrase = request.form.get("phrase")
 
         annotation = {
             "annotation_id": new_annotation_id,
             "value": expression,
-            "start_time": int(converted_start_time),
-            "end_time": int(converted_end_time),
+            "start_time": int(new_start_time),
+            "end_time": int(new_end_time),
             "phrase": phrase,
             "user_rating": 0
         }
 
         if new_annotation_id not in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
+            video_annotations["properties"]["lastUsedAnnotationId"] = str(int(new_annotation_id.split("a")[1]) + 1)
             video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].append(annotation)
 
             with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
                 json.dump(video_annotations, f, indent=4)
 
-            # Extract the frames
-            frames_processing.extract_annotation_frames(video_id, new_annotation_id, start_time, end_time)
+            update_embeddings_and_index(video_id, new_annotation_id, new_start_time, new_end_time)
 
-            # Generate the embeddings
-            embeddings_processing.add_embeddings(video_id, new_annotation_id, embedder)
-
-            # Load the embeddings
-            (base_frame_embeddings, average_frame_embeddings, best_frame_embeddings, summed_frame_embeddings,
-             annotations_embeddings) = embeddings_processing.load_embeddings()
-
-            # Index the new annotation in opensearch
-            doc = gen_doc(
-                video_id=video_id,
-                annotation_id=new_annotation_id,
-                base_frame_embedding=base_frame_embeddings[video_id][new_annotation_id].tolist(),
-                average_frame_embedding=average_frame_embeddings[video_id][new_annotation_id].tolist(),
-                best_frame_embedding=best_frame_embeddings[video_id][new_annotation_id].tolist(),
-                summed_frame_embeddings=summed_frame_embeddings[video_id][new_annotation_id].tolist(),
-                annotation_embedding=annotations_embeddings[video_id][new_annotation_id].tolist(),
-            )
-            opensearch.index_if_not_exists(doc)
 
             flash("Annotation added successfully!", "success")
         else:
             flash(f"Annotation with ID {new_annotation_id} already exists!", "danger")
 
         return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                               new_annotation_id=new_annotation_id)
+                               annotation_id=new_annotation_id, frame_rate=frame_rate)
 
     return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                           new_annotation_id=new_annotation_id)
+                           annotation_id=new_annotation_id, frame_rate=frame_rate)
 
 
 @bp.route("/update_user_rating", methods=["POST"])
@@ -214,11 +209,40 @@ def updated_user_rating():
     return '', 204
 
 
-def convert_to_milliseconds(time_str):
-    # Convert the time string to a datetime object
-    time_obj = dt.strptime(time_str, '%H:%M:%S')
+def update_embeddings_and_index(video_id, new_annotation_id, start_time, end_time):
+    """ Update the frames, embeddings and index the new annotation """
+    # Convert the start and end time from milliseconds to HH:MM:SS.MS format
+    start_time = str(dt.utcfromtimestamp(start_time / 1000).strftime('%H:%M:%S.%f')[:-3])
+    end_time = str(dt.utcfromtimestamp(end_time / 1000).strftime('%H:%M:%S.%f')[:-3])
 
-    # Calculate the total milliseconds
-    milliseconds = (time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second) * 1000
+    print(start_time, end_time)
 
-    return milliseconds
+    # Extract the frames
+    frames_processing.extract_annotation_frames(video_id, new_annotation_id, start_time, end_time)
+
+    # Generate the embeddings
+    embeddings_processing.add_embeddings(video_id, new_annotation_id, embedder)
+
+    # Load the embeddings
+    (base_frame_embeddings, average_frame_embeddings, best_frame_embeddings, summed_frame_embeddings,
+     annotations_embeddings) = embeddings_processing.load_embeddings()
+
+    # Index the new annotation in opensearch
+    doc = gen_doc(
+        video_id=video_id,
+        annotation_id=new_annotation_id,
+        base_frame_embedding=base_frame_embeddings[video_id][new_annotation_id].tolist(),
+        average_frame_embedding=average_frame_embeddings[video_id][new_annotation_id].tolist(),
+        best_frame_embedding=best_frame_embeddings[video_id][new_annotation_id].tolist(),
+        summed_frame_embeddings=summed_frame_embeddings[video_id][new_annotation_id].tolist(),
+        annotation_embedding=annotations_embeddings[video_id][new_annotation_id].tolist(),
+    )
+    opensearch.index_if_not_exists(doc)
+
+
+def convert_to_milliseconds(hours, minutes, seconds, milliseconds):
+    """ Convert the time to milliseconds """
+    return (int(hours) * 3600 + int(minutes) * 60 + int(seconds)) * 1000 + int(milliseconds)
+
+
+

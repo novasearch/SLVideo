@@ -76,3 +76,15 @@
     justify-content: flex-end;
     color: #bcbcbc;
 }
+
+.input-group .minutes {
+    width: 20%;
+}
+
+.input-group .seconds {
+    width: 20%;
+}
+
+.input-group .milliseconds {
+    width: 30%;
+}

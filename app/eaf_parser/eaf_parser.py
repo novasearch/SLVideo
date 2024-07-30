@@ -1,9 +1,11 @@
 import json
 import os
+import subprocess
+
 import webvtt
 import xml.etree.ElementTree as ET
 
-from app.utils import ANNOTATIONS_PATH, CAPTIONS_PATH, EAF_PATH
+from app.utils import ANNOTATIONS_PATH, CAPTIONS_PATH, EAF_PATH, VIDEO_PATH
 
 
 def parse_eaf_files():
@@ -28,6 +30,14 @@ def parse_eaf_files():
             file_content = file.read()
 
             root = ET.fromstring(file_content)
+
+            # Get the header info
+            header_properties = root.findall('HEADER/PROPERTY')
+            data_dict['properties'] = {}
+            for prop in header_properties:
+                data_dict['properties'][prop.attrib['NAME']] = prop.text
+
+            data_dict['properties']['frame_rate'] = get_video_frame_rate(os.path.join(VIDEO_PATH, videoname + '.mp4'))
 
             # Get the time slots info, cycle through them and save each time slot
             time_slots = root.findall('TIME_ORDER/TIME_SLOT')
@@ -129,6 +139,23 @@ def generate_captions(phrases, videoname):
     vtt.save(captions_path)
 
 
+def get_video_frame_rate(video_path):
+    # Use FFmpeg to extract video information
+    cmd = ['ffprobe', '-v', 'error', '-select_streams', 'v:0',
+           '-show_entries', 'stream=r_frame_rate', '-of', 'default=noprint_wrappers=1:nokey=1',
+           video_path]
+    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    frame_rate_str = result.stdout.decode('utf-8').strip()
+    try:
+        # The frame rate is usually in the format of NUM/DENOM (e.g., "30000/1001")
+        num, denom = map(int, frame_rate_str.split('/'))
+        frame_rate = num / denom
+    except ValueError:
+        # If the frame rate is a simple number (which is less common)
+        frame_rate = float(frame_rate_str)
+    return frame_rate
+
+
 def convert_milliseconds_to_time_format(milliseconds):
     """ Converts milliseconds to the WebVTT time format (HH:MM:SS.mmm) """
     seconds, milliseconds = divmod(milliseconds, 1000)
@@ -148,22 +175,3 @@ def convert_time_format_to_milliseconds(time_format):
     else:
         milliseconds = 0
     return hours + minutes + seconds + milliseconds
-
-
-def add_annotation(video_id, tier_id, start_time, end_time, value, phrase):
-    """ Adds an annotation to the video annotations EAF file """
-    video_eaf = os.path.join(EAF_PATH, video_id + '.eaf')
-
-    start_time_mm = convert_time_format_to_milliseconds(start_time)
-    end_time_mm = convert_time_format_to_milliseconds(end_time)
-
-    with open(video_eaf, "r", encoding='utf-8') as file:
-        file_content = file.read()
-
-        root = ET.fromstring(file_content)
-
-        # Add new time slot
-        time_slots = root.findall('TIME_ORDER/TIME_SLOT')
-
-
-

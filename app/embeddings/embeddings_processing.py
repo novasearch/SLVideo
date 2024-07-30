@@ -310,7 +310,7 @@ def update_annotations_embeddings(video_id, annotation_id, eb: Embedder):
 
 
 def add_embeddings(video_id, annotation_id, eb: Embedder):
-    """ Add the embeddings for a specific annotation of a video """
+    """ Add or update the embeddings for a specific annotation of a video """
     base_embeddings, average_embeddings, best_embeddings, summed_embeddings, annotations_embeddings = load_embeddings()
 
     # Add the embeddings
