@@ -19,7 +19,6 @@ prev_page = ""
 @bp.route("/edit_annotation/<video_id>/<annotation_id>", methods=("GET", "POST"))
 def edit_annotation(video_id, annotation_id):
     """ Edit an annotation """
-    frame_rate = get_video_frame_rate(os.path.join(VIDEO_PATH, f"{video_id}.mp4"))
 
     global prev_page
 
@@ -35,13 +34,15 @@ def edit_annotation(video_id, annotation_id):
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
 
+    frame_rate = video_annotations["properties"]["frame_rate"]
+
     expression, start_time, end_time, phrase = "", "", "", ""
 
     for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
         if annotation["annotation_id"] == annotation_id:
             expression = annotation["value"]
-            start_time = annotation["start_time"]
-            end_time = annotation["end_time"]
+            start_time = int(annotation["start_time"])
+            end_time = int(annotation["end_time"])
             phrase = annotation["phrase"]
             print("start_time", start_time)
             print("end_time", end_time)
@@ -120,8 +121,6 @@ def edit_annotation(video_id, annotation_id):
 @bp.route("/add_annotation/<video_id>", methods=("GET", "POST"))
 def add_annotation(video_id):
     """ Add an annotation """
-    frame_rate = get_video_frame_rate(os.path.join(VIDEO_PATH, f"{video_id}.mp4"))
-
     global prev_page
 
     current_route = url_for('annotations.add_annotation', video_id=video_id, _external=True)
@@ -135,9 +134,12 @@ def add_annotation(video_id):
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
         video_annotations = json.load(f)
 
-    last_annotation_id = video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"][-1]["annotation_id"]
+    frame_rate = video_annotations["properties"]["frame_rate"]
+    last_annotation_id = str(int(video_annotations["properties"]["lastUsedAnnotationId"]) + 1)
 
-    new_annotation_id = "a" + str(int(last_annotation_id.split("a")[1]) + 1)
+    new_annotation_id = "a" + last_annotation_id
+
+    print(new_annotation_id)
 
     if request.method == "POST":
         start_minutes = request.form.get("start_minutes")
@@ -163,12 +165,14 @@ def add_annotation(video_id):
         }
 
         if new_annotation_id not in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
+            video_annotations["properties"]["lastUsedAnnotationId"] = str(int(new_annotation_id.split("a")[1]) + 1)
             video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].append(annotation)
 
             with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
                 json.dump(video_annotations, f, indent=4)
 
             update_embeddings_and_index(video_id, new_annotation_id, new_start_time, new_end_time)
+
 
             flash("Annotation added successfully!", "success")
         else:
@@ -241,18 +245,4 @@ def convert_to_milliseconds(hours, minutes, seconds, milliseconds):
     return (int(hours) * 3600 + int(minutes) * 60 + int(seconds)) * 1000 + int(milliseconds)
 
 
-def get_video_frame_rate(video_path):
-    # Use FFmpeg to extract video information
-    cmd = ['ffprobe', '-v', 'error', '-select_streams', 'v:0',
-           '-show_entries', 'stream=r_frame_rate', '-of', 'default=noprint_wrappers=1:nokey=1',
-           video_path]
-    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    frame_rate_str = result.stdout.decode('utf-8').strip()
-    try:
-        # The frame rate is usually in the format of NUM/DENOM (e.g., "30000/1001")
-        num, denom = map(int, frame_rate_str.split('/'))
-        frame_rate = num / denom
-    except ValueError:
-        # If the frame rate is a simple number (which is less common)
-        frame_rate = float(frame_rate_str)
-    return frame_rate
+
