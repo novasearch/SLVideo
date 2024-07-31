@@ -181,26 +181,43 @@ def edit_annotation(video_id, tier_id, annotation_id, start_time, end_time, valu
     """ Edit an annotation in the video EAF file """
     video_eaf = os.path.join(EAF_PATH, video_id + '.eaf')
 
-    print("AAAAAAAAAAAAAAA", video_eaf)
-
     with open(video_eaf, "r", encoding='utf-8') as file:
         file_content = file.read()
 
         root = ET.fromstring(file_content)
 
-        # Edit the time slot
+        # Get the time slots
         time_slots = root.findall('TIME_ORDER/TIME_SLOT')
-
-        print("BBBBBBBBBBBBBBBBBBBBBBBB")
+        time_slot_1 = None
+        time_slot_2 = None
 
         # Edit the annotation
         tier_annotations = root.findall('TIER[@TIER_ID="' + tier_id + '"]/')
+        parent_tier = root.find('TIER[@TIER_ID="' + tier_id + '"]').attrib.get('PARENT_REF')
         for outer_tag in tier_annotations:
             annotation = outer_tag.find('*')  # Get the first child element
             if annotation.attrib['ANNOTATION_ID'] == annotation_id:
                 annotation.find('ANNOTATION_VALUE').text = value
 
-        print("CCCCCCCCCCCCCCCCCCCCCCC")
+                # If the annotation is a ref annotation, get the parent annotation's time slots
+                if parent_tier is not None:
+                    ref_id = annotation.attrib.get('ANNOTATION_REF')
+                    ref_annotation = root.findall('TIER[@TIER_ID="' + parent_tier + '"]/')
+                    for ref_outer_tag in ref_annotation:
+                        ref_annotation = ref_outer_tag.find('*')
+                        if ref_annotation.attrib['ANNOTATION_ID'] == ref_id:
+                            time_slot_1 = ref_annotation.attrib.get('TIME_SLOT_REF1')
+                            time_slot_2 = ref_annotation.attrib.get('TIME_SLOT_REF2')
+                else:
+                    time_slot_1 = ref_annotation.attrib.get('TIME_SLOT_REF1')
+                    time_slot_2 = ref_annotation.attrib.get('TIME_SLOT_REF2')
+
+        # Edit the time slots
+        for time_slot in time_slots:
+            if time_slot.attrib['TIME_SLOT_ID'] == time_slot_1:
+                time_slot.attrib['TIME_VALUE'] = str(start_time)
+            elif time_slot.attrib['TIME_SLOT_ID'] == time_slot_2:
+                time_slot.attrib['TIME_VALUE'] = str(end_time)
 
         with open(video_eaf, "w", encoding='utf-8') as updated_file:
             updated_file.write(ET.tostring(root, encoding='unicode'))
@@ -220,6 +237,3 @@ def add_annotation(video_id, tier_id, start_time, end_time, value, phrase):
 
         # Add new time slot
         time_slots = root.findall('TIME_ORDER/TIME_SLOT')
-
-
-

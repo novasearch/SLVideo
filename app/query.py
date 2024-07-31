@@ -4,10 +4,8 @@ import os
 import re
 from collections import OrderedDict
 from datetime import datetime as dt
-import umap
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
 import numpy as np
 
 from flask import (

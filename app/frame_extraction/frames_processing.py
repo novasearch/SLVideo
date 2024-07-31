@@ -145,7 +145,6 @@ def extract_annotation_frames(video_id, annotation_id, start_time, end_time):
     # Create a directory for the facial expression inside the video directory
     video_facial_expressions_dir = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID, video_id)
     expression_dir = os.path.join(video_facial_expressions_dir, f"{annotation_id}")
-    print(expression_dir)
     os.makedirs(expression_dir, exist_ok=True)
 
     # Extract the facial expressions frames from the video

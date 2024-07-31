@@ -45,8 +45,6 @@ def edit_annotation(video_id, annotation_id):
             start_time = int(annotation["start_time"])
             end_time = int(annotation["end_time"])
             phrase = annotation["phrase"]
-            print("start_time", start_time)
-            print("end_time", end_time)
 
     if request.method == "POST":
         action = request.form.get("action_type")
@@ -109,8 +107,8 @@ def edit_annotation(video_id, annotation_id):
                 opensearch.update_annotation_embedding(video_id, annotation_id, new_embeddings)
 
             # Update the EAF file
-            eaf_parser.edit_annotation(video_id, FACIAL_EXPRESSIONS_ID, annotation_id, new_converted_start_time,
-                                       new_converted_end_time, new_expression)
+            eaf_parser.edit_annotation(video_id, FACIAL_EXPRESSIONS_ID, annotation_id, new_start_time,
+                                       new_end_time, new_expression)
 
             flash("Annotation updated successfully!", "success")
 
@@ -144,8 +142,6 @@ def add_annotation(video_id):
 
     new_annotation_id = "a" + last_annotation_id
 
-    print(new_annotation_id)
-
     if request.method == "POST":
         start_minutes = request.form.get("start_minutes")
         start_seconds = request.form.get("start_seconds")
@@ -177,7 +173,6 @@ def add_annotation(video_id):
                 json.dump(video_annotations, f, indent=4)
 
             update_embeddings_and_index(video_id, new_annotation_id, new_start_time, new_end_time)
-
 
             flash("Annotation added successfully!", "success")
         else:
@@ -219,8 +214,6 @@ def update_embeddings_and_index(video_id, new_annotation_id, start_time, end_tim
     # Convert the start and end time from milliseconds to HH:MM:SS.MS format
     start_time = str(dt.utcfromtimestamp(start_time / 1000).strftime('%H:%M:%S.%f')[:-3])
     end_time = str(dt.utcfromtimestamp(end_time / 1000).strftime('%H:%M:%S.%f')[:-3])
-
-    print(start_time, end_time)
 
     # Extract the frames
     frames_processing.extract_annotation_frames(video_id, new_annotation_id, start_time, end_time)
