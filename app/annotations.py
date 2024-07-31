@@ -138,9 +138,7 @@ def add_annotation(video_id):
         video_annotations = json.load(f)
 
     frame_rate = video_annotations["properties"]["frame_rate"]
-    last_annotation_id = str(int(video_annotations["properties"]["lastUsedAnnotationId"]) + 1)
-
-    new_annotation_id = "a" + last_annotation_id
+    new_annotation_id = "a" + str(int(video_annotations["properties"]["lastUsedAnnotationId"]) + 1)
 
     if request.method == "POST":
         start_minutes = request.form.get("start_minutes")
@@ -166,13 +164,17 @@ def add_annotation(video_id):
         }
 
         if new_annotation_id not in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
-            video_annotations["properties"]["lastUsedAnnotationId"] = str(int(new_annotation_id.split("a")[1]) + 1)
+            video_annotations["properties"]["lastUsedAnnotationId"] = new_annotation_id.split("a")[1]
             video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].append(annotation)
 
             with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
                 json.dump(video_annotations, f, indent=4)
 
             update_embeddings_and_index(video_id, new_annotation_id, new_start_time, new_end_time)
+
+            # Update the EAF file
+            eaf_parser.add_annotation(video_id, new_annotation_id, FACIAL_EXPRESSIONS_ID, new_start_time,
+                                      new_end_time, expression, phrase)
 
             flash("Annotation added successfully!", "success")
         else:

@@ -4,7 +4,7 @@
 
 {% block form_attributes %}
     action="{{ url_for('annotations.add_annotation', video_id=video) }}"
-    method="post"
+    method="post" onsubmit="handleSubmit(event)"
 {% endblock %}
 
 {% block buttons %}
@@ -21,6 +21,14 @@
                     <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
                     <span role="status">Saving...</span>
                 `;
+
+            // Change step so that any value is accepted
+            startMilliseconds.setAttribute('step', 'any');
+            endMilliseconds.setAttribute('step', 'any');
+        }
+
+        function handleSubmit() {
+            document.getElementById('add_button').disabled = true;
         }
     </script>
 {% endblock %}
