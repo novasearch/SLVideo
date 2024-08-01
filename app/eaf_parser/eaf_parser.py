@@ -254,7 +254,7 @@ def add_annotation(video_id, new_annotation_id, tier_id, new_start_time, new_end
     if parent_tier_id is not None:
         # Add the parent annotation to the new annotation
         parent_tier = root.find(f'TIER[@TIER_ID="{parent_tier_id}"]')
-        parent_annotation_id = "a" + str(int(new_annotation_id.split("a")[1]) + 1)
+        parent_annotation_id = "a" + str(int(new_annotation_id.split("a")[1]) - 1)
         new_parent_outer_tag = ET.SubElement(parent_tier, 'ANNOTATION')
         new_parent_annotation = ET.SubElement(new_parent_outer_tag, 'ALIGNABLE_ANNOTATION', {
             'ANNOTATION_ID': parent_annotation_id, 'TIME_SLOT_REF1': time_slot_1, 'TIME_SLOT_REF2': time_slot_2
@@ -265,13 +265,6 @@ def add_annotation(video_id, new_annotation_id, tier_id, new_start_time, new_end
         new_annotation = ET.SubElement(new_outer_tag, 'REF_ANNOTATION', {
             'ANNOTATION_ID': new_annotation_id, 'ANNOTATION_REF': parent_annotation_id
         })
-
-        # Update the lastUsedAnnotationId in the JSON file
-        with open(os.path.join(ANNOTATIONS_PATH, video_id + '.json'), 'r') as f:
-            data = json.load(f)
-            data['properties']['lastUsedAnnotationId'] = parent_annotation_id.split("a")[1]
-        with open(os.path.join(ANNOTATIONS_PATH, video_id + '.json'), 'w') as f:
-            json.dump(data, f)
     else:
         new_annotation = ET.SubElement(new_outer_tag, 'ALIGNABLE_ANNOTATION', {
             'ANNOTATION_ID': new_annotation_id, 'TIME_SLOT_REF1': time_slot_1, 'TIME_SLOT_REF2': time_slot_2
@@ -282,10 +275,7 @@ def add_annotation(video_id, new_annotation_id, tier_id, new_start_time, new_end
 
     # Update the lastUsedAnnotationId in the EAF file
     last_used_annotation_id = root.find('HEADER/PROPERTY[@NAME="lastUsedAnnotationId"]')
-    if parent_tier_id is not None:
-        last_used_annotation_id.text = str(int(new_annotation_id.split("a")[1]) + 1)
-    else:
-        last_used_annotation_id.text = new_annotation_id.split("a")[1]
+    last_used_annotation_id.text = new_annotation_id
 
     # Write back the updated XML to the EAF file
     with open(video_eaf, "w", encoding='utf-8') as updated_file:

@@ -157,27 +157,50 @@ def add_annotation(video_id):
         expression = request.form.get("expression")
         phrase = request.form.get("phrase")
 
-        annotation = {
-            "annotation_id": new_annotation_id,
-            "value": expression,
-            "start_time": int(new_start_time),
-            "end_time": int(new_end_time),
-            "phrase": phrase,
-            "user_rating": 0
-        }
-
         if new_annotation_id not in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
-            video_annotations["properties"]["lastUsedAnnotationId"] = new_annotation_id.split("a")[1]
-            video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].append(annotation)
+            # Add respective parent annotation if there is a parent tier
+            parent_tier = video_annotations[FACIAL_EXPRESSIONS_ID].get("parent_ref", None)
+            if parent_tier:
+                parent_id = new_annotation_id
+                new_annotation_id = "a" + str(int(new_annotation_id.split("a")[1]) + 1)
+                parent_annotation = {
+                    "annotation_id": parent_id,
+                    "value": expression,
+                    "start_time": int(new_start_time),
+                    "end_time": int(new_end_time)
+                }
+                video_annotations[parent_tier]["annotations"].append(parent_annotation)
 
-            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
-                json.dump(video_annotations, f, indent=4)
+                annotation = {
+                    "annotation_id": new_annotation_id,
+                    "annotation_ref": parent_id,
+                    "value": expression,
+                    "start_time": int(new_start_time),
+                    "end_time": int(new_end_time),
+                    "phrase": phrase,
+                    "user_rating": 0
+                }
+            else:
+                annotation = {
+                    "annotation_id": new_annotation_id,
+                    "value": expression,
+                    "start_time": int(new_start_time),
+                    "end_time": int(new_end_time),
+                    "phrase": phrase,
+                    "user_rating": 0
+                }
+
+            video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].append(annotation)
+            video_annotations["properties"]["lastUsedAnnotationId"] = new_annotation_id.split("a")[1]
 
             update_embeddings_and_index(video_id, new_annotation_id, new_start_time, new_end_time)
 
             # Update the EAF file
             eaf_parser.add_annotation(video_id, new_annotation_id, FACIAL_EXPRESSIONS_ID, new_start_time,
                                       new_end_time, expression, phrase)
+
+            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+                json.dump(video_annotations, f, indent=4)
 
             flash("Annotation added successfully!", "success")
         else:
