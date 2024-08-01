@@ -213,12 +213,14 @@ def add_annotation(video_id):
             with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
                 json.dump(video_annotations, f, indent=4)
 
+            next_annotation = "a" + str(int(new_annotation_id.split("a")[1]) + 1)
+
             flash("Annotation added successfully!", "success")
         else:
             flash(f"Annotation with ID {new_annotation_id} already exists!", "danger")
 
         return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                               annotation_id=new_annotation_id, frame_rate=frame_rate)
+                               annotation_id=next_annotation, frame_rate=frame_rate)
 
     return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
                            annotation_id=new_annotation_id, frame_rate=frame_rate)
