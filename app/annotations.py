@@ -87,17 +87,25 @@ def edit_annotation(video_id, annotation_id):
             end_ms = request.form.get("end_ms")
             new_end_time = convert_to_milliseconds("0", end_minutes, end_seconds, end_ms)
 
+            parent_ref = None
+
             for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
                 if annotation["annotation_id"] == annotation_id:
                     annotation["value"] = new_expression
-                    annotation["start_time"] = int(new_start_time)
-                    annotation["end_time"] = int(new_end_time)
+                    annotation["start_time"] = str(new_start_time)
+                    annotation["end_time"] = str(new_end_time)
                     annotation["phrase"] = new_phrase
-
-            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
-                json.dump(video_annotations, f, indent=4)
+                    parent_ref = annotation.get("annotation_ref", None)
 
             if start_time != new_start_time or end_time != new_end_time:
+                # Update parent annotation if there is a parent tier
+                if parent_ref is not None:
+                    parent_tier = video_annotations[FACIAL_EXPRESSIONS_ID].get("parent_ref", None)
+                    for annotation in video_annotations[parent_tier]["annotations"]:
+                        if annotation["annotation_id"] == parent_ref:
+                            annotation["start_time"] = str(new_start_time)
+                            annotation["end_time"] = str(new_end_time)
+
                 # Update the frames
                 frames_processing.delete_frames(video_id, annotation_id)
                 update_embeddings_and_index(video_id, annotation_id, start_time, end_time)
@@ -112,6 +120,9 @@ def edit_annotation(video_id, annotation_id):
             # Update the EAF file
             eaf_parser.edit_annotation(video_id, FACIAL_EXPRESSIONS_ID, annotation_id, new_start_time,
                                        new_end_time, new_expression)
+
+            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+                json.dump(video_annotations, f, indent=4)
 
             flash("Annotation updated successfully!", "success")
 
@@ -173,7 +184,7 @@ def add_annotation(video_id):
 
                 annotation = {
                     "annotation_id": new_annotation_id,
-                    "annotation_ref": parent_id,
+                    "annotation_ref": parent_id,  # Reference to the parent annotation
                     "value": expression,
                     "start_time": int(new_start_time),
                     "end_time": int(new_end_time),
