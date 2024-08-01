@@ -217,6 +217,7 @@ def add_annotation(video_id):
 
             flash("Annotation added successfully!", "success")
         else:
+            next_annotation = new_annotation_id
             flash(f"Annotation with ID {new_annotation_id} already exists!", "danger")
 
         return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
