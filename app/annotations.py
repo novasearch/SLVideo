@@ -67,6 +67,9 @@ def edit_annotation(video_id, annotation_id):
             # Delete the frames
             frames_processing.delete_frames(video_id, annotation_id)
 
+            # Delete the annotation from the EAF file
+            eaf_parser.delete_annotation(video_id, annotation_id, FACIAL_EXPRESSIONS_ID)
+
             return redirect(prev_page)
 
         # If the user wants to edit the annotation
