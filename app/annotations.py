@@ -6,6 +6,7 @@ from datetime import datetime as dt
 
 from flask import Blueprint, request, render_template, flash, url_for, redirect
 
+from .eaf_parser import eaf_parser
 from .embeddings import embeddings_processing
 from .frame_extraction import frames_processing
 from .utils import embedder, FACIAL_EXPRESSIONS_ID, ANNOTATIONS_PATH, opensearch, VIDEO_PATH
@@ -44,8 +45,6 @@ def edit_annotation(video_id, annotation_id):
             start_time = int(annotation["start_time"])
             end_time = int(annotation["end_time"])
             phrase = annotation["phrase"]
-            print("start_time", start_time)
-            print("end_time", end_time)
 
     if request.method == "POST":
         action = request.form.get("action_type")
@@ -68,6 +67,9 @@ def edit_annotation(video_id, annotation_id):
             # Delete the frames
             frames_processing.delete_frames(video_id, annotation_id)
 
+            # Delete the annotation from the EAF file
+            eaf_parser.delete_annotation(video_id, annotation_id, FACIAL_EXPRESSIONS_ID)
+
             return redirect(prev_page)
 
         # If the user wants to edit the annotation
@@ -85,17 +87,25 @@ def edit_annotation(video_id, annotation_id):
             end_ms = request.form.get("end_ms")
             new_end_time = convert_to_milliseconds("0", end_minutes, end_seconds, end_ms)
 
+            parent_ref = None
+
             for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
                 if annotation["annotation_id"] == annotation_id:
                     annotation["value"] = new_expression
-                    annotation["start_time"] = int(new_start_time)
-                    annotation["end_time"] = int(new_end_time)
+                    annotation["start_time"] = str(new_start_time)
+                    annotation["end_time"] = str(new_end_time)
                     annotation["phrase"] = new_phrase
-
-            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
-                json.dump(video_annotations, f, indent=4)
+                    parent_ref = annotation.get("annotation_ref", None)
 
             if start_time != new_start_time or end_time != new_end_time:
+                # Update parent annotation if there is a parent tier
+                if parent_ref is not None:
+                    parent_tier = video_annotations[FACIAL_EXPRESSIONS_ID].get("parent_ref", None)
+                    for annotation in video_annotations[parent_tier]["annotations"]:
+                        if annotation["annotation_id"] == parent_ref:
+                            annotation["start_time"] = str(new_start_time)
+                            annotation["end_time"] = str(new_end_time)
+
                 # Update the frames
                 frames_processing.delete_frames(video_id, annotation_id)
                 update_embeddings_and_index(video_id, annotation_id, start_time, end_time)
@@ -106,6 +116,13 @@ def edit_annotation(video_id, annotation_id):
 
                 # Update the opensearch index
                 opensearch.update_annotation_embedding(video_id, annotation_id, new_embeddings)
+
+            # Update the EAF file
+            eaf_parser.edit_annotation(video_id, FACIAL_EXPRESSIONS_ID, annotation_id, new_start_time,
+                                       new_end_time, new_expression)
+
+            with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
+                json.dump(video_annotations, f, indent=4)
 
             flash("Annotation updated successfully!", "success")
 
@@ -135,11 +152,7 @@ def add_annotation(video_id):
         video_annotations = json.load(f)
 
     frame_rate = video_annotations["properties"]["frame_rate"]
-    last_annotation_id = str(int(video_annotations["properties"]["lastUsedAnnotationId"]) + 1)
-
-    new_annotation_id = "a" + last_annotation_id
-
-    print(new_annotation_id)
+    new_annotation_id = "a" + str(int(video_annotations["properties"]["lastUsedAnnotationId"]) + 1)
 
     if request.method == "POST":
         start_minutes = request.form.get("start_minutes")
@@ -155,31 +168,60 @@ def add_annotation(video_id):
         expression = request.form.get("expression")
         phrase = request.form.get("phrase")
 
-        annotation = {
-            "annotation_id": new_annotation_id,
-            "value": expression,
-            "start_time": int(new_start_time),
-            "end_time": int(new_end_time),
-            "phrase": phrase,
-            "user_rating": 0
-        }
-
         if new_annotation_id not in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
-            video_annotations["properties"]["lastUsedAnnotationId"] = str(int(new_annotation_id.split("a")[1]) + 1)
+            # Add respective parent annotation if there is a parent tier
+            parent_tier = video_annotations[FACIAL_EXPRESSIONS_ID].get("parent_ref", None)
+            if parent_tier:
+                parent_id = new_annotation_id
+                new_annotation_id = "a" + str(int(new_annotation_id.split("a")[1]) + 1)
+                parent_annotation = {
+                    "annotation_id": parent_id,
+                    "value": expression,
+                    "start_time": int(new_start_time),
+                    "end_time": int(new_end_time)
+                }
+                video_annotations[parent_tier]["annotations"].append(parent_annotation)
+
+                annotation = {
+                    "annotation_id": new_annotation_id,
+                    "annotation_ref": parent_id,  # Reference to the parent annotation
+                    "value": expression,
+                    "start_time": int(new_start_time),
+                    "end_time": int(new_end_time),
+                    "phrase": phrase,
+                    "user_rating": 0
+                }
+            else:
+                annotation = {
+                    "annotation_id": new_annotation_id,
+                    "value": expression,
+                    "start_time": int(new_start_time),
+                    "end_time": int(new_end_time),
+                    "phrase": phrase,
+                    "user_rating": 0
+                }
+
             video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"].append(annotation)
+            video_annotations["properties"]["lastUsedAnnotationId"] = new_annotation_id.split("a")[1]
+
+            update_embeddings_and_index(video_id, new_annotation_id, new_start_time, new_end_time)
+
+            # Update the EAF file
+            eaf_parser.add_annotation(video_id, new_annotation_id, FACIAL_EXPRESSIONS_ID, new_start_time,
+                                      new_end_time, expression, phrase)
 
             with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "w") as f:
                 json.dump(video_annotations, f, indent=4)
 
-            update_embeddings_and_index(video_id, new_annotation_id, new_start_time, new_end_time)
-
+            next_annotation = "a" + str(int(new_annotation_id.split("a")[1]) + 1)
 
             flash("Annotation added successfully!", "success")
         else:
+            next_annotation = new_annotation_id
             flash(f"Annotation with ID {new_annotation_id} already exists!", "danger")
 
         return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                               annotation_id=new_annotation_id, frame_rate=frame_rate)
+                               annotation_id=next_annotation, frame_rate=frame_rate)
 
     return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
                            annotation_id=new_annotation_id, frame_rate=frame_rate)
@@ -214,8 +256,6 @@ def update_embeddings_and_index(video_id, new_annotation_id, start_time, end_tim
     # Convert the start and end time from milliseconds to HH:MM:SS.MS format
     start_time = str(dt.utcfromtimestamp(start_time / 1000).strftime('%H:%M:%S.%f')[:-3])
     end_time = str(dt.utcfromtimestamp(end_time / 1000).strftime('%H:%M:%S.%f')[:-3])
-
-    print(start_time, end_time)
 
     # Extract the frames
     frames_processing.extract_annotation_frames(video_id, new_annotation_id, start_time, end_time)

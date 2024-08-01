@@ -5,7 +5,7 @@
         <div class="row align-items-center">
             <div class="col">
                 <a class="btn btn-outline-dark" style="width: 25%"
-                   href="{{ prev_page if prev_page else url_for('videos.videos') }}">Back</a>
+                   href="{{ prev_page if prev_page else url_for('videos.list_videos') }}">Back</a>
             </div>
             <div class="col">
                 <h2 class="text-center flex-grow-1">{% block title %}{% endblock %}</h2>
@@ -186,7 +186,6 @@
                 endMilliseconds.addEventListener('mouseup', function () {
                     isArrowClick = false;
                 });
-
 
                 video.addEventListener('timeupdate', checkVideoTime);
 

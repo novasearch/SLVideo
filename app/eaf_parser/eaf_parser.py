@@ -175,3 +175,141 @@ def convert_time_format_to_milliseconds(time_format):
     else:
         milliseconds = 0
     return hours + minutes + seconds + milliseconds
+
+
+def edit_annotation(video_id, tier_id, annotation_id, start_time, end_time, value):
+    """ Edit an annotation in the video EAF file """
+    video_eaf = os.path.join(EAF_PATH, video_id + '.eaf')
+
+    with open(video_eaf, "r", encoding='utf-8') as file:
+        file_content = file.read()
+
+        root = ET.fromstring(file_content)
+
+        # Get the time slots
+        time_slots = root.findall('TIME_ORDER/TIME_SLOT')
+        time_slot_1 = None
+        time_slot_2 = None
+
+        # Edit the annotation
+        tier_annotations = root.findall('TIER[@TIER_ID="' + tier_id + '"]/')
+        parent_tier = root.find('TIER[@TIER_ID="' + tier_id + '"]').attrib.get('PARENT_REF')
+        for outer_tag in tier_annotations:
+            annotation = outer_tag.find('*')  # Get the first child element
+            if annotation.attrib['ANNOTATION_ID'] == annotation_id:
+                annotation.find('ANNOTATION_VALUE').text = value
+
+                # If the annotation is a ref annotation, get the parent annotation's time slots
+                if parent_tier is not None:
+                    ref_id = annotation.attrib.get('ANNOTATION_REF')
+                    ref_annotation = root.findall('TIER[@TIER_ID="' + parent_tier + '"]/')
+                    for ref_outer_tag in ref_annotation:
+                        ref_annotation = ref_outer_tag.find('*')
+                        if ref_annotation.attrib['ANNOTATION_ID'] == ref_id:
+                            time_slot_1 = ref_annotation.attrib.get('TIME_SLOT_REF1')
+                            time_slot_2 = ref_annotation.attrib.get('TIME_SLOT_REF2')
+                else:
+                    time_slot_1 = annotation.attrib.get('TIME_SLOT_REF1')
+                    time_slot_2 = annotation.attrib.get('TIME_SLOT_REF2')
+
+        # Edit the time slots
+        for time_slot in time_slots:
+            if time_slot.attrib['TIME_SLOT_ID'] == time_slot_1:
+                time_slot.attrib['TIME_VALUE'] = str(start_time)
+            elif time_slot.attrib['TIME_SLOT_ID'] == time_slot_2:
+                time_slot.attrib['TIME_VALUE'] = str(end_time)
+
+        with open(video_eaf, "w", encoding='utf-8') as updated_file:
+            updated_file.write(ET.tostring(root, encoding='unicode'))
+
+
+def add_annotation(video_id, new_annotation_id, tier_id, new_start_time, new_end_time, value, phrase):
+    """ Adds an annotation to the video annotations EAF file """
+    video_eaf = os.path.join(EAF_PATH, video_id + '.eaf')
+    file = ET.parse(video_eaf)
+    root = file.getroot()
+
+    start_time = str(new_start_time)
+    end_time = str(new_end_time)
+
+    time_slots = root.findall('TIME_ORDER/TIME_SLOT')
+
+    # Get last time slot id
+    last_time_slot_id = int(time_slots[-1].attrib['TIME_SLOT_ID'].split("ts")[1])
+
+    # Create the new time slots
+    time_order = root.find('TIME_ORDER')
+    time_slot_1 = "ts" + str(last_time_slot_id + 1)
+    time_slot_2 = "ts" + str(last_time_slot_id + 2)
+    ET.SubElement(time_order, 'TIME_SLOT', {'TIME_SLOT_ID': time_slot_1, 'TIME_VALUE': start_time})
+    ET.SubElement(time_order, 'TIME_SLOT', {'TIME_SLOT_ID': time_slot_2, 'TIME_VALUE': end_time})
+
+    # Find the appropriate tier
+    tier = root.find(f'TIER[@TIER_ID="{tier_id}"]')
+    parent_tier_id = tier.attrib.get('PARENT_REF')
+
+    # Create the new annotation element
+    new_outer_tag = ET.SubElement(tier, 'ANNOTATION')
+
+    if parent_tier_id is not None:
+        # Add the parent annotation to the new annotation
+        parent_tier = root.find(f'TIER[@TIER_ID="{parent_tier_id}"]')
+        parent_annotation_id = "a" + str(int(new_annotation_id.split("a")[1]) - 1)
+        new_parent_outer_tag = ET.SubElement(parent_tier, 'ANNOTATION')
+        new_parent_annotation = ET.SubElement(new_parent_outer_tag, 'ALIGNABLE_ANNOTATION', {
+            'ANNOTATION_ID': parent_annotation_id, 'TIME_SLOT_REF1': time_slot_1, 'TIME_SLOT_REF2': time_slot_2
+        })
+        new_parent_annotation_value = ET.SubElement(new_parent_annotation, 'ANNOTATION_VALUE')
+        new_parent_annotation_value.text = value
+
+        new_annotation = ET.SubElement(new_outer_tag, 'REF_ANNOTATION', {
+            'ANNOTATION_ID': new_annotation_id, 'ANNOTATION_REF': parent_annotation_id
+        })
+    else:
+        new_annotation = ET.SubElement(new_outer_tag, 'ALIGNABLE_ANNOTATION', {
+            'ANNOTATION_ID': new_annotation_id, 'TIME_SLOT_REF1': time_slot_1, 'TIME_SLOT_REF2': time_slot_2
+        })
+
+    new_annotation_value = ET.SubElement(new_annotation, 'ANNOTATION_VALUE')
+    new_annotation_value.text = value
+
+    # Update the lastUsedAnnotationId in the EAF file
+    last_used_annotation_id = root.find('HEADER/PROPERTY[@NAME="lastUsedAnnotationId"]')
+    last_used_annotation_id.text = new_annotation_id
+
+    # Write back the updated XML to the EAF file
+    with open(video_eaf, "w", encoding='utf-8') as updated_file:
+        updated_file.write(ET.tostring(root, encoding='unicode'))
+
+
+def delete_annotation(video_id, annotation_id, tier_id):
+    """ Delete an annotation in the EAF file """
+    video_eaf = os.path.join(EAF_PATH, video_id + '.eaf')
+    file = ET.parse(video_eaf)
+    root = file.getroot()
+
+    # Get the time slots
+    time_slots = root.findall('TIME_ORDER/TIME_SLOT')
+    time_slot_1 = None
+    time_slot_2 = None
+
+    # Delete the annotation
+    tier_annotations = root.findall('TIER[@TIER_ID="' + tier_id + '"]/')
+    tier = root.find(f'TIER[@TIER_ID="{tier_id}"]')
+    for outer_tag in tier_annotations:
+        annotation = outer_tag.find('*')
+        if annotation.attrib['ANNOTATION_ID'] == annotation_id:
+            tier.remove(outer_tag)
+            time_slot_1 = annotation.attrib.get('TIME_SLOT_REF1')
+            time_slot_2 = annotation.attrib.get('TIME_SLOT_REF2')
+
+    # Delete the time slots if it is an alignable annotation
+    if time_slot_1 is not None and time_slot_2 is not None:
+        for time_slot in time_slots:
+            if time_slot.attrib['TIME_SLOT_ID'] == time_slot_1:
+                root.find('TIME_ORDER').remove(time_slot)
+            elif time_slot.attrib['TIME_SLOT_ID'] == time_slot_2:
+                root.find('TIME_ORDER').remove(time_slot)
+
+    with open(video_eaf, "w", encoding='utf-8') as updated_file:
+        updated_file.write(ET.tostring(root, encoding='unicode'))
