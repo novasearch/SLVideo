@@ -12,6 +12,8 @@ class ObjectDetector:
         - RMBG-1.4 for background removal
     """
 
+    BATCH_SIZE = 32
+
     def __init__(self):
         # Check if a GPU is available and if so, move the model to the GPU
         if torch.backends.mps.is_available():
@@ -42,9 +44,9 @@ class ObjectDetector:
 
         print(f"{parent_name} - {base_name} || Cropping Started", flush=True)
 
-        # If the images length is larger than 32, split the images into same sizes batches smaller than 32
-        if len(images_paths) > 32:
-            n_batches = math.ceil(len(images_paths) / 32)
+        # If the images length is larger than BATCH_SIZE, split the images into same sizes batches smaller than BATCH_SIZE
+        if len(images_paths) > BATCH_SIZE:
+            n_batches = math.ceil(len(images_paths) / BATCH_SIZE)
             batch_size = math.ceil(len(images_paths) / n_batches)
             images_paths = [images_paths[i:i + batch_size] for i in range(0, len(images_paths), batch_size)]
 

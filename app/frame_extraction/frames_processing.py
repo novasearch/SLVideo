@@ -9,6 +9,9 @@ from app.frame_extraction import object_detector
 
 
 class FrameExtractor:
+
+    THREAD_COUNT = 4
+
     def __init__(self):
         self.od = object_detector.ObjectDetector()
 
@@ -48,7 +51,7 @@ class FrameExtractor:
             annotations = json.load(f)
 
             if FACIAL_EXPRESSIONS_ID in annotations:
-                with ThreadPoolExecutor(max_workers=4) as executor:
+                with ThreadPoolExecutor(max_workers=THREAD_COUNT) as executor:
                     futures = []
                     for facial_expression in annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
                         future = executor.submit(self.process_facial_expression, video_path, facial_expressions_dir,
