@@ -6,7 +6,7 @@ from .embeddings import embeddings_processing
 from .opensearch.opensearch import LGPOpenSearch, gen_doc
 from .utils import CPU_Unpickler, RESULTS_PATH, EAF_PATH, VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH, EMBEDDINGS_PATH, \
     FACIAL_EXPRESSIONS_FRAMES_DIR, FACIAL_EXPRESSIONS_ID, BASE_FRAMES_EMBEDDINGS_FILE, AVERAGE_FRAMES_EMBEDDINGS_FILE, \
-    BEST_FRAMES_EMBEDDINGS_FILE, SUMMED_FRAMES_EMBEDDINGS_FILE, ANNOTATIONS_EMBEDDINGS_FILE
+    BEST_FRAMES_EMBEDDINGS_FILE, SUMMED_FRAMES_EMBEDDINGS_FILE, ANNOTATIONS_EMBEDDINGS_FILE, ALL_FRAMES_EMBEDDINGS_FILE
 
 # Initialize the OpenSearch client
 opensearch = LGPOpenSearch()
@@ -61,12 +61,15 @@ with open(BEST_FRAMES_EMBEDDINGS_FILE, "rb") as f:
 with open(SUMMED_FRAMES_EMBEDDINGS_FILE, "rb") as f:
     summed_frame_embeddings = CPU_Unpickler(f).load()
 
+with open(ALL_FRAMES_EMBEDDINGS_FILE, "rb") as f:
+    all_frame_embeddings = CPU_Unpickler(f).load()
+
 with open(ANNOTATIONS_EMBEDDINGS_FILE, "rb") as f:
     annotations_embeddings = CPU_Unpickler(f).load()
 
 print("ENTERING INDEXING LOOP", flush=True)
-# opensearch.delete_index()
-# opensearch.create_index()
+opensearch.delete_index()
+opensearch.create_index()
 for video_id in os.listdir(FACIAL_EXPRESSIONS_FRAMES_DIR):
     if video_id.startswith("."):
         continue
@@ -98,6 +101,7 @@ for video_id in os.listdir(FACIAL_EXPRESSIONS_FRAMES_DIR):
                 average_frame_embedding=average_frame_embeddings[video_id][annotation_id].tolist(),
                 best_frame_embedding=best_frame_embeddings[video_id][annotation_id].tolist(),
                 summed_frame_embeddings=summed_frame_embeddings[video_id][annotation_id].tolist(),
+                all_frames_embeddings=all_frame_embeddings[video_id][annotation_id].tolist(),
                 annotation_embedding=annotations_embeddings[video_id][annotation_id].tolist(),
             )
 

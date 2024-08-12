@@ -2,8 +2,6 @@ import os
 
 from flask import Flask, redirect, url_for
 
-from app.embeddings import embeddings_processing
-
 """Create and configure an instance of the Flask application."""
 
 app = Flask(__name__, instance_relative_config=True)

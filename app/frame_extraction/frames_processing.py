@@ -7,10 +7,10 @@ from concurrent.futures import ThreadPoolExecutor
 from app.utils import PHRASES_ID, FACIAL_EXPRESSIONS_ID, VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH
 from app.frame_extraction import object_detector
 
+THREAD_COUNT = 4
+
 
 class FrameExtractor:
-
-    THREAD_COUNT = 4
 
     def __init__(self):
         self.od = object_detector.ObjectDetector()

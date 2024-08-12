@@ -14,7 +14,7 @@ from flask import (
 from sklearn.preprocessing import StandardScaler
 
 from .embeddings import embeddings_processing
-from .utils import embedder, opensearch, CPU_Unpickler, EMBEDDINGS_PATH, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, \
+from .utils import embedder, opensearch, CPU_Unpickler, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, \
     ANNOTATIONS_PATH, AVERAGE_FRAMES_EMBEDDINGS_FILE
 
 N_RESULTS = 10
@@ -48,9 +48,11 @@ def query():
                 session['query_results'] = query_best_frame_embedding(query_input)
             elif selected_field == 4:  # Summed Frames Embeddings
                 session['query_results'] = query_summed_frames_embeddings(query_input)
-            elif selected_field == 5:  # Combined Frames Embeddings
+            elif selected_field == 5:  # All Frames Embeddings
+                session['query_results'] = query_all_frames_embeddings(query_input)
+            elif selected_field == 6:  # Combined Frames Embeddings
                 session['query_results'] = query_combined_frames_embeddings(query_input)
-            elif selected_field == 6:  # Annotations Embeddings
+            elif selected_field == 7:  # Annotations Embeddings
                 session['query_results'] = query_annotations_embeddings(query_input)
             else:  # True Expression / Ground Truth
                 session['query_results'] = query_true_expression(query_input)
@@ -227,6 +229,13 @@ def query_summed_frames_embeddings(query_input):
     return set_query_results(search_results, query_input)
 
 
+def query_all_frames_embeddings(query_input):
+    """ Get the results of the query using all frames embeddings """
+    query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
+    search_results = opensearch.knn_query_all(query_embedding.tolist(), N_RESULTS)
+    return set_query_results(search_results, query_input)
+
+
 def query_combined_frames_embeddings(query_input):
     """ Get the results of the query using the combined frames embeddings """
     query_embedding = embeddings_processing.generate_query_embeddings(query_input, embedder)
@@ -400,7 +409,7 @@ def get_results_tsne(results_embeddings):
     results_embeddings_reduced = pca.fit_transform(results_embeddings)
 
     # Dynamically adjust perplexity based on the number of results
-    perplexity_value = min(max(5, N_RESULTS//2), len(results_embeddings) - 1)
+    perplexity_value = min(max(5, N_RESULTS // 2), len(results_embeddings) - 1)
 
     # Use t-SNE to reduce the dimensionality of the embeddings
     tsne = TSNE(n_components=2, perplexity=perplexity_value)

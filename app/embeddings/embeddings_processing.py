@@ -3,15 +3,17 @@ import json
 
 import numpy as np
 import torch
+from torch.cuda import amp
+from torch.utils import checkpoint
 
 from .embeddings_generator import Embedder
 import os
 import pickle
 import gc
 
-from ..utils import FACIAL_EXPRESSIONS_FRAMES_DIR, EMBEDDINGS_PATH, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID, \
+from ..utils import FACIAL_EXPRESSIONS_FRAMES_DIR, ANNOTATIONS_PATH, FACIAL_EXPRESSIONS_ID, \
     CPU_Unpickler, BASE_FRAMES_EMBEDDINGS_FILE, AVERAGE_FRAMES_EMBEDDINGS_FILE, BEST_FRAMES_EMBEDDINGS_FILE, \
-    SUMMED_FRAMES_EMBEDDINGS_FILE, ANNOTATIONS_EMBEDDINGS_FILE
+    SUMMED_FRAMES_EMBEDDINGS_FILE, ANNOTATIONS_EMBEDDINGS_FILE, ALL_FRAMES_EMBEDDINGS_FILE
 
 
 def generate_video_embeddings():
@@ -28,6 +30,9 @@ def generate_video_embeddings():
 
     generate_summed_embeddings()
     print("Summed embeddings generated", flush=True)
+
+    generate_all_frames_embeddings(embedder)
+    print("All frames embeddings generated", flush=True)
 
     generate_annotations_embeddings(embedder)
     print("Annotations embeddings generated", flush=True)
@@ -156,6 +161,34 @@ def generate_summed_embeddings():
         pickle.dump(summed_embeddings, f)
 
 
+def generate_all_frames_embeddings(eb: Embedder):
+    """ Generate the embeddings for all the facial expressions frames """
+    print("Generating all frames embeddings", flush=True)
+
+    embeddings = {}
+
+    if os.path.exists(ALL_FRAMES_EMBEDDINGS_FILE):
+        with open(ALL_FRAMES_EMBEDDINGS_FILE, 'rb') as f:
+            embeddings = pickle.load(f)
+
+    for video in os.listdir(FACIAL_EXPRESSIONS_FRAMES_DIR):
+        video_dir = os.path.join(FACIAL_EXPRESSIONS_FRAMES_DIR, video)
+        annotations_dir = os.listdir(video_dir)
+
+        if video in embeddings or len(annotations_dir) == 0 or video.startswith('.'):
+            continue
+
+        embeddings[video] = {}
+        print(f"Working on {video}", flush=True)
+
+        for annotation in annotations_dir:
+            embeddings[video][annotation] = generate_annotation_all_frames_embeddings(video, annotation, eb)
+            torch.cuda.empty_cache()  # Clear GPU cache after each annotation
+
+    with open(ALL_FRAMES_EMBEDDINGS_FILE, 'wb') as f:
+        pickle.dump(embeddings, f)
+
+
 def generate_annotations_embeddings(eb: Embedder):
     """ Generate the embeddings for all the facial expressions annotations' values """
     print("Generating annotations embeddings", flush=True)
@@ -242,7 +275,7 @@ def generate_annotation_frame_embeddings(video_id, annotation_id, eb: Embedder):
 
 
 def generate_annotation_average_and_best_frame_embeddings(video_id, annotation_id, eb: Embedder):
-    """ Generate the average and best facial expression frame embeddings of a specific annotation of a video """
+    """ Generate the average and best facial expression frame embeddings for a specific annotation of a video """
     video_dir = os.path.join(FACIAL_EXPRESSIONS_FRAMES_DIR, video_id)
     expression_frames_dir = os.path.join(video_dir, annotation_id)
     total_embedding = None
@@ -281,6 +314,39 @@ def generate_annotation_average_and_best_frame_embeddings(video_id, annotation_i
     return average_embedding, best_embedding
 
 
+def generate_annotation_all_frames_embeddings(video_id, annotation_id, eb: Embedder):
+    """ Generate the embeddings for all the facial expressions frames of a specific annotation of a video """
+    video_dir = os.path.join(FACIAL_EXPRESSIONS_FRAMES_DIR, video_id)
+    expression_frames_dir = os.path.join(video_dir, annotation_id)
+    annotation_embedding = None
+
+    frames = os.listdir(expression_frames_dir)
+    batch_size = 8  # Process frames in smaller batches
+
+    for i in range(0, len(frames), batch_size):
+        batch_frames = frames[i:i + batch_size]
+        batch_embeddings = []
+
+        for frame in batch_frames:
+            frame_path = os.path.join(expression_frames_dir, frame)
+
+            if not os.path.isfile(frame_path):
+                continue
+
+            with amp.autocast():  # Use mixed precision
+                frame_embedding = checkpoint.checkpoint(eb.image_encode, frame_path)
+                batch_embeddings.append(frame_embedding.cpu())  # Move to CPU to save GPU memory
+
+        if annotation_embedding is None:
+            annotation_embedding = sum(batch_embeddings)
+        else:
+            annotation_embedding += sum(batch_embeddings)
+
+        torch.cuda.empty_cache()  # Clear GPU cache after each frame
+
+    return annotation_embedding
+
+
 def update_annotations_embeddings(video_id, annotation_id, eb: Embedder):
     """ Update the embeddings for a specific annotation of a video """
 
@@ -311,7 +377,7 @@ def update_annotations_embeddings(video_id, annotation_id, eb: Embedder):
 
 def add_embeddings(video_id, annotation_id, eb: Embedder):
     """ Add or update the embeddings for a specific annotation of a video """
-    base_embeddings, average_embeddings, best_embeddings, summed_embeddings, annotations_embeddings = load_embeddings()
+    base_embeddings, average_embeddings, best_embeddings, summed_embeddings, all_embeddings, annotations_embeddings = load_embeddings()
 
     # Add the embeddings
     base_embeddings[video_id][annotation_id] = generate_annotation_frame_embeddings(video_id, annotation_id, eb)
@@ -320,25 +386,28 @@ def add_embeddings(video_id, annotation_id, eb: Embedder):
     summed_embeddings[video_id][annotation_id] = base_embeddings[video_id][annotation_id] + \
                                                  average_embeddings[video_id][annotation_id] + \
                                                  best_embeddings[video_id][annotation_id]
+    all_embeddings[video_id][annotation_id] = generate_annotation_all_frames_embeddings(video_id, annotation_id, eb)
     annotations_embeddings[video_id][annotation_id] = eb.text_encode(annotation_id.lower())
 
     # Save the embeddings
-    save_embeddings(base_embeddings, average_embeddings, best_embeddings, summed_embeddings, annotations_embeddings)
+    save_embeddings(base_embeddings, average_embeddings, best_embeddings, summed_embeddings, all_embeddings, annotations_embeddings)
 
 
 def delete_embeddings(video_id, annotation_id):
     """ Delete the embeddings for a specific annotation of a video """
-    base_embeddings, average_embeddings, best_embeddings, summed_embeddings, annotations_embeddings = load_embeddings()
+    base_embeddings, average_embeddings, best_embeddings, summed_embeddings, all_embeddings, annotations_embeddings = load_embeddings()
 
     # Delete the embeddings
     del base_embeddings[video_id][annotation_id]
     del average_embeddings[video_id][annotation_id]
     del best_embeddings[video_id][annotation_id]
     del summed_embeddings[video_id][annotation_id]
+    del all_embeddings[video_id][annotation_id]
     del annotations_embeddings[video_id][annotation_id]
 
     # Save the embeddings
-    save_embeddings(base_embeddings, average_embeddings, best_embeddings, summed_embeddings, annotations_embeddings)
+    save_embeddings(base_embeddings, average_embeddings, best_embeddings, summed_embeddings, all_embeddings,
+                    annotations_embeddings)
 
 
 def load_embeddings():
@@ -351,13 +420,16 @@ def load_embeddings():
         best_embeddings = CPU_Unpickler(f).load()
     with open(SUMMED_FRAMES_EMBEDDINGS_FILE, 'rb') as f:
         summed_embeddings = CPU_Unpickler(f).load()
+    with open(ALL_FRAMES_EMBEDDINGS_FILE, 'rb') as f:
+        all_embeddings = CPU_Unpickler(f).load()
     with open(ANNOTATIONS_EMBEDDINGS_FILE, 'rb') as f:
         annotations_embeddings = CPU_Unpickler(f).load()
 
-    return base_embeddings, average_embeddings, best_embeddings, summed_embeddings, annotations_embeddings
+    return base_embeddings, average_embeddings, best_embeddings, summed_embeddings, all_embeddings, annotations_embeddings
 
 
-def save_embeddings(base_embeddings, average_embeddings, best_embeddings, summed_embeddings, annotations_embeddings):
+def save_embeddings(base_embeddings, average_embeddings, best_embeddings, summed_embeddings, all_embeddings,
+                    annotations_embeddings):
     """Save all embeddings back to their files."""
     with open(BASE_FRAMES_EMBEDDINGS_FILE, 'wb') as f:
         pickle.dump(base_embeddings, f)
@@ -367,5 +439,7 @@ def save_embeddings(base_embeddings, average_embeddings, best_embeddings, summed
         pickle.dump(best_embeddings, f)
     with open(SUMMED_FRAMES_EMBEDDINGS_FILE, 'wb') as f:
         pickle.dump(summed_embeddings, f)
+    with open(ALL_FRAMES_EMBEDDINGS_FILE, 'wb') as f:
+        pickle.dump(all_embeddings, f)
     with open(ANNOTATIONS_EMBEDDINGS_FILE, 'wb') as f:
         pickle.dump(annotations_embeddings, f)

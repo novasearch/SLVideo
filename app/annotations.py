@@ -1,7 +1,5 @@
 import json
 import os
-import datetime
-import subprocess
 from datetime import datetime as dt
 
 from flask import Blueprint, request, render_template, flash, url_for, redirect
@@ -265,7 +263,7 @@ def update_embeddings_and_index(video_id, new_annotation_id, start_time, end_tim
 
     # Load the embeddings
     (base_frame_embeddings, average_frame_embeddings, best_frame_embeddings, summed_frame_embeddings,
-     annotations_embeddings) = embeddings_processing.load_embeddings()
+     all_frame_embeddings, annotations_embeddings) = embeddings_processing.load_embeddings()
 
     # Index the new annotation in opensearch
     doc = gen_doc(
@@ -275,6 +273,7 @@ def update_embeddings_and_index(video_id, new_annotation_id, start_time, end_tim
         average_frame_embedding=average_frame_embeddings[video_id][new_annotation_id].tolist(),
         best_frame_embedding=best_frame_embeddings[video_id][new_annotation_id].tolist(),
         summed_frame_embeddings=summed_frame_embeddings[video_id][new_annotation_id].tolist(),
+        all_frames_embeddings=all_frame_embeddings[video_id][new_annotation_id].tolist(),
         annotation_embedding=annotations_embeddings[video_id][new_annotation_id].tolist(),
     )
     opensearch.index_if_not_exists(doc)

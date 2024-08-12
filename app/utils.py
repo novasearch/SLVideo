@@ -25,6 +25,7 @@ BASE_FRAMES_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'frame_embeddings.js
 AVERAGE_FRAMES_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'average_frame_embeddings.json.embeddings')
 BEST_FRAMES_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'best_frame_embeddings.json.embeddings')
 SUMMED_FRAMES_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'summed_frame_embeddings.json.embeddings')
+ALL_FRAMES_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'all_frame_embeddings.json.embeddings')
 ANNOTATIONS_EMBEDDINGS_FILE = os.path.join(EMBEDDINGS_PATH, 'annotations_embeddings.json.embeddings')
 
 # Embedder to be used throughout the application

@@ -4,7 +4,7 @@ from opensearchpy import OpenSearch, OpenSearchException
 
 
 def gen_doc(video_id: str, annotation_id: str, base_frame_embedding, average_frame_embedding,
-            summed_frame_embeddings, best_frame_embedding, annotation_embedding):
+            summed_frame_embeddings, best_frame_embedding, all_frames_embeddings, annotation_embedding):
     """ Generate a document for indexing in OpenSearch """
     return {
         "video_id": video_id,
@@ -13,6 +13,7 @@ def gen_doc(video_id: str, annotation_id: str, base_frame_embedding, average_fra
         "average_frame_embedding": average_frame_embedding,
         "best_frame_embedding": best_frame_embedding,
         "summed_frame_embeddings": summed_frame_embeddings,
+        "all_frames_embeddings": all_frames_embeddings,
         "annotation_embedding": annotation_embedding,
     }
 
@@ -71,6 +72,10 @@ class LGPOpenSearch:
                         'type': 'knn_vector'
                     },
                     "summed_frame_embeddings": {
+                        'dimension': 512,
+                        'type': 'knn_vector'
+                    },
+                    "all_frames_embeddings": {
                         'dimension': 512,
                         'type': 'knn_vector'
                     },
@@ -228,6 +233,29 @@ class LGPOpenSearch:
                     "should": {
                         "knn": {
                             "summed_frame_embeddings": {
+                                "vector": embedding,
+                                "k": k
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return self.client.search(
+            body=query_obj,
+            index=self.index_name
+        )
+
+    def knn_query_all(self, embedding, k):
+        """ Performs a k-nearest neighbors (k-NN) search on the all_frames_embeddings field of the OpenSearch index"""
+        query_obj = {
+            "size": k,
+            "query": {
+                "bool": {
+                    "should": {
+                        "knn": {
+                            "all_frames_embeddings": {
                                 "vector": embedding,
                                 "k": k
                             }
