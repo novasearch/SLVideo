@@ -31,8 +31,8 @@ class ObjectDetector:
         self.crop_model = self.crop_model.to(self.device)
 
         # Initialize the RMBG-1.4 model for image segmentation
-        #self.segmentation_model = pipeline("image-segmentation", model="briaai/RMBG-1.4", trust_remote_code=True,
-        #                                   device=self.device)
+        self.segmentation_model = pipeline("image-segmentation", model="briaai/RMBG-1.4", trust_remote_code=True,
+                                          device=self.device)
 
     def detect_person(self, images_paths):
         """ Detect a person in an image, crop the person box, detect the person in the
@@ -52,16 +52,16 @@ class ObjectDetector:
 
             for images_paths in images_paths:
                 cropped_images = self.detect_person_box(images_paths)
-                #masked_images = self.detect_person_remove_background(cropped_images)
+                masked_images = self.detect_person_remove_background(cropped_images)
 
-                for image, image_path in zip(cropped_images, images_paths):
+                for image, image_path in zip(masked_images, images_paths):
                     image.save(image_path)
                     image.close()
         else:
             cropped_images = self.detect_person_box(images_paths)
-            #masked_images = self.detect_person_remove_background(cropped_images)
+            masked_images = self.detect_person_remove_background(cropped_images)
 
-            for image, image_path in zip(cropped_images, images_paths):
+            for image, image_path in zip(masked_images, images_paths):
                 image.save(image_path)
                 image.close()
 
@@ -102,6 +102,6 @@ class ObjectDetector:
         """ Detect a person in a cropped image, remove the background and save the final image """
 
         # pillow_mask = self.segmentation_model(image_paths, return_mask=True)  # outputs a pillow mask
-        #pillow_images = self.segmentation_model(cropped_images)  # applies mask on input and returns a pillow image
+        pillow_images = self.segmentation_model(cropped_images)  # applies mask on input and returns a pillow image
 
-        #return pillow_images
+        return pillow_images
