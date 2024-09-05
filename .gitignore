@@ -158,3 +158,4 @@ cython_debug/
 preprocess.sh
 *.json
 *.vtt
+test_searches.py
