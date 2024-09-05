@@ -124,7 +124,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        'video_id': {{ video }},
+                        'video_id': {{ video|tojson }},
                         'annotation_id': current_annotation,
                         'rating': starNumber
                     })
@@ -136,7 +136,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        'video_id': {{ video }},
+                        'video_id': {{ video|tojson }},
                         'annotation_id': current_annotation,
                         'rating': starNumber
                     })

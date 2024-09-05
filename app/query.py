@@ -114,7 +114,6 @@ def videos_results():
 def clips_results(video):
     """ Display the video segments of one video that contain the query results """
     query_results = session.get('query_results')[video]
-
     query_input = session.get('query_input')
     search_mode = session.get('search_mode', 1)
 
@@ -122,7 +121,6 @@ def clips_results(video):
     query_results = OrderedDict(sorted(query_results.items(), key=lambda x: x[1]['similarity_score'], reverse=True))
 
     frames = {}
-    # frames_info = {}
 
     # Collect information about the retrieved video segments
     for annotation_id in query_results:
@@ -146,10 +144,8 @@ def clips_results(video):
             if button_clicked == 'edit':
                 return redirect(
                     url_for("annotations.edit_annotation", video_id=video, annotation_id=selected_annotation))
-
             elif button_clicked == 'thesaurus':
                 return redirect(url_for("query.thesaurus_results", video_id=video, annotation_id=selected_annotation))
-
         return render_template("query/clips_results/expressions_clips.html", frames=frames_to_display,
                                frames_info=query_results, query_input=query_input,
                                search_mode=search_mode, video=video)
@@ -256,7 +252,15 @@ def query_thesaurus(video_id, annotation_id):
         average_frame_embeddings = CPU_Unpickler(f).load()
     embedding = average_frame_embeddings[video_id][annotation_id].tolist()
     search_results = opensearch.knn_query_average(embedding, N_RESULTS)
-    return set_query_results(search_results, plot_tsne=True)
+
+    annotation_value = None
+    with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
+        video_annotations = json.load(f)
+        for annotation in video_annotations[FACIAL_EXPRESSIONS_ID]["annotations"]:
+            if annotation["annotation_id"] == annotation_id:
+                annotation_value = annotation['value']
+                break
+    return set_query_results(search_results, annotation_value, plot_tsne=True)
 
 
 def set_query_results(search_results, query_input=None, plot_tsne=False):
@@ -305,7 +309,8 @@ def query_true_expression(query_input):
     """ Get the results of the query using the ground truth """
     query_results = {}
     search_mode = session.get('search_mode', 1)
-    pattern = re.compile(r'(^|\[|_|]|\(|-|\s){}($|\]|_|(?=\W)|\)|-|\s)'.format(query_input.lower()), re.IGNORECASE)
+    escaped_query_input = re.escape(query_input.lower())
+    pattern = re.compile(r'(^|\[|_|]|\(|-|\s){}($|\]|_|(?=\W)|\)|-|\s)'.format(escaped_query_input), re.IGNORECASE)
     for video in os.listdir(os.path.join(FRAMES_PATH, search_mode)):
         if video.startswith("."):
             continue
@@ -422,7 +427,7 @@ def get_results_tsne(results_embeddings):
 def update_annotation_rating():
     """ Update the rating of an annotation in the session variable """
     data = request.get_json()
-    video_id = str(data['video_id'])
+    video_id = data['video_id']
     annotation_id = data['annotation_id']
     rating = data['rating']
 
@@ -439,7 +444,7 @@ def update_annotation_rating():
 def update_annotation_info():
     """ Update the information of an annotation in the session variable """
     data = request.get_json()
-    video_id = str(data['video_id'])
+    video_id = data['video_id']
     annotation_id = data['annotation_id']
 
     query_results = session.get('query_results', {})
