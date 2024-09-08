@@ -1,9 +1,9 @@
 from PIL import Image
-from app.embeddings.encoders.encoder import Encoder
+from app.embeddings.encoders.abstract_encoder import AbstractEncoder
 import open_clip
 
 
-class CapivaraEncoder(Encoder):
+class CapivaraEncoder(AbstractEncoder):
     """ Encoder class to encode text and image using the CAPIVARA model """
 
     def __init__(self, device):

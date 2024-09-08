@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Encoder(ABC):
+class AbstractEncoder(ABC):
     """Abstract class for encoders."""
 
     @abstractmethod

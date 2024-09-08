@@ -1,10 +1,10 @@
 from PIL import Image
 
-from app.embeddings.encoders.encoder import Encoder
+from app.embeddings.encoders.abstract_encoder import AbstractEncoder
 from sentence_transformers import SentenceTransformer
 
 
-class ClipEncoder(Encoder):
+class ClipEncoder(AbstractEncoder):
     """ Encoder class to encode text and image using the clip-Vit-B-32 model """
 
     def __init__(self, device):
