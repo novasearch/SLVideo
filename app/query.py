@@ -15,7 +15,8 @@ from sklearn.preprocessing import StandardScaler
 
 from .embeddings import embeddings_processing
 from .utils import embedder, opensearch, CPU_Unpickler, FRAMES_PATH, FACIAL_EXPRESSIONS_ID, PHRASES_ID, \
-    ANNOTATIONS_PATH, AVERAGE_FRAMES_EMBEDDINGS_FILE
+    ANNOTATIONS_PATH, AVERAGE_FRAMES_EMBEDDINGS_FILE, BASE_FRAMES_EMBEDDINGS_FILE, BEST_FRAMES_EMBEDDINGS_FILE, \
+    SUMMED_FRAMES_EMBEDDINGS_FILE, ALL_FRAMES_EMBEDDINGS_FILE
 
 N_RESULTS = 10
 N_FRAMES_TO_DISPLAY = 6
@@ -30,6 +31,7 @@ def query():
         query_input = request.form["query"]
         session['query_input'] = query_input
         selected_field = int(request.form.get('field'))
+        session['selected_field'] = selected_field
         session['search_mode'] = request.form.get('mode')
         error = None
 
@@ -40,22 +42,33 @@ def query():
             flash(error)
         else:
 
+            print()
+            print("-------------------------------------")
             if selected_field == 1:  # Base Frames Embeddings
+                print(f"Searching for '{query_input}' using Base Frames Embeddings...")
                 session['query_results'] = query_frames_embeddings(query_input)
             elif selected_field == 2:  # Average Frames Embeddings
+                print(f"Searching for '{query_input}' using Average Frames Embeddings...")
                 session['query_results'] = query_average_frames_embeddings(query_input)
             elif selected_field == 3:  # Best Frame Embeddings
+                print(f"Searching for '{query_input}' using Best Frame Embeddings...")
                 session['query_results'] = query_best_frame_embedding(query_input)
             elif selected_field == 4:  # Summed Frames Embeddings
+                print(f"Searching for '{query_input}' using Summed Frames Embeddings...")
                 session['query_results'] = query_summed_frames_embeddings(query_input)
             elif selected_field == 5:  # All Frames Embeddings
+                print(f"Searching for '{query_input}' using All Frames Embeddings...")
                 session['query_results'] = query_all_frames_embeddings(query_input)
             elif selected_field == 6:  # Combined Frames Embeddings
+                print(f"Searching for '{query_input}' using Combined Frames Embeddings...")
                 session['query_results'] = query_combined_frames_embeddings(query_input)
             elif selected_field == 7:  # Annotations Embeddings
+                print(f"Searching for '{query_input}' using Annotations Embeddings...")
                 session['query_results'] = query_annotations_embeddings(query_input)
             else:  # True Expression / Ground Truth
                 session['query_results'] = query_true_expression(query_input)
+
+            print()
 
             # If there are no results, display a message
             if query_input is not None and not session['query_results']:
@@ -168,19 +181,19 @@ def thesaurus_results(video_id, annotation_id):
     frames = {}
 
     # Collect information about the retrieved video segments
-    for video_id in search_results:
-        for annotation_id in search_results[video_id]:
-            frames_path = os.path.join(FRAMES_PATH, search_mode, video_id, annotation_id)
+    for video in search_results:
+        for annotation_id in search_results[video]:
+            frames_path = os.path.join(FRAMES_PATH, search_mode, video, annotation_id)
 
-            frames[video_id + "_" + annotation_id] = os.listdir(frames_path)
+            frames[video + "_" + annotation_id] = os.listdir(frames_path)
 
             converted_start_time = str(
-                datetime.timedelta(seconds=int(search_results[video_id][annotation_id]["start_time"]) // 1000))
+                datetime.timedelta(seconds=int(search_results[video][annotation_id]["start_time"]) // 1000))
             converted_end_time = str(
-                datetime.timedelta(seconds=int(search_results[video_id][annotation_id]["end_time"]) // 1000))
+                datetime.timedelta(seconds=int(search_results[video][annotation_id]["end_time"]) // 1000))
 
-            search_results[video_id][annotation_id]["converted_start_time"] = converted_start_time
-            search_results[video_id][annotation_id]["converted_end_time"] = converted_end_time
+            search_results[video][annotation_id]["converted_start_time"] = converted_start_time
+            search_results[video][annotation_id]["converted_end_time"] = converted_end_time
 
     # Not all frames of each expression are going to be displayed
     frames_to_display = get_frames_to_display(frames, n_frames=1)
@@ -188,10 +201,10 @@ def thesaurus_results(video_id, annotation_id):
     # Initialize a dictionary to store the frames information so that the keys
     # are a composition of the video_id and the annotation_id
     frames_info = {}
-    for video_id in search_results:
-        for annotation_id in search_results[video_id]:
-            frames_info[video_id + "_" + annotation_id] = search_results[video_id][annotation_id]
-            frames_info[video_id + "_" + annotation_id]["annotation_id"] = annotation_id
+    for video in search_results:
+        for annotation_id in search_results[video]:
+            frames_info[video + "_" + annotation_id] = search_results[video][annotation_id]
+            frames_info[video + "_" + annotation_id]["annotation_id"] = annotation_id
 
     return render_template("query/clips_results/thesaurus_clips.html", frames=frames_to_display,
                            frames_info=frames_info, search_mode=search_mode, video=video_id)
@@ -248,10 +261,43 @@ def query_annotations_embeddings(query_input):
 
 def query_thesaurus(video_id, annotation_id):
     """ Get the results of querying for a similar sign """
-    with open(AVERAGE_FRAMES_EMBEDDINGS_FILE, "rb") as f:
-        average_frame_embeddings = CPU_Unpickler(f).load()
-    embedding = average_frame_embeddings[video_id][annotation_id].tolist()
-    search_results = opensearch.knn_query_average(embedding, N_RESULTS)
+
+    selected_field = session.get('selected_field')
+    if selected_field == 1:  # Base Frames Embeddings
+        with open(BASE_FRAMES_EMBEDDINGS_FILE, "rb") as f:
+            base_frame_embeddings = CPU_Unpickler(f).load()
+        embedding = base_frame_embeddings[video_id][annotation_id].tolist()
+        search_results = opensearch.knn_query(embedding, N_RESULTS)
+        print(f"Searching using Base Frames Embeddings...")
+    elif selected_field == 2:  # Average Frames Embeddings
+        with open(AVERAGE_FRAMES_EMBEDDINGS_FILE, "rb") as f:
+            average_frame_embeddings = CPU_Unpickler(f).load()
+        embedding = average_frame_embeddings[video_id][annotation_id].tolist()
+        search_results = opensearch.knn_query_average(embedding, N_RESULTS)
+        print(f"Searching using Average Frames Embeddings...")
+    elif selected_field == 3:  # Best Frame Embeddings
+        with open(BEST_FRAMES_EMBEDDINGS_FILE, "rb") as f:
+            best_frame_embeddings = CPU_Unpickler(f).load()
+        embedding = best_frame_embeddings[video_id][annotation_id].tolist()
+        search_results = opensearch.knn_query_best(embedding, N_RESULTS)
+        print(f"Searching using Best Frame Embeddings...")
+    elif selected_field == 4:  # Summed Frames Embeddings
+        with open(SUMMED_FRAMES_EMBEDDINGS_FILE, "rb") as f:
+            summed_frame_embeddings = CPU_Unpickler(f).load()
+        embedding = summed_frame_embeddings[video_id][annotation_id].tolist()
+        search_results = opensearch.knn_query_summed(embedding, N_RESULTS)
+        print(f"Searching using Summed Frames Embeddings...")
+    elif selected_field == 5:  # All Frames Embeddings
+        with open(ALL_FRAMES_EMBEDDINGS_FILE, "rb") as f:
+            all_frame_embeddings = CPU_Unpickler(f).load()
+        embedding = all_frame_embeddings[video_id][annotation_id].tolist()
+        search_results = opensearch.knn_query_all(embedding, N_RESULTS)
+        print(f"Searching using All Frames Embeddings...")
+    else :  # Combined Frames Embeddings or Annotations Embeddings or True Expression
+        with open(AVERAGE_FRAMES_EMBEDDINGS_FILE, "rb") as f:
+            average_frame_embeddings = CPU_Unpickler(f).load()
+        embedding = average_frame_embeddings[video_id][annotation_id].tolist()
+        search_results = opensearch.knn_query_combined(embedding, N_RESULTS)
 
     annotation_value = None
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
@@ -370,12 +416,9 @@ def print_performance_metrics(query_results, query_input):
     recall = round(tp / (tp + fn), 2) if tp + fn > 0 else 0.0
     f1 = round(2 * (precision * recall) / (precision + recall), 2) if precision + recall > 0 else 0.0
 
-    print("-------------------------------------")
-    print("-------------------------------------")
     print("Precision: ", precision)
     print("Recall: ", recall)
     print("F1: ", f1)
-    print("-------------------------------------")
     print("-------------------------------------")
 
 

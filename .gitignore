@@ -159,3 +159,4 @@ preprocess.sh
 *.json
 *.vtt
 test_searches.py
+encoders.drawio
