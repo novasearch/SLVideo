@@ -30,15 +30,13 @@ class FrameExtractor:
             video_facial_expressions_dir = os.path.join(FRAMES_PATH, FACIAL_EXPRESSIONS_ID, videoname)
             annotation_path = os.path.join(ANNOTATIONS_PATH, f"{videoname}.json")
 
-            if os.path.isdir(video_facial_expressions_dir):
-                continue
+            if not os.path.isdir(video_facial_expressions_dir):
+                os.makedirs(video_facial_expressions_dir, exist_ok=True)
+                self.extract_facial_expressions_frames(video_path, video_facial_expressions_dir, annotation_path)
 
-            # Create the directories for the video if it doesn't exist
-            os.makedirs(video_phrases_dir, exist_ok=True)
-            os.makedirs(video_facial_expressions_dir, exist_ok=True)
-
-            self.extract_facial_expressions_frames(video_path, video_facial_expressions_dir, annotation_path)
-            self.extract_phrases_frames(video_path, video_phrases_dir, annotation_path)
+            if not os.path.isdir(video_phrases_dir):
+                os.makedirs(video_phrases_dir, exist_ok=True)
+                self.extract_phrases_frames(video_path, video_phrases_dir, annotation_path)
 
     def extract_facial_expressions_frames(self, video_path, facial_expressions_dir, annotation_path):
         """ Extract the facial expressions frames from the videos
@@ -85,9 +83,9 @@ class FrameExtractor:
         # Extract the facial expressions frames from the video
         command = ["ffmpeg",
                    "-loglevel", "error",  # suppress the output
-                   "-i", video_path,  # input file
                    "-ss", start_time_str,  # start time
                    "-to", end_time_str,  # end time
+                   "-i", video_path,  # input file
                    # "-vf", "fps=1",  # extract 1 frame per second
                    os.path.join(expression_dir, f"{annotation_id}_%02d.png")  # output file
                    ]
@@ -132,8 +130,8 @@ class FrameExtractor:
                     # Extract the phrase middle frame from the video
                     command = ["ffmpeg",
                                "-loglevel", "error",  # suppress the output
-                               "-i", video_path,  # input file
                                "-ss", middle_time_str,  # start time
+                               "-i", video_path,  # input file
                                "-vframes", "1",  # output one frame
                                "-update", "1",  # write a single image
                                os.path.join(annotation_dir, f"{annotation_id}.png")  # output file
@@ -153,9 +151,9 @@ def extract_annotation_frames(video_id, annotation_id, start_time, end_time):
     # Extract the facial expressions frames from the video
     command = ["ffmpeg",
                "-loglevel", "error",  # suppress the output
-               "-i", os.path.join(VIDEO_PATH, video_id + ".mp4"),  # input file
                "-ss", start_time,  # start time in HH:MM:SS format
                "-to", end_time,  # end time in HH:MM:SS format
+               "-i", os.path.join(VIDEO_PATH, video_id + ".mp4"),  # input file
                # "-vf", "fps=1",  # extract 1 frame per second
                os.path.join(expression_dir, f"{annotation_id}_%02d.png")  # output file
                ]

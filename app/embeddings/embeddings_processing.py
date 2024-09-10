@@ -44,7 +44,7 @@ def generate_frame_embeddings(eb: Embedder):
     print("Generating frame embeddings", flush=True)
 
     embeddings = {}
-    annotations_batch_size = 32
+    annotations_batch_size = 16
     if os.path.exists(BASE_FRAMES_EMBEDDINGS_FILE):
         with open(BASE_FRAMES_EMBEDDINGS_FILE, 'rb') as f:
             embeddings = pickle.load(f)
@@ -62,7 +62,8 @@ def generate_frame_embeddings(eb: Embedder):
         for i in range(0, len(annotations_dir), annotations_batch_size):
             annotations_batch = annotations_dir[i:i + annotations_batch_size]
             for annotation in annotations_batch:
-                annotation_embedding = generate_annotation_frame_embeddings(video, annotation, eb)
+                with torch.no_grad():  # Avoid storing computations for gradient calculation
+                    annotation_embedding = generate_annotation_frame_embeddings(video, annotation, eb)
                 embeddings[video][annotation] = annotation_embedding
 
                 del annotation_embedding
@@ -72,12 +73,14 @@ def generate_frame_embeddings(eb: Embedder):
                 pickle.dump(embeddings, f)
             gc.collect()
 
+    torch.cuda.empty_cache()  # Final cache clear
+
 
 def generate_average_and_best_frame_embeddings(eb: Embedder):
     """ Generates the average and best facial expression frame embeddings of a video for a folder of videos """
     print("Generating average and best frame embeddings", flush=True)
 
-    annotations_batch_size = 8
+    annotations_batch_size = 4
     average_embeddings = {}
     best_embeddings = {}
 
@@ -390,7 +393,8 @@ def add_embeddings(video_id, annotation_id, eb: Embedder):
     annotations_embeddings[video_id][annotation_id] = eb.text_encode(annotation_id.lower())
 
     # Save the embeddings
-    save_embeddings(base_embeddings, average_embeddings, best_embeddings, summed_embeddings, all_embeddings, annotations_embeddings)
+    save_embeddings(base_embeddings, average_embeddings, best_embeddings, summed_embeddings, all_embeddings,
+                    annotations_embeddings)
 
 
 def delete_embeddings(video_id, annotation_id):
