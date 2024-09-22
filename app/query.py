@@ -504,24 +504,26 @@ def update_annotation_info():
     elif action == 'edit':
         annotation_value = data['expression']
         phrase = data['phrase']
-        start_time = convert_to_milliseconds(data['start_time'])
-        end_time = convert_to_milliseconds(data['end_time'])
+        start_minutes = data["start_minutes"]
+        start_seconds = data["start_seconds"]
+        start_ms = data["start_ms"]
+        new_start_time = convert_to_milliseconds("0", start_minutes, start_seconds, start_ms)
+
+        end_minutes = data["end_minutes"]
+        end_seconds = data["end_seconds"]
+        end_ms = data["end_ms"]
+        new_end_time = convert_to_milliseconds("0", end_minutes, end_seconds, end_ms)
 
         query_results[video_id][annotation_id]['annotation_value'] = annotation_value
         query_results[video_id][annotation_id]['phrase'] = phrase
-        query_results[video_id][annotation_id]['start_time'] = start_time
-        query_results[video_id][annotation_id]['end_time'] = end_time
+        query_results[video_id][annotation_id]['start_time'] = new_start_time
+        query_results[video_id][annotation_id]['end_time'] = new_end_time
 
         session['query_results'] = query_results
 
         return '', 204
 
 
-def convert_to_milliseconds(time_str):
-    # Convert the time string to a datetime object
-    time_obj = dt.strptime(time_str, '%H:%M:%S')
-
-    # Calculate the total milliseconds
-    milliseconds = (time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second) * 1000
-
-    return milliseconds
+def convert_to_milliseconds(hours, minutes, seconds, milliseconds):
+    """ Convert the time to milliseconds """
+    return (int(hours) * 3600 + int(minutes) * 60 + int(seconds)) * 1000 + int(milliseconds)
