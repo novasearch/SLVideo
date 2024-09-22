@@ -5,7 +5,7 @@ import subprocess
 import webvtt
 import xml.etree.ElementTree as ET
 
-from app.utils import ANNOTATIONS_PATH, CAPTIONS_PATH, EAF_PATH, VIDEO_PATH
+from app.utils import ANNOTATIONS_PATH, CAPTIONS_PATH, EAF_PATH, VIDEO_PATH, FACIAL_EXPRESSIONS_ID_2, FACIAL_EXPRESSIONS_ID
 
 
 def parse_eaf_files():
@@ -193,6 +193,10 @@ def edit_annotation(video_id, tier_id, annotation_id, start_time, end_time, valu
 
         # Edit the annotation
         tier_annotations = root.findall('TIER[@TIER_ID="' + tier_id + '"]/')
+
+        if tier_annotations is None and tier_id == FACIAL_EXPRESSIONS_ID:
+            tier_annotations = root.findall('TIER[@TIER_ID="' + FACIAL_EXPRESSIONS_ID_2 + '"]/')
+
         parent_tier = root.find('TIER[@TIER_ID="' + tier_id + '"]').attrib.get('PARENT_REF')
         for outer_tag in tier_annotations:
             annotation = outer_tag.find('*')  # Get the first child element
@@ -246,6 +250,10 @@ def add_annotation(video_id, new_annotation_id, tier_id, new_start_time, new_end
 
     # Find the appropriate tier
     tier = root.find(f'TIER[@TIER_ID="{tier_id}"]')
+
+    if tier is None and tier_id == FACIAL_EXPRESSIONS_ID:
+        tier = root.find(f'TIER[@TIER_ID="{FACIAL_EXPRESSIONS_ID_2}"]')
+
     parent_tier_id = tier.attrib.get('PARENT_REF')
 
     # Create the new annotation element
@@ -295,6 +303,9 @@ def delete_annotation(video_id, annotation_id, tier_id):
 
     # Delete the annotation
     tier_annotations = root.findall('TIER[@TIER_ID="' + tier_id + '"]/')
+    if tier_annotations is None and tier_id == FACIAL_EXPRESSIONS_ID:
+        tier_annotations = root.findall('TIER[@TIER_ID="' + FACIAL_EXPRESSIONS_ID_2 + '"]/')
+
     tier = root.find(f'TIER[@TIER_ID="{tier_id}"]')
     for outer_tag in tier_annotations:
         annotation = outer_tag.find('*')
