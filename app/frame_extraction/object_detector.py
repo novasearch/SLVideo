@@ -28,6 +28,7 @@ class ObjectDetector:
         # Initialize the DETR model for object detection and the Image Processor
         self.crop_processor = DetrImageProcessor.from_pretrained("facebook/detr-resnet-50", revision="no_timm")
         self.crop_model = DetrForObjectDetection.from_pretrained("facebook/detr-resnet-50", revision="no_timm")
+
         self.crop_model = self.crop_model.to(self.device)
 
         # Initialize the RMBG-1.4 model for image segmentation
@@ -48,19 +49,18 @@ class ObjectDetector:
         if len(images_paths) > BATCH_SIZE:
             n_batches = math.ceil(len(images_paths) / BATCH_SIZE)
             batch_size = math.ceil(len(images_paths) / n_batches)
-            images_paths = [images_paths[i:i + batch_size] for i in range(0, len(images_paths), batch_size)]
+            batches_images_paths = [images_paths[i:i + batch_size] for i in range(0, len(images_paths), batch_size)]
 
-            for images_paths in images_paths:
-                cropped_images = self.detect_person_box(images_paths)
+            for img_paths in batches_images_paths:
+                cropped_images = self.detect_person_box(img_paths)
                 masked_images = self.detect_person_remove_background(cropped_images)
 
-                for image, image_path in zip(masked_images, images_paths):
+                for image, image_path in zip(masked_images, img_paths):
                     image.save(image_path)
                     image.close()
         else:
             cropped_images = self.detect_person_box(images_paths)
             masked_images = self.detect_person_remove_background(cropped_images)
-
             for image, image_path in zip(masked_images, images_paths):
                 image.save(image_path)
                 image.close()
@@ -75,7 +75,7 @@ class ObjectDetector:
 
         inputs = self.crop_processor(images=images, return_tensors="pt")
 
-        # Move the inputs to the GPU
+        # Move the inputs to the used device
         inputs = {name: tensor.to(self.device) for name, tensor in inputs.items()}
 
         outputs = self.crop_model(**inputs)

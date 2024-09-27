@@ -27,7 +27,7 @@ class Embedder:
         print("Embedder's Device: ", self.device, flush=True)
 
         # Select the model to be used
-        self.encoder = ClipEncoder(self.device)
+        self.encoder = CapivaraEncoder(self.device)
 
     def text_encode(self, text):
         """ Encode text and generate its embeddings  using the selected model """
