@@ -193,11 +193,12 @@ def edit_annotation(video_id, tier_id, annotation_id, start_time, end_time, valu
 
         # Edit the annotation
         tier_annotations = root.findall('TIER[@TIER_ID="' + tier_id + '"]/')
+        parent_tier = root.find('TIER[@TIER_ID="' + tier_id + '"]').attrib.get('PARENT_REF')
 
         if tier_annotations is None and tier_id == FACIAL_EXPRESSIONS_ID:
             tier_annotations = root.findall('TIER[@TIER_ID="' + FACIAL_EXPRESSIONS_ID_2 + '"]/')
+            parent_tier = root.find('TIER[@TIER_ID="' + FACIAL_EXPRESSIONS_ID_2 + '"]').attrib.get('PARENT_REF')
 
-        parent_tier = root.find('TIER[@TIER_ID="' + tier_id + '"]').attrib.get('PARENT_REF')
         for outer_tag in tier_annotations:
             annotation = outer_tag.find('*')  # Get the first child element
             if annotation.attrib['ANNOTATION_ID'] == annotation_id:
@@ -283,7 +284,7 @@ def add_annotation(video_id, new_annotation_id, tier_id, new_start_time, new_end
 
     # Update the lastUsedAnnotationId in the EAF file
     last_used_annotation_id = root.find('HEADER/PROPERTY[@NAME="lastUsedAnnotationId"]')
-    last_used_annotation_id.text = new_annotation_id
+    last_used_annotation_id.text = new_annotation_id.split("a")[1]
 
     # Write back the updated XML to the EAF file
     with open(video_eaf, "w", encoding='utf-8') as updated_file:

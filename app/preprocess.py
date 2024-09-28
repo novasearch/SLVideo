@@ -3,6 +3,7 @@ import os
 import subprocess
 from .eaf_parser import eaf_parser
 from .embeddings import embeddings_processing
+from .frame_extraction import frames_processing
 from .opensearch.opensearch import LGPOpenSearch, gen_doc
 from .utils import CPU_Unpickler, RESULTS_PATH, EAF_PATH, VIDEO_PATH, FRAMES_PATH, ANNOTATIONS_PATH, EMBEDDINGS_PATH, \
     FACIAL_EXPRESSIONS_FRAMES_DIR, FACIAL_EXPRESSIONS_ID, BASE_FRAMES_EMBEDDINGS_FILE, AVERAGE_FRAMES_EMBEDDINGS_FILE, \
@@ -10,19 +11,6 @@ from .utils import CPU_Unpickler, RESULTS_PATH, EAF_PATH, VIDEO_PATH, FRAMES_PAT
 
 # Initialize the OpenSearch client
 opensearch = LGPOpenSearch()
-
-
-def run_in_env(script_path, env_path):
-    """ Run a script in a virtual environment """
-    activate_script = f'source {env_path}/bin/activate'
-    command = f"{activate_script}; python -m {script_path}; deactivate"
-    process = subprocess.Popen(command, shell=True, executable="/bin/bash", stderr=subprocess.PIPE)
-    _, err = process.communicate()
-    err_decoded = err.decode()
-    if process.returncode != 0 or err_decoded:
-        print(f"Error occurred: {err_decoded}")
-    process.wait()
-
 
 """ Preprocess videos, extract frames, generate embeddings and create indexes in OpenSearch """
 
@@ -40,10 +28,13 @@ print("Annotations generated", flush=True)
 if not os.path.exists(FRAMES_PATH):
     os.makedirs(FRAMES_PATH)
 
-# Due to dependencies incompatibilities, this step is done in a separate environment
-run_in_env("app.frame_extraction.run_frame_extraction.py",
-           "python_environments/object_detectors_env")
+import time
+
+start = time.time()
+frames_processing.extract_frames()
 print("Extracted facial expressions frames", flush=True)
+end = time.time()
+print("Time elapsed: ", end - start , flush=True)
 
 # Generate embeddings
 embeddings_processing.generate_video_embeddings()

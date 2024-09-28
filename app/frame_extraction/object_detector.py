@@ -4,7 +4,7 @@ from transformers import DetrImageProcessor, DetrForObjectDetection, pipeline
 import torch
 import os
 
-BATCH_SIZE = 32
+BATCH_SIZE = 16
 
 
 class ObjectDetector:
@@ -23,7 +23,7 @@ class ObjectDetector:
         else:
             self.device = 'cpu'
 
-        print("Person Detector's Device: ", self.device, flush=True)
+        #print("Person Detector's Device: ", self.device, flush=True)
 
         # Initialize the DETR model for object detection and the Image Processor
         self.crop_processor = DetrImageProcessor.from_pretrained("facebook/detr-resnet-50", revision="no_timm")
@@ -38,12 +38,6 @@ class ObjectDetector:
     def detect_person(self, images_paths):
         """ Detect a person in an image, crop the person box, detect the person in the
             cropped image, remove the background and save the final image """
-
-        # Extract the required parts from the image_paths for the print statements
-        base_name = os.path.basename(os.path.dirname(images_paths[0]))
-        parent_name = os.path.basename(os.path.dirname(os.path.dirname(images_paths[0])))
-
-        print(f"{parent_name} - {base_name} || Cropping Started", flush=True)
 
         # If the images length is larger than BATCH_SIZE, split the images into same sizes batches smaller than BATCH_SIZE
         if len(images_paths) > BATCH_SIZE:
@@ -64,8 +58,6 @@ class ObjectDetector:
             for image, image_path in zip(masked_images, images_paths):
                 image.save(image_path)
                 image.close()
-
-        print(f"{parent_name} - {base_name} || Cropping Finished", flush=True)
 
     def detect_person_box(self, images_paths):
         """ Detect a person in an image, crop the person box and save the cropped image """
