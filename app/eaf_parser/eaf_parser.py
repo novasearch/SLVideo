@@ -63,6 +63,9 @@ def parse_eaf_files():
             for tier in data_dict:
                 annotations = root.findall('TIER[@TIER_ID="' + tier + '"]/ANNOTATION/ALIGNABLE_ANNOTATION')
                 for annotation in annotations:
+                    if annotation.find('ANNOTATION_VALUE').text == '' or annotation.find('ANNOTATION_VALUE').text is None:
+                        continue
+
                     data_dict[tier]['annotations'].append({
                         'annotation_id': annotation.attrib['ANNOTATION_ID'],
                         'start_time': str(int(
@@ -82,6 +85,9 @@ def parse_eaf_files():
             for tier in data_dict:
                 annotations = root.findall('TIER[@TIER_ID="' + tier + '"]/ANNOTATION/REF_ANNOTATION')
                 for annotation in annotations:
+                    if annotation.find('ANNOTATION_VALUE').text == '' or annotation.find('ANNOTATION_VALUE').text is None:
+                        continue
+
                     annotation_ref = annotation.attrib['ANNOTATION_REF']
                     if annotation_ref in annotation_timestamps:
                         data_dict[tier]['annotations'].append({

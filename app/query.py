@@ -297,7 +297,7 @@ def query_thesaurus(video_id, annotation_id):
         with open(AVERAGE_FRAMES_EMBEDDINGS_FILE, "rb") as f:
             average_frame_embeddings = CPU_Unpickler(f).load()
         embedding = average_frame_embeddings[video_id][annotation_id].tolist()
-        search_results = opensearch.knn_query_combined(embedding, N_RESULTS)
+        search_results = opensearch.knn_query_average(embedding, N_RESULTS)
 
     annotation_value = None
     with open(os.path.join(ANNOTATIONS_PATH, f"{video_id}.json"), "r") as f:
