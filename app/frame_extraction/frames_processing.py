@@ -170,10 +170,10 @@ def extract_annotation_frames(video_id, annotation_id, start_time, end_time):
     # This step is done in a separate environment due to incompatible dependencies with the main environment
     image_paths_str = ",".join(images_paths)
 
-    print(video_name, "-", facial_expression["annotation_id"], "|| Cropping Started", flush=True)
+    print(video_id, "-", annotation_id, "|| Cropping Started", flush=True)
     run_od_in_env("app/frame_extraction/run_object_detector.py",
                "python_environments/object_detectors_env", image_paths_str)
-    print(video_name, "-", facial_expression["annotation_id"], "|| Cropping Finished", flush=True)
+    print(video_id, "-", annotation_id, "|| Cropping Finished", flush=True)
 
 
 def delete_frames(video_id, annotation_id):

@@ -103,6 +103,10 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="row justify-content-center">
+            {% block alerts %}
+            {% endblock %}
+        </div>
     </div>
 
     {% block scripts %}
@@ -160,7 +164,7 @@
                     startMilliseconds.value = milliseconds.toString().padStart(3, '0');
 
                     {% set end_time = end_time if end_time else 0 %}
-                    if({{ end_time }} > 0)
+                    if ({{ end_time }} > 0)
                         [minutes, seconds, milliseconds] = msToTime({{ end_time }});
                     else
                         [minutes, seconds, milliseconds] = msToTime(videoDuration);

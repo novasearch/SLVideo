@@ -26,7 +26,8 @@ This system includes a web application developed in Flask for the users to try S
 
 You just need to access this link: https://slvideo.novasearch.org/
 
-In this deployed version, the model used to generate the embeddings is `CAPIVARA`.
+In this deployed version, the model used to generate the embeddings is `CAPIVARA`. Due to the lack of GPU availability, 
+it is not possible to add new annotations or edit the start and end times of existing annotations in this version.
 
 ### Locally
 

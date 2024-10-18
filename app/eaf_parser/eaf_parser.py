@@ -199,11 +199,12 @@ def edit_annotation(video_id, tier_id, annotation_id, start_time, end_time, valu
 
         # Edit the annotation
         tier_annotations = root.findall('TIER[@TIER_ID="' + tier_id + '"]/')
-        parent_tier = root.find('TIER[@TIER_ID="' + tier_id + '"]').attrib.get('PARENT_REF')
 
-        if tier_annotations is None and tier_id == FACIAL_EXPRESSIONS_ID:
+        if (tier_annotations is None or len(tier_annotations) == 0) and tier_id == FACIAL_EXPRESSIONS_ID:
             tier_annotations = root.findall('TIER[@TIER_ID="' + FACIAL_EXPRESSIONS_ID_2 + '"]/')
             parent_tier = root.find('TIER[@TIER_ID="' + FACIAL_EXPRESSIONS_ID_2 + '"]').attrib.get('PARENT_REF')
+        else:
+            parent_tier = root.find('TIER[@TIER_ID="' + tier_id + '"]').attrib.get('PARENT_REF')
 
         for outer_tag in tier_annotations:
             annotation = outer_tag.find('*')  # Get the first child element

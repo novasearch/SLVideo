@@ -18,9 +18,29 @@
     <input type="hidden" id="action_type" name="action_type" value="">
 {% endblock %}
 
+{% block alerts %}
+    {% if not is_gpu_available %}
+        <div class="alert alert-warning mt-2 text-center" style="width: 40%" role="alert">
+            <strong>Warning!</strong> GPU not found, you can't edit the start and end times!
+        </div>
+    {% endif %}
+{% endblock %}
+
 {% block scripts %}
     {{ super() }} <!-- This will include the scripts from the parent template -->
     <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            console.log({{ is_gpu_available | tojson}});
+
+            if (!{{ is_gpu_available | tojson }}) {
+                startMinutes.disabled = true;
+                startSeconds.disabled = true;
+                startMilliseconds.disabled = true;
+                endMinutes.disabled = true;
+                endSeconds.disabled = true;
+                endMilliseconds.disabled = true;
+            }
+        });
 
         function setAction(action) {
             document.getElementById('action_type').value = action;
@@ -34,6 +54,16 @@
 
         function handleSubmit(event) {
             event.preventDefault();
+
+            if (!{{ is_gpu_available | tojson }}) {
+                startMinutes.disabled = false;
+                startSeconds.disabled = false;
+                startMilliseconds.disabled = false;
+                endMinutes.disabled = false;
+                endSeconds.disabled = false;
+                endMilliseconds.disabled = false;
+            }
+
             const action = document.getElementById('action_type').value;
 
             if (action === 'delete') {

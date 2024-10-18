@@ -8,9 +8,21 @@
 {% endblock %}
 
 {% block buttons %}
-    <button id="add_button" type="submit" class="btn btn-primary" onclick="savingEffect()">Save
-        Annotation
-    </button>
+    {% if is_gpu_available %}
+        <button id="add_button" type="submit" class="btn btn-primary">Save
+            Annotation
+        </button>
+    {% else %}
+        <button id="add_button" type="submit" class="btn btn-primary" disabled>Save Annotation</button>
+    {% endif %}
+{% endblock %}
+
+{% block alerts %}
+    {% if not is_gpu_available %}
+        <div class="alert alert-warning mt-2 text-center" style="width: 40%" role="alert">
+            <strong>Warning!</strong> GPU not found, you can't add annotations!
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}
@@ -28,6 +40,7 @@
         }
 
         function handleSubmit() {
+            savingEffect();
             document.getElementById('add_button').disabled = true;
         }
     </script>

@@ -1,5 +1,6 @@
 import json
 import os
+import torch
 from datetime import datetime as dt
 
 from flask import Blueprint, request, render_template, flash, url_for, redirect
@@ -13,6 +14,16 @@ from .opensearch.opensearch import gen_doc
 bp = Blueprint('annotations', __name__)
 
 prev_page = ""
+
+is_gpu_available = False
+
+# Check if a gpu is available
+if torch.backends.mps.is_available():
+    is_gpu_available = True
+elif torch.cuda.is_available():
+    is_gpu_available = True
+
+print("Annotations' Device: ", is_gpu_available, flush=True)
 
 
 @bp.route("/edit_annotation/<video_id>/<annotation_id>", methods=("GET", "POST"))
@@ -126,11 +137,12 @@ def edit_annotation(video_id, annotation_id):
 
             return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
                                    prev_page=prev_page, expression=new_expression, start_time=new_start_time,
-                                   end_time=new_end_time, phrase=new_phrase, frame_rate=frame_rate)
+                                   end_time=new_end_time, phrase=new_phrase, frame_rate=frame_rate,
+                                   is_gpu_available=is_gpu_available)
 
     return render_template("annotations/edit_annotation.html", video=video_id, annotation_id=annotation_id,
                            prev_page=prev_page, expression=expression, start_time=start_time,
-                           end_time=end_time, phrase=phrase, frame_rate=frame_rate)
+                           end_time=end_time, phrase=phrase, frame_rate=frame_rate, is_gpu_available=is_gpu_available)
 
 
 @bp.route("/add_annotation/<video_id>", methods=("GET", "POST"))
@@ -219,10 +231,10 @@ def add_annotation(video_id):
             flash(f"Annotation with ID {new_annotation_id} already exists!", "danger")
 
         return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                               annotation_id=next_annotation, frame_rate=frame_rate)
+                               annotation_id=next_annotation, frame_rate=frame_rate, is_gpu_available=is_gpu_available)
 
     return render_template("annotations/add_annotations.html", video=video_id, prev_page=prev_page,
-                           annotation_id=new_annotation_id, frame_rate=frame_rate)
+                           annotation_id=new_annotation_id, frame_rate=frame_rate, is_gpu_available=is_gpu_available)
 
 
 @bp.route("/update_user_rating", methods=["POST"])
@@ -282,6 +294,3 @@ def update_embeddings_and_index(video_id, new_annotation_id, start_time, end_tim
 def convert_to_milliseconds(hours, minutes, seconds, milliseconds):
     """ Convert the time to milliseconds """
     return (int(hours) * 3600 + int(minutes) * 60 + int(seconds)) * 1000 + int(milliseconds)
-
-
-
