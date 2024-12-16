@@ -160,3 +160,5 @@ preprocess.sh
 *.vtt
 test_searches.py
 encoders.drawio
+/app/static/videofiles/frames/GLOSA_P1_EXPRESSAO
+/app/static/videofiles/frames/LP_P1 transcrição livre
